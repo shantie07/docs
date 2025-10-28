@@ -6,7 +6,7 @@ versions:
   ghec: '*'
   ghes: '*'
 topics:
-  - Advanced Security
+  - Code Security
   - Code scanning
   - CodeQL
 type: reference
@@ -15,13 +15,10 @@ intro: 'You can work from a template to write your own code to create a custom q
 
 ## About custom queries
 
-{% note %}
+> [!NOTE]
+> Creating a custom query is optional, and the [`github/codeql`](https://github.com/github/codeql) repository contains a large number of example queries you can use instead.
 
-**Note:** Creating a custom query is optional, and the [`github/codeql`](https://github.com/github/codeql) repository contains a large number of example queries you can use instead.
-
-{% endnote %}
-
-You create a new query file from a template for a given language, which imports the standard libraries for analyzing that language. For more information, see "[About {% data variables.product.prodname_codeql %} queries](https://codeql.github.com/docs/writing-codeql-queries/about-codeql-queries/)" in the {% data variables.product.prodname_codeql %} documentation.
+You create a new query file from a template for a given language, which imports the standard libraries for analyzing that language. For more information, see [About {% data variables.product.prodname_codeql %} queries](https://codeql.github.com/docs/writing-codeql-queries/about-codeql-queries/) in the {% data variables.product.prodname_codeql %} documentation.
 
 ## Creating a custom query
 
@@ -35,11 +32,11 @@ You create a new query file from a template for a given language, which imports 
 
 You can read about how to create queries for supported languages in the {% data variables.product.prodname_codeql %} documentation:
 
-- [{% data variables.product.prodname_codeql %} for C and C++](https://codeql.github.com/docs/codeql-language-guides/codeql-for-cpp/)
-- [{% data variables.product.prodname_codeql %} for C#](https://codeql.github.com/docs/codeql-language-guides/codeql-for-csharp/)
-- [{% data variables.product.prodname_codeql %} for Go](https://codeql.github.com/docs/codeql-language-guides/codeql-for-go/)
-- [{% data variables.product.prodname_codeql %} for Java and Kotlin](https://codeql.github.com/docs/codeql-language-guides/codeql-for-java/)
-- [{% data variables.product.prodname_codeql %} for JavaScript and TypeScript](https://codeql.github.com/docs/codeql-language-guides/codeql-for-javascript/)
-- [{% data variables.product.prodname_codeql %} for Python](https://codeql.github.com/docs/codeql-language-guides/codeql-for-python/)
-- [{% data variables.product.prodname_codeql %} for Ruby](https://codeql.github.com/docs/codeql-language-guides/codeql-for-ruby/)
-- [{% data variables.product.prodname_codeql %} for Swift](https://codeql.github.com/docs/codeql-language-guides/codeql-for-swift/)
+* [{% data variables.product.prodname_codeql %} for C and C++](https://codeql.github.com/docs/codeql-language-guides/codeql-for-cpp/)
+* [{% data variables.product.prodname_codeql %} for C#](https://codeql.github.com/docs/codeql-language-guides/codeql-for-csharp/)
+* [{% data variables.product.prodname_codeql %} for Go](https://codeql.github.com/docs/codeql-language-guides/codeql-for-go/)
+* [{% data variables.product.prodname_codeql %} for Java and Kotlin](https://codeql.github.com/docs/codeql-language-guides/codeql-for-java/)
+* [{% data variables.product.prodname_codeql %} for JavaScript and TypeScript](https://codeql.github.com/docs/codeql-language-guides/codeql-for-javascript/)
+* [{% data variables.product.prodname_codeql %} for Python](https://codeql.github.com/docs/codeql-language-guides/codeql-for-python/)
+* [{% data variables.product.prodname_codeql %} for Ruby](https://codeql.github.com/docs/codeql-language-guides/codeql-for-ruby/)
+* [{% data variables.product.prodname_codeql %} for Swift](https://codeql.github.com/docs/codeql-language-guides/codeql-for-swift/)

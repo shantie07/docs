@@ -60,13 +60,13 @@ jobs:
             language_repo: github/docs-internal.ko-kr
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Checkout the language-specific repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           repository: ${{ matrix.language_repo }}
-          token: ${{ secrets.DOCS_BOT_PAT_READPUBLICKEY }}
+          token: ${{ secrets.DOCS_BOT_PAT_BASE }}
           path: ${{ matrix.language_dir }}
 
       - uses: ./.github/actions/node-npm-setup
@@ -89,13 +89,13 @@ jobs:
         working-directory: ${{ matrix.language_dir }}
         env:
           # Needed for gh
-          GH_TOKEN: ${{ secrets.DOCS_BOT_PAT_READPUBLICKEY }}
+          GH_TOKEN: ${{ secrets.DOCS_BOT_PAT_BASE }}
         run: |
           # If nothing to commit, exit now. It's fine. No orphans.
           changes=$(git diff --name-only | wc -l)
           untracked=$(git status --untracked-files --short | wc -l)
           if [[ $changes -eq 0 ]] && [[ $untracked -eq 0 ]]; then
-            echo "There are no changes to commit after running src/rest/scripts/update-files.js. Exiting..."
+            echo "There are no changes to commit or untracked files. Exiting."
             exit 0
           fi
 
@@ -129,7 +129,9 @@ jobs:
             --title "Delete orphan files ($current_daystamp)" \
             --body '👋 humans. This PR was generated from docs-internal/.github/workflows/delete-orphan-translation-files.yml.
             ' \
-            --repo "${{ matrix.language_repo }}"
+            --repo "${{ matrix.language_repo }}" \
+            --label "workflow-generated" \
+            --head=$branch_name
           echo "Merge created PR..."
           retry_command gh pr merge --merge --auto --delete-branch "$branch_name"
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * This script generates a block of Markdown that can be saved as a reusable.
  * The reusable lists all the queries for one programming language, with CWEs, as a Markdown table.
@@ -30,12 +28,12 @@
  *   /Users/peterbe/.local/share/gh/extensions/gh-codeql/dist/nightly/codeql-bundle-20231204/codeql
  *
  * Finally, you need to install `@github/cocofix`. This is a private package,
- * so you first need to get the `DOCS_BOT_PAT_WORKFLOW` PAT from the vault and
- * store it in the environment variable `DOCS_BOT_PAT_WORKFLOW`.
+ * so you first need to get the `DOCS_BOT_PAT_BASE` PAT from the vault and
+ * store it in the environment variable `DOCS_BOT_PAT_BASE`.
  * Then run the following command from the root of this repo:
  *
  * ```sh
- * npm i --no-save '--@github:registry=https://npm.pkg.github.com' '--//npm.pkg.github.com/:_authToken=${DOCS_BOT_PAT_WORKFLOW}' @github/cocofix
+ * npm i --no-save '--@github:registry=https://npm.pkg.github.com' '--//npm.pkg.github.com/:_authToken=${DOCS_BOT_PAT_BASE}' @github/cocofix
  * ```
  *
  * If you've git cloned github/codeql in /tmp/ now you can execute this script.
@@ -55,30 +53,8 @@ import chalk from 'chalk'
 import { program } from 'commander'
 // We don't want to introduce a global dependency on @github/cocofix, so we install it by hand
 // as described above and suppress the import warning.
-import { getSupportedQueries } from '@github/cocofix/dist/querySuites' // eslint-disable-line import/no-extraneous-dependencies
-import { type Language } from '@github/cocofix/dist/codeql' // eslint-disable-line import/no-extraneous-dependencies
-
-/**
- * The list of languages for which autofix support has (publicly) shipped.
- *
- * We don't want to add documentation about autofix support for languages that have not shipped.
- *
- * Note that this is conceptually different from the list of languages for which we support autofix:
- * some languages are supported, but only staff-shipped internally (currently, `go` and `ruby`).
- *
- * Supporting a language is a technical decision, and reflected in the list of supported queries
- * returned by `getSupportedQueries`. Shipping a language, on the other hand, is a product decision,
- * and is implemented by a feature flag in the monolith, so we cannot easily check it here.
- *
- * Instead we hard-code the list of shipped languages here and manually keep it in sync with
- * https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/about-autofix-for-codeql-code-scanning#supported-languages.
- * This sounds worse than it is, since CodeQL only supports a total of eight languages
- * and we are on track to ship autofix support for all of them in the next few months.
- *
- * Note that we never publicly ship a language for which we don't have autofix support, so if a language
- * has been shipped, we know for sure that it is supported.
- */
-const AUTOFIX_SHIPPED_LANGUAGES = ['csharp', 'java', 'javascript', 'python', 'go', 'ruby']
+import { getSupportedQueries } from '@github/cocofix/dist/querySuites' /* eslint-disable-line import/no-extraneous-dependencies, import/no-unresolved */
+import type { Language } from 'codeql-ts'
 
 program
   .description('Generate a reusable Markdown for for a code scanning query language')
@@ -213,20 +189,20 @@ async function main(options: Options, language: string) {
     return a.name.localeCompare(b.name)
   })
 
-  // Omit the 'Autofix' column if the language has not been shipped
-  const includeAutofix = AUTOFIX_SHIPPED_LANGUAGES.includes(language)
-  console.warn(`${includeAutofix ? 'Including' : 'Excluding'} 'Autofix' column for ${language}`)
-  printQueries(options, entries, includeAutofix)
+  printQueries(options, entries)
 }
 
-function printQueries(options: Options, queries: QueryExtended[], includeAutofix: boolean) {
+function printQueries(options: Options, queries: QueryExtended[]) {
   const markdown: string[] = []
   markdown.push('{% rowheaders %}')
   markdown.push('') // blank line
-  const header = ['Query name', 'Related CWEs', 'Default', 'Extended']
-  if (includeAutofix) {
-    header.push('Autofix')
-  }
+  const header = [
+    'Query name',
+    'Related CWEs',
+    'Default',
+    'Extended',
+    '{% data variables.copilot.copilot_autofix_short %}',
+  ]
   markdown.push(`| ${header.join(' | ')} |`)
   markdown.push(`| ${header.map(() => '---').join(' | ')} |`)
 
@@ -238,10 +214,7 @@ function printQueries(options: Options, queries: QueryExtended[], includeAutofix
     const defaultIcon = query.inDefault ? includedOcticon : notIncludedOcticon
     const extendedIcon = query.inExtended ? includedOcticon : notIncludedOcticon
     const autofixIcon = query.inAutofix ? includedOcticon : notIncludedOcticon
-    const row = [markdownLink, query.cwes.join(', '), defaultIcon, extendedIcon]
-    if (includeAutofix) {
-      row.push(autofixIcon)
-    }
+    const row = [markdownLink, query.cwes.join(', '), defaultIcon, extendedIcon, autofixIcon]
     markdown.push(`| ${row.join(' | ')} |`)
   }
   markdown.push('') // blank line

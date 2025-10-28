@@ -13,12 +13,6 @@ redirect_from:
   - /admin/user-management/managing-repositories-in-your-enterprise/accessing-user-owned-repositories-in-your-enterprise
 ---
 
-{% note %}
-
-**Note:** Temporarily accessing user-owned repositories is currently in beta for {% data variables.product.prodname_emus %} and subject to change.
-
-{% endnote %}
-
 ## About temporary access to user-owned repositories
 
 If your enterprise uses {% data variables.product.prodname_emus %}, and you've allowed users to create repositories owned by their user accounts, you can temporarily access any user-owned repository within your enterprise.

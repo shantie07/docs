@@ -1,6 +1,6 @@
 ---
 title: Installing your own GitHub App
-intro: 'You can install a {% data variables.product.prodname_github_app %} that you created on the personal or organization account that owns the app. If your app is public, the {% data variables.product.prodname_github_app %} can also be installed on other accounts.'
+intro: 'You can install a {% data variables.product.prodname_github_app %} that you created on the account that owns the app. If your app is public, the {% data variables.product.prodname_github_app %} can also be installed on other accounts.'
 redirect_from:
   - /apps/installing-github-apps
   - /developers/apps/installing-github-apps
@@ -18,17 +18,17 @@ shortTitle: Install your own app
 
 ## About installing your own {% data variables.product.prodname_github_app %}
 
-Once you create a {% data variables.product.prodname_github_app %}, you can install it. If your {% data variables.product.prodname_github_app %} is owned by a personal account{% ifversion ghec%} and you are not an {% data variables.product.prodname_emu %}{% endif %}, you can install it on your account. If your {% data variables.product.prodname_github_app %} is owned by an organization and you are an organization owner, you can install it on the organization.
+After creating a {% data variables.product.prodname_github_app %}, you can install it based on its visibility.
 
-{% ifversion fpt or ghec %}
-If your {% data variables.product.prodname_github_app %} is public{% ifversion ghec%} and you are not an {% data variables.product.prodname_emu %}{% endif %}, you can also share your {% data variables.product.prodname_github_app %} with other users or organizations. {% ifversion ghec%}If you are an {% data variables.product.prodname_emu %}, then you can only share your app with other organizations within your enterprise.{% endif %}For more information, see "[AUTOTITLE](/apps/maintaining-github-apps/sharing-your-github-app)."
-{% else %}
-If your {% data variables.product.prodname_github_app %} is public, you can also share your {% data variables.product.prodname_github_app %} with other users or organizations within your enterprise. For more information, see "[AUTOTITLE](/apps/maintaining-github-apps/sharing-your-github-app)."
-{% endif %}
+* **Only on this account:** The {% data variables.product.prodname_github_app %} can only be installed on the account that created it.{% ifversion enterprise-apps-public-beta %} This visibility is not available for apps{% ifversion ghec %} created by a {% data variables.enterprise.prodname_managed_user %} or{% endif %} registered by an enterprise.{% endif %}
+* **Any account:** You can install this {% data variables.product.prodname_github_app %} on any account you control.{% ifversion enterprise-apps-public-beta %} This visibility is not available for apps registered by an enterprise.
+* **Only enterprise organizations:** If the {% data variables.product.prodname_github_app %} is owned by an enterprise, you can only install the app on{% ifversion enterprise-installed-apps %} that enterprise or{% endif %} organizations within the enterprise. Organizations where you are an organization owner will appear in the installation options.{% endif %}{% ifversion ghec %}
+
+If you are an {% data variables.product.prodname_emu %}, you cannot install a {% data variables.product.prodname_github_app %} on your user account.{% endif %}
 
 ## Installing your own {% data variables.product.prodname_github_app %}
 
-{% data reusables.apps.settings-step %}
+{% data reusables.apps.settings-step-personal-orgs %}
 {% data reusables.user-settings.developer_settings %}
 {% data reusables.user-settings.github_apps %}
 1. Next to the {% data variables.product.prodname_github_app %} that you want to install, click **Edit**.

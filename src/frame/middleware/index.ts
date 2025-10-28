@@ -7,88 +7,86 @@ import timeout from 'connect-timeout'
 
 import { haltOnDroppedConnection } from './halt-on-dropped-connection'
 import abort from './abort'
-import morgan from 'morgan'
-import datadog from '@/observability/middleware/connect-datadog'
-import helmet from './helmet.js'
-import cookieParser from './cookie-parser.js'
+import helmet from './helmet'
+import cookieParser from './cookie-parser'
 import {
   setDefaultFastlySurrogateKey,
   setLanguageFastlySurrogateKey,
-} from './set-fastly-surrogate-key.js'
-import handleErrors from '@/observability/middleware/handle-errors.js'
-import handleNextDataPath from './handle-next-data-path.js'
-import detectLanguage from '@/languages/middleware/detect-language.js'
-import reloadTree from './reload-tree.js'
-import context from './context/context.js'
-import shortVersions from '@/versions/middleware/short-versions.js'
-import languageCodeRedirects from '@/redirects/middleware/language-code-redirects.js'
-import handleRedirects from '@/redirects/middleware/handle-redirects.js'
-import findPage from './find-page.js'
-import blockRobots from './block-robots.js'
-import archivedEnterpriseVersionsAssets from '@/archives/middleware/archived-enterprise-versions-assets.js'
-import api from './api.js'
-import healthz from './healthz.js'
-import productIcons from './product-icons.js'
-import manifestJson from './manifest-json.js'
-import remoteIP from './remote-ip.js'
-import buildInfo from './build-info.js'
-import archivedEnterpriseVersions from '@/archives/middleware/archived-enterprise-versions.js'
-import robots from './robots.js'
-import earlyAccessLinks from '@/early-access/middleware/early-access-links.js'
-import categoriesForSupport from './categories-for-support.js'
-import triggerError from '@/observability/middleware/trigger-error.js'
-import secretScanning from '@/secret-scanning/middleware/secret-scanning.js'
-import ghesReleaseNotes from '@/release-notes/middleware/ghes-release-notes.js'
-import whatsNewChangelog from './context/whats-new-changelog.js'
-import layout from './context/layout.js'
-import currentProductTree from './context/current-product-tree.js'
-import genericToc from './context/generic-toc.js'
-import breadcrumbs from './context/breadcrumbs.js'
-import glossaries from './context/glossaries.js'
-import renderProductName from './context/render-product-name.js'
-import features from '@/versions/middleware/features.js'
-import productExamples from './context/product-examples.js'
-import productGroups from './context/product-groups.js'
-import featuredLinks from '@/landings/middleware/featured-links.js'
-import learningTrack from '@/learning-track/middleware/learning-track.js'
-import next from './next.js'
-import renderPage from './render-page.js'
-import assetPreprocessing from '@/assets/middleware/asset-preprocessing.js'
-import archivedAssetRedirects from '@/archives/middleware/archived-asset-redirects.js'
-import favicons from './favicons.js'
-import setStaticAssetCaching from '@/assets/middleware/static-asset-caching.js'
-import fastHead from './fast-head.js'
-import fastlyCacheTest from './fastly-cache-test.js'
-import trailingSlashes from './trailing-slashes.js'
-import fastlyBehavior from './fastly-behavior.js'
-import mockVaPortal from './mock-va-portal.js'
-import dynamicAssets from '@/assets/middleware/dynamic-assets.js'
-import contextualizeSearch from '@/search/middleware/contextualize.js'
-import shielding from '@/shielding/middleware/index.js'
-import tracking from '@/tracking/middleware/index.js'
-import { MAX_REQUEST_TIMEOUT } from '@/frame/lib/constants.js'
+} from './set-fastly-surrogate-key'
+import handleErrors from '@/observability/middleware/handle-errors'
+import handleNextDataPath from './handle-next-data-path'
+import detectLanguage from '@/languages/middleware/detect-language'
+import reloadTree from './reload-tree'
+import context from './context/context'
+import shortVersions from '@/versions/middleware/short-versions'
+import languageCodeRedirects from '@/redirects/middleware/language-code-redirects'
+import handleRedirects from '@/redirects/middleware/handle-redirects'
+import findPage from './find-page'
+import blockRobots from './block-robots'
+import archivedEnterpriseVersionsAssets from '@/archives/middleware/archived-enterprise-versions-assets'
+import api from './api'
+import llmsTxt from './llms-txt'
+import healthcheck from './healthcheck'
+import manifestJson from './manifest-json'
+import buildInfo from './build-info'
+import reqHeaders from './req-headers'
+import archivedEnterpriseVersions from '@/archives/middleware/archived-enterprise-versions'
+import robots from './robots'
+import earlyAccessLinks from '@/early-access/middleware/early-access-links'
+import categoriesForSupport from './categories-for-support'
+import triggerError from '@/observability/middleware/trigger-error'
+import dataTables from '@/data-directory/middleware/data-tables'
+import secretScanning from '@/secret-scanning/middleware/secret-scanning'
+import ghesReleaseNotes from '@/release-notes/middleware/ghes-release-notes'
+import whatsNewChangelog from './context/whats-new-changelog'
+import layout from './context/layout'
+import currentProductTree from './context/current-product-tree'
+import genericToc from './context/generic-toc'
+import breadcrumbs from './context/breadcrumbs'
+import glossaries from './context/glossaries'
+import resolveRecommended from './resolve-recommended'
+import renderProductName from './context/render-product-name'
+import features from '@/versions/middleware/features'
+import productExamples from './context/product-examples'
+import productGroups from './context/product-groups'
+import featuredLinks from '@/landings/middleware/featured-links'
+import learningTrack from '@/learning-track/middleware/learning-track'
+import journeyTrack from '@/journeys/middleware/journey-track'
+import next from './next'
+import renderPage from './render-page'
+import assetPreprocessing from '@/assets/middleware/asset-preprocessing'
+import archivedAssetRedirects from '@/archives/middleware/archived-asset-redirects'
+import favicons from './favicons'
+import setStaticAssetCaching from '@/assets/middleware/static-asset-caching'
+import fastHead from './fast-head'
+import fastlyCacheTest from './fastly-cache-test'
+import trailingSlashes from './trailing-slashes'
+import mockVaPortal from './mock-va-portal'
+import dynamicAssets from '@/assets/middleware/dynamic-assets'
+import generalSearchMiddleware from '@/search/middleware/general-search-middleware'
+import shielding from '@/shielding/middleware'
+import { MAX_REQUEST_TIMEOUT } from '@/frame/lib/constants'
+import { initLoggerContext } from '@/observability/logger/lib/logger-context'
+import { getAutomaticRequestLogger } from '@/observability/logger/middleware/get-automatic-request-logger'
+import appRouterGateway from './app-router-gateway'
+import urlDecode from './url-decode'
 
-const { DEPLOYMENT_ENV, NODE_ENV } = process.env
+const { NODE_ENV } = process.env
 const isTest = NODE_ENV === 'test' || process.env.GITHUB_ACTIONS === 'true'
-
-// By default, logging each request (with morgan), is on. And by default
-// it's off if you're in a production environment or running automated tests.
-// But if you set the env var, that takes precedence.
-const ENABLE_DEV_LOGGING = Boolean(
-  process.env.ENABLE_DEV_LOGGING
-    ? JSON.parse(process.env.ENABLE_DEV_LOGGING)
-    : !(DEPLOYMENT_ENV === 'azure' || isTest),
-)
 
 const ENABLE_FASTLY_TESTING = JSON.parse(process.env.ENABLE_FASTLY_TESTING || 'false')
 
 // Catch unhandled promise rejections and passing them to Express's error handler
 // https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016
-const asyncMiddleware = (fn: Function) => (req: Request, res: Response, next: NextFunction) => {
-  Promise.resolve(fn(req, res, next)).catch(next)
-}
+const asyncMiddleware =
+  <TReq extends Request = Request, T = void>(
+    fn: (req: TReq, res: Response, next: NextFunction) => T | Promise<T>,
+  ) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    Promise.resolve(fn(req as TReq, res, next)).catch(next)
+  }
 
-export default function (app: Express) {
+export default function index(app: Express) {
   // *** Request connection management ***
   if (!isTest) app.use(timeout(MAX_REQUEST_TIMEOUT))
   app.use(abort)
@@ -109,20 +107,13 @@ export default function (app: Express) {
   //
   app.set('trust proxy', true)
 
-  // *** Request logging ***
-  if (ENABLE_DEV_LOGGING) {
-    app.use(morgan('dev'))
-  }
+  // *** Logging ***
+  app.use(initLoggerContext) // Context for both inline logs (e.g. logger.info) and automatic logs
+  app.use(getAutomaticRequestLogger()) // Automatic logging for all requests e.g. "GET /path 200"
 
-  // *** Observability ***
-  if (process.env.DD_API_KEY) {
-    app.use(datadog)
-  }
-
-  // Put this early to make it as fast as possible because it's used,
-  // and used very often, by the Azure load balancer to check the
-  // health of each node.
-  app.use('/healthz', healthz)
+  // Put this early to make it as fast as possible because it's used
+  // to check the health of each cluster.
+  app.use('/healthcheck', healthcheck)
 
   // Must appear before static assets and all other requests
   // otherwise we won't be able to benefit from that functionality
@@ -206,21 +197,17 @@ export default function (app: Express) {
   app.use(cookieParser)
   app.use(express.json())
 
-  if (ENABLE_FASTLY_TESTING) {
-    app.use(fastlyBehavior) // FOR TESTING.
-  }
-
   if (process.env.NODE_ENV === 'development') {
     app.use(mockVaPortal) // FOR TESTING.
   }
 
   // ** Possible early exits after cookies **
-  app.use(tracking)
 
   // *** Headers ***
   app.set('etag', false) // We will manage our own ETags if desired
 
   // *** Config and context for redirects ***
+  app.use(urlDecode) // Must come before detectLanguage to decode @ symbols in version segments
   app.use(detectLanguage) // Must come before context, breadcrumbs, find-page, handle-errors, homepages
   app.use(asyncMiddleware(reloadTree)) // Must come before context
   app.use(asyncMiddleware(context)) // Must come before early-access-*, handle-redirects
@@ -244,11 +231,14 @@ export default function (app: Express) {
   // Check for a dropped connection before proceeding
   app.use(haltOnDroppedConnection)
 
+  // *** Add App Router Gateway here - before heavy contextualizers ***
+  app.use(asyncMiddleware(appRouterGateway))
+
   // *** Rendering, 2xx responses ***
   app.use('/api', api)
-  app.get('/_ip', remoteIP)
+  app.use('/llms.txt', llmsTxt)
   app.get('/_build', buildInfo)
-  app.use('/producticons', productIcons)
+  app.get('/_req-headers', reqHeaders)
   app.use(asyncMiddleware(manifestJson))
 
   // Things like `/api` sets their own Fastly surrogate keys.
@@ -268,9 +258,10 @@ export default function (app: Express) {
 
   // Specifically deal with HEAD requests before doing the slower
   // full page rendering.
-  app.head('/*', fastHead)
+  app.head('/*path', fastHead)
 
   // *** Preparation for render-page: contextualizers ***
+  app.use(asyncMiddleware(dataTables))
   app.use(asyncMiddleware(secretScanning))
   app.use(asyncMiddleware(ghesReleaseNotes))
   app.use(asyncMiddleware(whatsNewChangelog))
@@ -282,9 +273,11 @@ export default function (app: Express) {
   app.use(asyncMiddleware(productExamples))
   app.use(asyncMiddleware(productGroups))
   app.use(asyncMiddleware(glossaries))
-  app.use(asyncMiddleware(contextualizeSearch))
+  app.use(asyncMiddleware(generalSearchMiddleware))
   app.use(asyncMiddleware(featuredLinks))
+  app.use(asyncMiddleware(resolveRecommended))
   app.use(asyncMiddleware(learningTrack))
+  app.use(asyncMiddleware(journeyTrack))
 
   if (ENABLE_FASTLY_TESTING) {
     // The fastlyCacheTest middleware is intended to be used with Fastly to test caching behavior.
@@ -300,7 +293,7 @@ export default function (app: Express) {
   app.use(haltOnDroppedConnection)
 
   // *** Rendering, must go almost last ***
-  app.get('/*', asyncMiddleware(renderPage))
+  app.get('/*path', asyncMiddleware(renderPage))
 
   // *** Error handling, must go last ***
   app.use(handleErrors)

@@ -15,4 +15,9 @@ allowTitleToDifferFromFilename: true
 
 This article gives details about the REST API endpoint.
 
+{% ifversion ghes %}
+> [!NOTE]
+> {% data variables.product.prodname_ghe_server %} does not retrieve license information for dependencies, and does not calculate information about dependents, the repositories and packages that depend on a repository. These fields will not be populated in the response.
+{% endif %}
+
 <!-- Content after this section is automatically generated -->

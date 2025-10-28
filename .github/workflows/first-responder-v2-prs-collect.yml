@@ -23,11 +23,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
       - name: Check if the event originated from a team member
-        uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         id: check-membership
         with:
-          github-token: ${{secrets.DOCS_BOT_PAT_WORKFLOW_READORG}}
+          github-token: ${{secrets.DOCS_BOT_PAT_BASE}}
           result-encoding: string
           script: |
             const repoName = context.payload.repository.name
@@ -44,6 +47,19 @@ jobs:
             console.log(`This pull request was authored by an external contributor.`)
             return 'false'
 
+      # Check if docs-bot authored the PR
+      # If yes, set Type field to "Maintenance"
+      # If no, set Type field to "External contributor PR"
+      - name: Check if docs-bot is PR author
+        env:
+          PR_AUTHOR_ID: ${{ github.event.pull_request.user.id }}
+        run: |
+          if [ $PR_AUTHOR_ID == 77750099 ]; then
+            echo "TYPE_FIELD_VALUE=3f142cf2" >> $GITHUB_ENV
+          else
+            echo "TYPE_FIELD_VALUE=bbd0922a" >> $GITHUB_ENV
+          fi
+
       - name: Add the docs-content-fr label
         if: ${{ steps.check-membership.outputs.result == 'false' }}
         env:
@@ -53,18 +69,17 @@ jobs:
           gh pr edit $PR_URL --add-label docs-content-fr
 
       # Add to the FR project
-      # and set type to "External contributor PR"
+      # and set type to "Maintenance" or "External contributor PR"
       # and set date to now
       - name: Triage to docs-content FR project
         if: steps.check-membership.outputs.result == 'false'
         env:
-          GITHUB_TOKEN: ${{ secrets.DOCS_BOT_PAT_WRITEORG_PROJECT }}
+          GITHUB_TOKEN: ${{ secrets.DOCS_BOT_PAT_BASE }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           PROJECT_NUMBER: 11672
           PROJECT_ID: PVT_kwDNJr_OAGNkBg
           TYPE_FIELD_ID: PVTSSF_lADNJr_OAGNkBs4D-Nyn
           DATE_FIELD_ID: PVTF_lADNJr_OAGNkBs4D-N1h
-          EXTERNAL_PR_TYPE_ID: bbd0922a
         run: |
           echo "Adding item to project..."
 
@@ -72,7 +87,7 @@ jobs:
 
           echo "Editing type..."
 
-          gh project item-edit --project-id $PROJECT_ID --id $ITEM_ID --field-id $TYPE_FIELD_ID --single-select-option-id $EXTERNAL_PR_TYPE_ID
+          gh project item-edit --project-id $PROJECT_ID --id $ITEM_ID --field-id $TYPE_FIELD_ID --single-select-option-id ${{ env.TYPE_FIELD_VALUE }}
 
           echo "Editing date..."
 

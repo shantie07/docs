@@ -8,17 +8,86 @@ shortTitle: Register an LMS
 ---
 ## About registering an LMS to your classroom
 
-Before you can connect your LMS to a classroom, an administrator for your LMS instance needs to configure your LMS to allow {% data variables.product.prodname_classroom %} and then register your LMS with {% data variables.product.prodname_classroom %} to initiate the OAuth handshake. An admin only needs to do this registration process once, then any teacher who uses their LMS instance may sync their LMS courses to classrooms. For more information on connecting an LMS course to a classroom, see "[AUTOTITLE](/education/manage-coursework-with-github-classroom/teach-with-github-classroom/connect-a-learning-management-system-course-to-a-classroom)."
+Before you can connect your LMS to a classroom, an administrator for your LMS instance needs to configure your LMS to allow {% data variables.product.prodname_classroom %} and then register your LMS with {% data variables.product.prodname_classroom %} to initiate the OAuth handshake. An admin only needs to do this registration process once, then any teacher who uses their LMS instance may sync their LMS courses to classrooms. For more information on connecting an LMS course to a classroom, see [AUTOTITLE](/education/manage-coursework-with-github-classroom/teach-with-github-classroom/connect-a-learning-management-system-course-to-a-classroom).
 
-{% note %}
-
-**Note:** {% data reusables.classroom.google-classroom-note %}
-
-{% endnote %}
+> [!NOTE]
+> {% data reusables.classroom.google-classroom-note %}
 
 ## Supported LMSes
 
 {% data reusables.classroom.supported-lmses %}
+
+## Configuring Blackboard for {% data variables.product.prodname_classroom %}
+
+You can register your Blackboard installation with {% data variables.product.prodname_classroom %} to enable teachers to import roster data into their classrooms. For more information about Blackboard, see the [Blackboard website](https://www.anthology.com/products/teaching-and-learning/learning-effectiveness/blackboard).
+
+### Step 1. Register {% data variables.product.prodname_classroom %} Developer Keys in the Anthology Developer Portal
+
+1. Sign into the [Anthology Developer Portal](https://developer.anthology.com/).
+1. Click on the **plus sign** in the [My Application](https://developer.anthology.com/portal/applications) page.
+1. Click **Manual Registration** in the dropdown menu.
+1. On the "Register a new application" configuration screen, set the fields to the following values.
+
+    | Field in the new app configuration | Value or setting |
+    | :- | :- |
+    | **Application Name** | `GitHub Classroom` <br/><br/>You can use any name, it will be showed only to administrators.  |
+    | **Description** | `Sync Blackboard course roster to GitHub Classroom` (or something similar) |
+    | **Domain(s)** | `classroom.github.com` |
+    | **Group** | Leave the default value or change it according to your institution needs. |
+    | **My Integration supports LTI 1.3** | Enable the flag.|
+    | **Login Initiation URL** | `https://classroom.github.com/lti1p3/openid-connect/auth` |
+    | **Tool Redirect URL(s)** | `https://classroom.github.com/lti1p3/openid-connect/redirect,https://classroom.github.com/context-link` |
+    | **Tool JWKS URL** | `https://classroom.github.com/.well-known/jwks.json` |
+    | **Signing Algorithm** dropdown | `RS256` |
+    | **Custom parameters** | Leave empty. |
+1. Click **Register Application**.
+1. The Developer Portal will show a screen that contains important information you'll need to input in the next steps of registering your instance in your Blackboard instance and in {% data variables.product.prodname_classroom %} below. Please note them in a safe place and click **Done**.
+1. In the table on the "My Applications" page, in the row for the GitHub Classroom application, click on the three dots and then **Manage Placements** in the dropdown menu.
+1. Click on the **plus sign**.
+1. On the "Register a new placement" configuration screen, set the fields to the following values.
+
+    | Field in the new placement configuration | Value or setting |
+    | :- | :- |
+    | **Placement Name** | `GitHub Classroom` <br/><br/>You can use any name, but if you set this to something else, be sure this is communicated to teachers.  |
+    | **Description** | `Sync Blackboard course roster to GitHub Classroom` (or something similar) |
+    | **Type** dropdown | Course Tool |
+    | **Allow students access** | Don't enable the flag. |
+    | **Launch in new window** | Don't enable the flag, unless you want to offer that user experience. |
+    | **Target link URI** | `https://classroom.github.com/context-link` |
+    | **Icon URL** | Leave it empty or provide a static URL for the icon. If needed, later in Blackboard can be manually uploaded. |
+    | **Custom parameters** | Leave empty. |
+1. Click **Register Placement**.
+
+### Step 2. Register {% data variables.product.prodname_classroom %} Developer Keys in Blackboard
+
+1. Sign into your **Blackboard** instance.
+1. In the left sidebar on the home page, click **Admin**, then click **LTI Tool Providers**.
+1. On the "LTI Tool Providers" page, click **Register LTI 1.3/Advantage Tool**.
+1. Insert the **Client ID** / **Application ID** obtained from the Developer Portal and click **Submit**.
+1. Blackboard will show all application data. In this page:
+    1. Verify that **Tool Status** is `Approved`.
+    1. Verify that **User Fields to be Sent** flags are enabled for "Role in Course", "Name", "Email Address".
+    1. Verify that **Allow mark service access** radio button is set to "No". To enable this option, navigate to the LTI Tool Providers in the Admin Panel:
+       * Select Manage Global Properties
+       * Under Creation of Tool Provider Links, select radio button “Allow links to any tool provider, but require approval for each new provider”
+    1. Verify that **Allow Membership Service Access** radio button is set to "Yes".
+1. Click **Submit**.
+
+### Step 3. Register your developer keys with {% data variables.product.prodname_classroom %}
+
+1. Go to https://classroom.github.com/register-lms.
+1. Fill in the following information:
+
+   * Under "LMS Type", choose "Other" from the dropdown menu.
+   * "Issuer Identifier": `https://blackboard.com`
+   * "Domain": The base URL to your Blackboard instance
+   * "Client ID": The "Client ID" / "Application ID" obtained from the registration of the app in the Anthology Developer Portal.
+   * "OIDC Initiation URL": The "OIDC auth request endpoint" obtained from the registration of the app in the Anthology Developer Portal.
+   * "OAuth 2.0 Token Retrieval URL": The "Auth token endpoint" obtained from the registration of the app in the Anthology Developer Portal.
+   * "Key Set URL": The "Public keyset URL" obtained from the registration of the app in the Anthology Developer Portal.
+
+1. Click **Register**.
+1. You should see the "Successfully registered LMS" banner at the top of the screen, which means that you've registered your LMS instance and teachers can now link their classrooms.
 
 ## Configuring Canvas for {% data variables.product.prodname_classroom %}
 
@@ -35,7 +104,7 @@ You can register your Canvas installation with {% data variables.product.prodnam
     | Field in Canvas app configuration | Value or setting |
     | :- | :- |
     | **Method** | `Manual Entry` |
-    | **Title** | `GitHub Classroom` <br/><br/>**Note**: You can use any name, but if you set this to something else, be sure this is communicated to teachers.  |
+    | **Title** | `GitHub Classroom` <br/><br/>**Note:** You can use any name, but if you set this to something else, be sure this is communicated to teachers.  |
     | **Description** | `Sync Canvas course rosters to GitHub Classroom` (or something similar) |
     | **Target Link URI** | `https://classroom.github.com/context-link` |
     | **OpenID Connect Initiation URL** | `https://classroom.github.com/lti1p3/openid-connect/auth` |
@@ -44,7 +113,7 @@ You can register your Canvas installation with {% data variables.product.prodnam
     | **Redirect URIs** | `https://classroom.github.com/lti1p3/openid-connect/redirect` |
     | **LTI Advantage Services** dropdown | Select the "Can retrieve user data associated with the context the tool is installed in" checkbox. |
     | **Additional Settings** dropdown | Under "Privacy Level", select `Public` |
-    | **Placements** | Select `Course Settings Sub Navigation`. <br/><br/>**Note**: If you set the placement to something else, this must be communicated to teachers. Our documentation will expect that this is the placement of the button. |
+    | **Placements** | Select `Course Settings Sub Navigation`. <br/><br/>**Note:** If you set the placement to something else, this must be communicated to teachers. Our documentation will expect that this is the placement of the button. |
 1. Click **Save**.
 1. In the table on the "Developer Keys" page, in the row for the GitHub Classroom developer key, take note of the value of the client ID in the "Details" column -- this must be communicated to teachers for them to finish setup.
 1. In the table on the "Developer Keys" page, under the "State" column, toggle the state of the key to "On".
@@ -54,13 +123,13 @@ You can register your Canvas installation with {% data variables.product.prodnam
 1. Go to https://classroom.github.com/register-lms.
 1. Fill in the following information:
 
-   - Under "LMS Type", choose "Canvas" from the dropdown menu.
-   - "Issuer Identifier": `https://canvas.instructure.com`
-   - "Domain": The base URL to your Canvas instance
-   - "Client ID": The "Client ID" under "Details" from the developer key you created
-   - "OIDC Authorization end-point": The base URL to your Canvas instance with `/api/lti/authorize_redirect` appended at the end.
-   - "OAuth 2.0 Token Retrieval URL": The base URL to your Canvas instance with `/login/oauth2/token` appended at the end.
-   - "Key Set URL": The base URL to your Canvas instance with `/api/lti/security/jwks` appended at the end.
+   * Under "LMS Type", choose "Canvas" from the dropdown menu.
+   * "Issuer Identifier": `https://canvas.instructure.com`
+   * "Domain": The base URL to your Canvas instance
+   * "Client ID": The "Client ID" under "Details" from the developer key you created
+   * "OIDC Authorization end-point": The base URL to your Canvas instance with `/api/lti/authorize_redirect` appended at the end.
+   * "OAuth 2.0 Token Retrieval URL": The base URL to your Canvas instance with `/login/oauth2/token` appended at the end.
+   * "Key Set URL": The base URL to your Canvas instance with `/api/lti/security/jwks` appended at the end.
 
 1. Click **Register**.
 1. You should see the "Successfully registered LMS" banner at the top of the screen, which means that you've registered your LMS instance and teachers can now link their classrooms.
@@ -91,7 +160,7 @@ You must be using Moodle version 3.0 or greater.
 
     | Field in Moodle app configuration | Value or setting |
     | :- | :- |
-    | **Tool name** | `GitHub Classroom` <br/><br/>**Note**: You can use any name, but if you set this to something else, be sure this is communicated to teachers. |
+    | **Tool name** | `GitHub Classroom` <br/><br/>**Note:** You can use any name, but if you set this to something else, be sure this is communicated to teachers. |
     | **Tool URL** | `https://classroom.github.com` |
     | **LTI version** | `LTI 1.3` |
     | **Public Key type** | `Keyset URL` |
@@ -111,13 +180,13 @@ You must be using Moodle version 3.0 or greater.
 1. Go to https://classroom.github.com/register-lms.
 1. Fill in the following information:
 
-   - Under "LMS Type", choose "Moodle" from the dropdown menu.
-   - "Issuer Identifier": The "Platform ID" from the "Tool configuration details" of the external tool you created in Moodle
-   - "Domain": The base URL to your Moodle instance
-   - "Client ID": The "Client ID" from the "Tool configuration details" of the external tool you created in Moodle
-   - "Authentication request URL": The "Authentication Request URL" from the "Tool configuration details" of the external tool you created in Moodle
-   - "Access token URL": The "Access token URL" from the "Tool configuration details" of the external tool you created in Moodle
-   - "Key Set URL": The "Public keyset URL" from the "Tool configuration details" of the external tool you created in Moodle
+   * Under "LMS Type", choose "Moodle" from the dropdown menu.
+   * "Issuer Identifier": The "Platform ID" from the "Tool configuration details" of the external tool you created in Moodle
+   * "Domain": The base URL to your Moodle instance
+   * "Client ID": The "Client ID" from the "Tool configuration details" of the external tool you created in Moodle
+   * "Authentication request URL": The "Authentication Request URL" from the "Tool configuration details" of the external tool you created in Moodle
+   * "Access token URL": The "Access token URL" from the "Tool configuration details" of the external tool you created in Moodle
+   * "Key Set URL": The "Public keyset URL" from the "Tool configuration details" of the external tool you created in Moodle
 
 1. Click **Register**.
 1. You should see the "Successfully registered LMS" banner at the top of the screen, which means that you've registered your LMS instance and teachers can now link their classrooms.
@@ -133,7 +202,7 @@ You must be using Moodle version 3.0 or greater.
 
     | Field in Sakai app configuration | Value or setting |
     | :- | :- |
-    | **Tool name** | GitHub Classroom - [Your Course Name] <br/><br/>**Note**: You can use any name, but if you set this to something else, be sure this is communicated to teachers. |
+    | **Tool name** | GitHub Classroom - [Your Course Name] <br/><br/>**Note:** You can use any name, but if you set this to something else, be sure this is communicated to teachers. |
     | **Button Text** (Text in tool menu) | What the teacher will see on the button to launch to {% data variables.product.prodname_classroom %}. For example, the value could be `sync`. |
     | **Launch URL** | `https://classroom.github.com/context-link` |
     | **Send User Names to External Tool** | Select this checkbox. |
@@ -148,13 +217,13 @@ You must be using Moodle version 3.0 or greater.
 
 1. Go to https://classroom.github.com/register-lms.
 1. Fill in the following information:
-   - Under "LMS Type", choose "Sakai" from the dropdown menu.
-   - "LTI 1.3 Platform Issuer": The "LTI 1.3 Platform Issuer" field as provided by Sakai
-   - "Domain": The base URL to your Sakai instance
-   - "LTI 1.3 Client ID": The "LTI 1.3 Client ID" field as provided by Sakai
-   - "LTI 1.3 Platform OIDC Authentication URL":  The "LTI 1.3 Platform OIDC Authentication URL" field as provided by Sakai
-   - "LTI 1.3 Platform OAuth2 Bearer Token Retrieval URL": The "LTI 1.3 Platform OAuth2 Bearer Token Retrieval URL" field as provided by Sakai
-   - "LTI 1.3 Platform OAuth2 Well-Known/KeySet URL": The "LTI 1.3 Platform OAuth2 Well-Known/KeySet URL" field as provided by Sakai
+   * Under "LMS Type", choose "Sakai" from the dropdown menu.
+   * "LTI 1.3 Platform Issuer": The "LTI 1.3 Platform Issuer" field as provided by Sakai
+   * "Domain": The base URL to your Sakai instance
+   * "LTI 1.3 Client ID": The "LTI 1.3 Client ID" field as provided by Sakai
+   * "LTI 1.3 Platform OIDC Authentication URL": The "LTI 1.3 Platform OIDC Authentication URL" field as provided by Sakai
+   * "LTI 1.3 Platform OAuth2 Bearer Token Retrieval URL": The "LTI 1.3 Platform OAuth2 Bearer Token Retrieval URL" field as provided by Sakai
+   * "LTI 1.3 Platform OAuth2 Well-Known/KeySet URL": The "LTI 1.3 Platform OAuth2 Well-Known/KeySet URL" field as provided by Sakai
 
 1. Click **Register**.
-1. You should see the "Successfully registered LMS" banner at the top of the screen, which means that you've  registered your LMS instance and teachers can now link their classrooms.
+1. You should see the "Successfully registered LMS" banner at the top of the screen, which means that you've registered your LMS instance and teachers can now link their classrooms.

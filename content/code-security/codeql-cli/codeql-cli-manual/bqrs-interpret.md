@@ -5,7 +5,7 @@ versions: # DO NOT MANUALLY EDIT. CHANGES WILL BE OVERWRITTEN BY A 🤖
   ghec: '*'
   ghes: '*'
 topics:
-  - Advanced Security
+  - Code Security
   - Code scanning
   - CodeQL
 type: reference
@@ -16,6 +16,9 @@ redirect_from:
   - /code-security/codeql-cli/manual/bqrs-interpret
 ---
 
+<!-- markdownlint-disable GHD053 -->
+
+<!-- markdownlint-disable GHD030 -->
 
 <!-- Content after this section is automatically generated -->
 
@@ -102,7 +105,7 @@ all queries. It loads query help for /path/to/query.ql from the
 /path/to/query.md file. If this flag is not supplied the default
 behavior is to include help only for custom queries i.e. those in query
 packs which are not of the form \`codeql/\<lang\&rt;-queries\`. This
-option has no effect when passed to [codeql bqrs interpret](/code-security/codeql-cli/codeql-cli-manual/bqrs-interpret).
+option has no effect when passed to codeql bqrs interpret.
 
 #### `--sarif-include-query-help=<mode>`
 
@@ -117,21 +120,38 @@ queries i.e. those in query packs which are not of the form
 
 `never`: Do not include query help for any queries.
 
-This option has no effect when passed to [codeql bqrs interpret](/code-security/codeql-cli/codeql-cli-manual/bqrs-interpret).
+This option has no effect when passed to codeql bqrs interpret.
 
 Available since `v2.15.2`.
+
+#### `--no-sarif-include-alert-provenance`
+
+\[Advanced] \[SARIF formats only] Do not include alert provenance
+information in the SARIF output.
+
+Available since `v2.18.1`.
 
 #### `--[no-]sarif-group-rules-by-pack`
 
 \[SARIF formats only] Place the rule object for each query under its
 corresponding QL pack in the `<run>.tool.extensions` property. This
-option has no effect when passed to [codeql bqrs interpret](/code-security/codeql-cli/codeql-cli-manual/bqrs-interpret).
+option has no effect when passed to codeql bqrs interpret.
 
 #### `--[no-]sarif-multicause-markdown`
 
 \[SARIF formats only] For alerts that have multiple causes, include
 them as a Markdown-formatted itemized list in the output in addition to
 as a plain string.
+
+#### `--no-sarif-minify`
+
+\[SARIF formats only] Produce pretty-printed SARIF output. By default,
+SARIF output is minified to reduce the size of the output file.
+
+#### `--sarif-run-property=<String=String>`
+
+\[SARIF formats only] A key value pair to add to the generated SARIF
+'run' property bag. Can be repeated.
 
 #### `--no-group-results`
 
@@ -184,11 +204,6 @@ The number of threads used for computing paths.
 Defaults to 1. You can pass 0 to use one thread per core on the machine,
 or -_N_ to leave _N_ cores unused (except still use at least one
 thread).
-
-#### `--sarif-run-property=<String=String>`
-
-\[SARIF only] A key value pair to add to the generated SARIF 'run'
-property bag. Can be repeated.
 
 #### `--column-kind=<columnKind>`
 

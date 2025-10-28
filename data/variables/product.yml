@@ -7,15 +7,20 @@
 company_short: 'GitHub'
 
 # GitHub's flagship products
-product_name: >-
-  {% ifversion ghec %}GitHub Enterprise Cloud{% elsif ghes %}GitHub Enterprise Server{% else %}GitHub{% endif %}
-## Use this variable when referring to the product, when the output should always be GitHub. For example, "the GitHub REST API"
+
+## Use this variable to refer generically to the "GitHub" platform or website (for example, when referring to GitHub.com, GHEC, or GHES as simply "GitHub").
+## Use another variable if it is important to specify the environment (e.g. GHES)
+github: 'GitHub'
+
+## DO NOT USE. Use the `github` variable instead. (Writers found the name of this variable to be misleading.)
 prodname_dotcom: 'GitHub'
 
 ## Use this variable when the output should always be GitHub Enterprise, regardless of the product the user is using
 prodname_enterprise: 'GitHub Enterprise'
 
 ## Use this variable only when the output should specifically be GitHub.com, to distinguish from GitHub the company or other GitHub products (e.g. connecting GHE to GitHub.com)
+## Note that many users access GitHub through a different URL
+## Do NOT use as a synonym for "The GitHub web interface" (for example, if you want to distinguish something from the GitHub Mobile interface), or in cases where the .com top-level domain is not relevant.
 prodname_dotcom_the_website: 'GitHub.com'
 
 ## Use these variables when the output should reflect one of our two specific GitHub Enterprise offerings
@@ -29,6 +34,7 @@ prodname_team: 'GitHub Team'
 prodname_free_team: 'GitHub Free'
 
 prodname_enterprise_backup_utilities: 'GitHub Enterprise Server Backup Utilities'
+prodname_enterprise_backup_service: 'GitHub Enterprise Server Backup Service'
 
 # GitHub Connect (enterprise accounts, other unified features)
 prodname_github_connect: 'GitHub Connect'
@@ -45,6 +51,7 @@ prodname_ado2gh_cli_short: ADO2GH extension
 prodname_bbs2gh: BBS2GH
 prodname_bbs2gh_cli: BBS2GH extension of the GitHub CLI
 prodname_bbs2gh_cli_short: BBS2GH extension
+prodname_ghos: GitHub-owned blob storage
 
 # GitHub Education
 prodname_education: 'GitHub Education'
@@ -55,7 +62,7 @@ prodname_classroom: 'GitHub Classroom'
 prodname_classroom_with_url: '[GitHub Classroom](https://classroom.github.com/login)'
 prodname_campus_program: 'GitHub Campus Program'
 prodname_student_pack: 'GitHub Student Developer Pack'
-prodname_global_campus: 'GitHub Global Campus'
+prodname_global_campus: 'GitHub Education'
 prodname_community_exchange: 'GitHub Community Exchange'
 prodname_student_leader_program: 'GitHub Campus Experts'
 prodname_student_leader_program_singular: 'GitHub Campus Expert'
@@ -89,10 +96,10 @@ prodname_codeql_cli: 'CodeQL CLI'
 # CodeQL usually bumps its minor version for each minor version of GHES.
 # Update this whenever a new enterprise version of CodeQL is being prepared.
 codeql_cli_ghes_recommended_version: >-
-  {% ifversion ghes < 3.10 %}2.12.7{% elsif ghes < 3.11 %}2.13.5{% elsif ghes < 3.12 %}2.14.6{% elsif ghes < 3.13 %}2.15.5{% elsif ghes < 3.14 %}2.16.6{% endif %}
-
+  {% ifversion ghes < 3.15 %}2.17.6{% elsif ghes < 3.16 %}2.18.4{% elsif ghes < 3.17 %}2.20.3{% elsif ghes < 3.18 %}2.20.7{% elsif ghes < 3.19 %}2.21.4{% endif %}
+codeql_cli_version_min_version_create_bundle: '2.17.6'
 # Projects v2
-prodname_projects_v2: '{% ifversion ghes = 3.9 %}Projects (beta){% else %}Projects{% endif %}'
+prodname_projects_v2: 'Projects'
 prodname_projects_v1: >-
   projects (classic)
 prodname_projects_v1_caps: >-
@@ -112,14 +119,18 @@ pat_generic_title_case_plural: 'Personal Access Tokens'
 pat_v2: 'fine-grained personal access token'
 pat_v2_plural: 'fine-grained personal access tokens'
 pat_v2_caps: 'Fine-grained personal access token'
+pat_v2_caps_plural: 'Fine-grained personal access tokens'
 pat_v1: >-
-  {% ifversion pat-v2 %}personal access token (classic){% else %}personal access token{% endif %}
+  personal access token (classic)
 pat_v1_plural: >-
-  {% ifversion pat-v2 %}personal access tokens (classic){% else %}personal access tokens{% endif %}
+  personal access tokens (classic)
 pat_v1_caps: >-
-  {% ifversion pat-v2 %}Personal access token (classic){% else %}Personal access token{% endif %}
+  Personal access token (classic)
 pat_v1_caps_plural: >-
-  {% ifversion pat-v2 %}Personal access tokens (classic){% else %}Personal access tokens{% endif %}
+  Personal access tokens (classic)
+pat_classic: 'token (classic)'
+pat_classic_plural: 'tokens (classic)'
+pat_classic_caps: 'Token (classic)'
 
 # Apps, GitHub Marketplace, and integrations
 prodname_marketplace: 'GitHub Marketplace'
@@ -127,6 +138,7 @@ prodname_github_app: 'GitHub App'
 prodname_github_apps: 'GitHub Apps'
 prodname_oauth_app: 'OAuth app'
 prodname_oauth_apps: 'OAuth apps'
+prodname_github_models: 'GitHub Models'
 
 # API and developer docs
 prodname_enterprise_api: 'GitHub Enterprise Server APIs'
@@ -136,8 +148,8 @@ prodname_unfurls: 'Content Attachments'
 ## Use this variable only when referring to GitHub Actions the product. When referring to the thing that someone creates using the product, call it an action (small a). See the terminology page of the Brand Guide for more.
 prodname_actions: 'GitHub Actions'
 prodname_actions_runner_controller: 'Actions Runner Controller'
-runner_controller_required_version: >-
-  {% ifversion ghes < 3.10 %}2.303.0{% elsif ghes < 3.11 %}2.304.0{% elsif ghes < 3.12 %}2.309.0{% elsif ghes < 3.13 %}2.311.0{% elsif ghes < 3.14 %}2.314.1{% endif %}
+runner_required_version: >-
+  {% ifversion ghes < 3.15 %}2.317.0{% elsif ghes < 3.16 %}2.319.1{% elsif ghes < 3.17 %}2.321.0{% elsif ghes < 3.18 %}2.322.0{% elsif ghes < 3.19 %}2.324.0{% endif %}
 
 # GitHub Debug
 prodname_debug: 'GitHub Debug'
@@ -170,8 +182,45 @@ prodname_sponsors: 'GitHub Sponsors'
 prodname_matching_fund: 'GitHub Sponsors Matching Fund'
 
 # GitHub Advanced Security
+# ------------------------
+## Full product names
+prodname_GHAS: 'GitHub Advanced Security'
+prodname_GH_code_security: '{% ifversion ghas-products %}GitHub Code Security{% else %}GitHub Advanced Security{% endif %}'
+prodname_GH_secret_protection: '{% ifversion ghas-products %}GitHub Secret Protection{% else %}GitHub Advanced Security{% endif %}'
+### Useful in unversioned docs
+prodname_GH_code_security_always: 'GitHub Code Security'
+prodname_GH_secret_protection_always: 'GitHub Secret Protection'
+
+## GHAS or GHAS products
+prodname_GHAS_or_code_security: '{% ifversion ghas-products %}GitHub Code Security or {% endif %}GitHub Advanced Security'
+prodname_GHAS_or_secret_protection: '{% ifversion ghas-products %}GitHub Secret Protection or {% endif %}GitHub Advanced Security'
+prodname_GHAS_cs_or_sp: '{% ifversion ghas-products %}GitHub Secret Protection, GitHub Code Security, or {% endif %}GitHub Advanced Security'
+prodname_GH_cs_or_sp: '{% ifversion ghas-products %}GitHub Secret Protection or GitHub Code Security{% else %}GitHub Advanced Security{% endif %}'
+
+## GHAS and GHAS products
+prodname_GHAS_cs_and_sp: '{% ifversion ghas-products %}GitHub Secret Protection, GitHub Code Security, and {% endif %}GitHub Advanced Security'
+prodname_GH_cs_and_sp: '{% ifversion ghas-products %}GitHub Secret Protection and GitHub Code Security{% else %}GitHub Advanced Security{% endif %}'
+
+## Short or UI names
+prodname_AS: 'Advanced Security'
+prodname_code_security: '{% ifversion ghas-products %}Code Scanning{% else %}Advanced Security{% endif %}'
+prodname_secret_protection: '{% ifversion ghas-products %}Secret Protection{% else %}Advanced Security{% endif %}'
+prodname_cs_or_sp: '{% ifversion ghas-products %}Secret Protection or Code Security{% else %}Advanced Security{% endif %}'
+prodname_cs_and_sp: '{% ifversion ghas-products %}Secret Protection and Code Security{% else %}Advanced Security{% endif %}'
+UI_advanced_security: '{% ifversion ghas-products %}{% data variables.product.prodname_AS %}{% elsif ghes > 3.15 %}Code security{% else %}Code security and analysis{% endif %}'
+UI_advanced_security_ent: '{% ifversion ghas-products %}{% data variables.product.prodname_AS %}{% elsif ghes > 3.14 %}Code security{% else %}Code security and analysis{% endif %}'
+UI_code_security_scanning: '{% ifversion ghas-products %}Code Security{% else %}Code scanning{% endif %}'
+UI_secret_protection_scanning: '{% ifversion ghas-products %}Secret Protection{% else %}Secret scanning{% endif %}'
+
+## OLD variables, DO NOT USE
 prodname_GH_advanced_security: 'GitHub Advanced Security'
 prodname_advanced_security: 'Advanced Security'
+
+## Secret risk assessment
+prodname_secret_risk_assessment: 'secret risk assessment'
+prodname_secret_risk_assessment_caps: 'Secret risk assessment'
+
+## Azure DevOps
 prodname_ghas_azdo: 'GitHub Advanced Security for Azure DevOps'
 
 # Codespaces
@@ -188,7 +237,8 @@ prodname_learning_link: 'https://skills.github.com/'
 prodname_roadmap: 'GitHub public roadmap'
 prodname_roadmap_link: 'https://github.com/github/roadmap#github-public-roadmap'
 
-# GitHub support
+# GitHub Support plans
+standard_support_plan: 'Standard plan'
 premium_support_plan: 'Premium plan'
 premium_plus_support_plan: 'Premium Plus plan / GitHub Engineering Direct'
 microsoft_premium_plus_support_plan: 'GitHub Engineering Direct'
@@ -251,27 +301,16 @@ prodname_dependabot_updates: 'Dependabot updates'
 prodname_archive: 'GitHub Archive Program'
 prodname_arctic_vault: 'Arctic Code Vault'
 
-# GitHub Copilot
+# GitHub Copilot (product)
 prodname_copilot: 'GitHub Copilot'
 prodname_copilot_short: 'Copilot'
-prodname_copilot_for_business: 'GitHub Copilot Business'
-prodname_copilot_for_individuals: 'GitHub Copilot Individual'
-prodname_copilot_business_short: 'Copilot Business'
-prodname_copilot_individuals_short: 'Copilot Individual'
-prodname_copilot_enterprise: 'GitHub Copilot Enterprise'
-prodname_copilot_enterprise_short: 'Copilot Enterprise'
-prodname_copilot_chat: 'GitHub Copilot Chat'
-prodname_copilot_chat_short: 'Copilot Chat'
-prodname_copilot_chat_dotcom: 'GitHub Copilot Chat in GitHub.com'
-prodname_copilot_chat_dotcom_short: 'Copilot Chat in GitHub.com'
-prodname_copilot_mobile: 'GitHub Copilot Chat in GitHub Mobile'
-prodname_copilot_mobile_short: 'Copilot Chat in GitHub Mobile'
-prodname_copilot_cli: 'GitHub Copilot in the CLI'
-prodname_copilot_cli_short: 'Copilot in the CLI'
-prodname_copilot_for_prs: 'Copilot pull request summaries'
-prodname_copilot_prs_short: 'pull request summaries'
-prodname_copilot_customization: 'Copilot Customization'
-prodname_copilot_in_support: 'Copilot in GitHub Support'
+
+# GitHub Spark
+prodname_spark: 'GitHub Spark'
+prodname_spark_short: 'Spark'
+
+# Windows
+prodname_windows_terminal: 'Windows Terminal'
 
 # Command Palette
 prodname_command_palette: 'GitHub Command Palette'
@@ -295,13 +334,18 @@ pricing_url: 'https://github.com/pricing'
 pricing_link: '[GitHub Pricing](https://github.com/pricing)'
 raw_github_com: >-
   {% ifversion fpt or ghec %}raw.githubusercontent.com{% else %}HOSTNAME/user/repo/raw{% endif %}
+login_url: >-
+  {%- ifversion fpt or ghec %}
+  [`https://github.com/login`](https://github.com/login)
+  {%- elsif ghes %}
+  `http(s)://HOSTNAME/login`
+  {%- endif %}
 # GitHub Enterprise Server past versions
 current-340-version: '11.10.354'
 
 # Developer site product variables
-# Use this inside command-line code blocks
-api_url_pre: >-
-  {% ifversion fpt or ghec %}https://api.github.com{% elsif ghes %}http(s)://<em>HOSTNAME</em>/api/v3{% endif %}
+rest_url: >-
+  {% ifversion fpt or ghec %}https://api.github.com{% elsif ghes %}http(s)://HOSTNAME/api/v3{% endif %}
 # Use this inside command-line code blocks
 # Enterprise OAuth paths that don't include "/graphql" or "/api/v3"
 oauth_host_code: >-
@@ -312,12 +356,5 @@ device_authorization_url: >-
   {%- elsif ghes %}
   `http(s)://HOSTNAME/login/device`
   {%- endif %}
-# Use this all other code blocks
-api_url_code: >-
-  {% ifversion fpt or ghec %}https://api.github.com{% elsif ghes %}http(s)://HOSTNAME/api/v3{% endif %}
-# Use this inside command-line code blocks
-graphql_url_pre: >-
-  {% ifversion fpt or ghec %}https://api.github.com/graphql{% elsif ghes %}http(s)://<em>HOSTNAME</em>/api/graphql{% endif %}
-# Use this all other code blocks
-graphql_url_code: >-
+graphql_url: >-
   {% ifversion fpt or ghec %}https://api.github.com/graphql{% elsif ghes %}http(s)://HOSTNAME/api/graphql{% endif %}

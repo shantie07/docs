@@ -5,7 +5,7 @@ versions: # DO NOT MANUALLY EDIT. CHANGES WILL BE OVERWRITTEN BY A 🤖
   ghec: '*'
   ghes: '*'
 topics:
-  - Advanced Security
+  - Code Security
   - Code scanning
   - CodeQL
 type: reference
@@ -16,6 +16,9 @@ redirect_from:
   - /code-security/codeql-cli/manual/database-bundle
 ---
 
+<!-- markdownlint-disable GHD053 -->
+
+<!-- markdownlint-disable GHD030 -->
 
 <!-- Content after this section is automatically generated -->
 
@@ -47,24 +50,30 @@ that results, logs, TRAP, or similar should be included.
 
 \[Mandatory] The output file, typically with the extension ".zip".
 
-#### `--include-diagnostics`
+#### `--[no-]include-diagnostics`
 
 Include diagnostics in the bundle.
 
 Available since `v2.16.0`.
 
-#### `--include-results`
+#### `--[no-]include-results`
 
 Include any precomputed query results in the bundle.
 
-#### `--include-temp`
+#### `--[no-]include-logs`
+
+Include the logs directory in the bundle.
+
+Available since `v2.17.6`.
+
+#### `--[no-]include-temp`
 
 Includes the "temp" directory, where any generated packs, queries, and
 suites are located.
 
 Available since `v2.13.3`.
 
-#### `--include-uncompressed-source`
+#### `--[no-]include-uncompressed-source`
 
 Include an uncompressed version of the source archive directory. This is
 necessary for legacy CodeQL plugins (like CodeQL for Eclipse).
@@ -115,6 +124,9 @@ predicates.
 
 `fit`: Simply make sure the defined size limits for the disk cache are
 observed, deleting as many intermediates as necessary.
+
+`overlay`: Trim to just the data that will be useful when evaluating
+against an overlay.
 
 #### `--cleanup-upgrade-backups`
 

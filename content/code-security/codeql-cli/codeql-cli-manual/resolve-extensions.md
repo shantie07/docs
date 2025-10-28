@@ -5,7 +5,7 @@ versions: # DO NOT MANUALLY EDIT. CHANGES WILL BE OVERWRITTEN BY A 🤖
   ghec: '*'
   ghes: '*'
 topics:
-  - Advanced Security
+  - Code Security
   - Code scanning
   - CodeQL
 type: reference
@@ -18,6 +18,9 @@ redirect_from:
   - /code-security/codeql-cli/manual/resolve-extensions
 ---
 
+<!-- markdownlint-disable GHD053 -->
+
+<!-- markdownlint-disable GHD030 -->
 
 <!-- Content after this section is automatically generated -->
 
@@ -31,25 +34,23 @@ codeql resolve extensions <options>... -- <query|dir|suite|pack>...
 
 ## Description
 
-\[Deep plumbing] Determine accessible extensions. This includes machine
-learning models and data extensions.
+\[Deep plumbing] Determine accessible data extensions.
 
-This plumbing command resolves the set of data extensions and
-GitHub-created machine learning models that are available to the query
-specifiers passed in as command line arguments.
+This plumbing command resolves the set of data extensions that are
+available to the query specifiers passed in as command line arguments.
 
 ## Options
 
 ### Primary Options
 
-#### `<querysuite|pack>...`
+#### `<query|dir|suite|pack>...`
 
 \[Mandatory] Queries to execute. Each argument is in the form
 `scope/name@range:path` where:
 
-- `scope/name` is the qualified name of a CodeQL pack.
-- `range` is a semver range.
-- `path` is a file system path.
+* `scope/name` is the qualified name of a CodeQL pack.
+* `range` is a semver range.
+* `path` is a file system path.
 
 If a `scope/name` is specified, the `range` and `path` are optional. A
 missing `range` implies the latest version of the specified pack. A
@@ -104,6 +105,12 @@ actions will add this option on the fly, overriding any configured
 value.
 
 (Note: On Windows the path separator is `;`).
+
+#### `--model-packs=<`<name@range>>...
+
+A list of CodeQL pack names, each with an optional version range, to be
+used as model packs to customize the queries that are about to be
+evaluated.
 
 #### `--threat-model=<name>...`
 

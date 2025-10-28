@@ -2,15 +2,16 @@
 title: Viewing security information for your organization or enterprise
 shortTitle: Security overview
 allowTitleToDifferFromFilename: true
-intro: 'View, sort, and filter security alerts and coverage information from across your organization or enterprise, and enable security features for their repositories.'
-product: '{% data reusables.gated-features.security-overview %}'
+intro: 'Visualize adoption rates for {% data variables.product.prodname_GHAS %} features, alert discovery, and remediation for your organization or enterprise.'
+product: '{% data reusables.gated-features.security-overview-general %}'
 versions:
   fpt: '*'
   ghes: '*'
   ghec: '*'
 topics:
   - Security overview
-  - Advanced Security
+  - Code Security
+  - Secret Protection
 children:
   - /about-security-overview
   - /viewing-security-insights
@@ -18,6 +19,9 @@ children:
   - /assessing-code-security-risk
   - /filtering-alerts-in-security-overview
   - /enabling-security-features-for-multiple-repositories
-  - /exporting-data-from-the-risk-and-coverage-pages
-  - /viewing-metrics-for-secret-scanning-push-protection-in-your-organization
+  - /exporting-data-from-security-overview
+  - /viewing-metrics-for-dependabot-alerts
+  - /viewing-metrics-for-secret-scanning-push-protection
+  - /viewing-metrics-for-pull-request-alerts
+  - /reviewing-requests-to-bypass-push-protection
 ---

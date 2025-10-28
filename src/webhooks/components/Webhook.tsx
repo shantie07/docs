@@ -5,11 +5,11 @@ import { useRouter } from 'next/router'
 import { slug } from 'github-slugger'
 import cx from 'classnames'
 
-import { useVersion } from 'src/versions/components/useVersion'
-import { HeadingLink } from 'src/frame/components/article/HeadingLink'
-import { useTranslation } from 'src/languages/components/useTranslation'
+import { useVersion } from '@/versions/components/useVersion'
+import { HeadingLink } from '@/frame/components/article/HeadingLink'
+import { useTranslation } from '@/languages/components/useTranslation'
 import type { WebhookAction, WebhookData } from './types'
-import { ParameterTable } from 'src/automated-pipelines/components/parameter-table/ParameterTable'
+import { ParameterTable } from '@/automated-pipelines/components/parameter-table/ParameterTable'
 
 import styles from './WebhookPayloadExample.module.scss'
 
@@ -157,9 +157,7 @@ export function Webhook({ webhook }: Props) {
           <Flash className="mb-5" variant="danger">
             <p>{t('action_type_switch_error')}</p>
             <p>
-              <code className="f6" style={{ background: 'none' }}>
-                {error.toString()}
-              </code>
+              <code className={`f6 ${styles.errorCode}`}>{error.toString()}</code>
             </p>
           </Flash>
         )}
@@ -167,25 +165,20 @@ export function Webhook({ webhook }: Props) {
           <div className="mb-4">
             <div className="mb-3">
               <ActionMenu>
-                <ActionMenu.Button
-                  aria-label="Select a webhook action type"
-                  className="text-normal"
-                >
+                <ActionMenu.Button className="text-normal">
                   {t('action_type')}: <span className="text-bold">{currentWebhookActionType}</span>
                 </ActionMenu.Button>
                 <ActionMenu.Overlay>
                   <ActionList selectionVariant="single">
-                    {webhook.actionTypes.map((type, index) => {
-                      return (
-                        <ActionList.Item
-                          selected={index === selectedActionTypeIndex}
-                          key={`${webhook.name}-${type}`}
-                          onSelect={() => handleActionTypeChange(type, index)}
-                        >
-                          {type}
-                        </ActionList.Item>
-                      )
-                    })}
+                    {webhook.actionTypes.map((type, index) => (
+                      <ActionList.Item
+                        key={`${webhook.name}-${type}`}
+                        selected={index === selectedActionTypeIndex}
+                        onSelect={() => handleActionTypeChange(type, index)}
+                      >
+                        {type}
+                      </ActionList.Item>
+                    ))}
                   </ActionList>
                 </ActionMenu.Overlay>
               </ActionMenu>

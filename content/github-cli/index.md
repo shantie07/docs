@@ -16,11 +16,11 @@ featuredLinks:
   startHere:
     - /github-cli/github-cli/creating-github-cli-extensions
     - /github-cli/github-cli/using-github-cli-extensions
-    - /actions/using-workflows/using-github-cli-in-workflows
+    - /actions/how-tos/write-workflows/choose-what-workflows-do/use-github-cli
     - /codespaces/developing-in-a-codespace/using-github-codespaces-with-github-cli
   popular:
     - /pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
-    - /issues/tracking-your-work-with-issues/creating-an-issue
+    - /issues/tracking-your-work-with-issues/using-issues/creating-an-issue
     - /authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
     - /repositories/creating-and-managing-repositories/quickstart-for-repositories
     - /pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/checking-out-pull-requests-locally
@@ -33,4 +33,3 @@ changelog:
 layout: product-landing
 beta_product: false
 ---
-

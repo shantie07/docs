@@ -1,6 +1,6 @@
 name: Validate asset images
 
-# **What it does**: Run ./src/assets/scripts/validate-asset-images.js on all images in assets/
+# **What it does**: Run ./src/assets/scripts/validate-asset-images.ts on all images in assets/
 # **Why we have it**: To protect from innocent and potentially malicious bad image assets
 # **Who does it impact**: Docs content.
 
@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - 'assets/**'
+      - '.github/workflows/validate-asset-images.yml'
 
 permissions:
   contents: read
@@ -19,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - uses: ./.github/actions/node-npm-setup
 
       - name: Validate all asset images
-        run: src/assets/scripts/validate-asset-images.js
+        run: npm run validate-asset-images

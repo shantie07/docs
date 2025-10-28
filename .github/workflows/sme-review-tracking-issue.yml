@@ -19,14 +19,14 @@ permissions:
 jobs:
   create-sme-review-tracking-issue:
     runs-on: ubuntu-latest
-    if: github.repository == 'github/docs' && github.event.label.name == 'test-create-tracking-issue'
+    if: github.repository == 'github/docs' && github.event.label.name == 'needs SME'
     steps:
       - id: create-issue
         env:
           URL: ${{ github.event.pull_request.html_url || github.event.issue.html_url }}
-        uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         with:
-          github-token: ${{ secrets.DOCS_BOT_PAT_WORKFLOW_READORG }}
+          github-token: ${{ secrets.DOCS_BOT_PAT_BASE }}
           script: |-
 
             const issueNo = context.number || context.issue.number
@@ -40,6 +40,10 @@ jobs:
 
             ${process.env.URL}
 
+            ### Reason for SME review
+
+            @${context.payload.sender.login} (Optional) _Insert short answer regarding why SME assistance is required to review this contribution_
+
             ### Location SME review was requested
 
             _Insert link to the location SME review was initially requested_
@@ -50,5 +54,5 @@ jobs:
             - Reviewer stating they'll need to get back to us at a later time
             - Review provided was unclear or missing key information, and a follow-up is necessary
             `,
-              labels: ['on track','open source', 'sme-review'],
+              labels: ['on track','open source', 'sme-review', 'workflow-generated'],
             });

@@ -10,5 +10,5 @@ children:
   - /permissions
   - /code-annotations
   - /alerts
-  - /replace-domain
+  - /html-comments
 ---

@@ -5,7 +5,7 @@ versions: # DO NOT MANUALLY EDIT. CHANGES WILL BE OVERWRITTEN BY A 🤖
   ghec: '*'
   ghes: '*'
 topics:
-  - Advanced Security
+  - Code Security
   - Code scanning
   - CodeQL
 type: reference
@@ -16,6 +16,9 @@ redirect_from:
   - /code-security/codeql-cli/manual/query-compile
 ---
 
+<!-- markdownlint-disable GHD053 -->
+
+<!-- markdownlint-disable GHD030 -->
 
 <!-- Content after this section is automatically generated -->
 
@@ -44,10 +47,10 @@ output options are mostly for debugging.
 
 \[Mandatory] Queries to compile. Each argument is one of:
 
-- A .ql file to compile.
-- A directory which will be searched recursively for .ql files.
-- A .qls file that defines a particular set of queries.
-- The basename of a "well-known" .qls file exported by one of the
+* A .ql file to compile.
+* A directory which will be searched recursively for .ql files.
+* A .qls file that defines a particular set of queries.
+* The basename of a "well-known" .qls file exported by one of the
   installed QL packs.
 
 #### `-n, --check-only`

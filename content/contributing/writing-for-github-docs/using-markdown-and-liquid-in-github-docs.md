@@ -1,16 +1,18 @@
 ---
 title: Using Markdown and Liquid in GitHub Docs
-shortTitle: Markdown and Liquid # Max 31 characters
+shortTitle: Markdown and Liquid
 intro: 'You can use Markdown and Liquid to format content, create reusable content, and write content for different versions on {% data variables.product.prodname_docs %}.'
 versions:
-  feature: 'contributing'
+  fpt: '*'
+  ghec: '*'
+  ghes: '*'
 redirect_from:
   - /contributing/syntax-and-versioning-for-github-docs/using-markdown-and-liquid-in-github-docs
 ---
 
 ## About using Markdown and Liquid in {% data variables.product.prodname_docs %}
 
-{% data variables.product.prodname_docs %} are written using Markdown, which is a human-friendly syntax for formatting plain text. We use the variant of Markdown called {% data variables.product.prodname_dotcom %} Flavored Markdown and ensure that it is compliant with CommonMark. For more information, see "[AUTOTITLE](/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/about-writing-and-formatting-on-github)."
+{% data variables.product.prodname_docs %} are written using Markdown, which is a human-friendly syntax for formatting plain text. We use the variant of Markdown called {% data variables.product.prodname_dotcom %} Flavored Markdown and ensure that it is compliant with CommonMark. For more information, see [AUTOTITLE](/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/about-writing-and-formatting-on-github).
 
 We use Liquid syntax to expand the functionality to provide accessible tables, maintainable links, versioning, variables, and chunks of reusable content. For more information about Liquid, see the [Liquid documentation](https://shopify.github.io/liquid/basics/introduction/).
 
@@ -20,8 +22,8 @@ The content on this site uses Markdown rendering powered by [`/src/content-rende
 
 In a list item, the general rules for additional content after the first paragraph are:
 
-- Images and subsequent paragraphs should each be on their own line and separated by a blank line.
-- All subsequent lines in a list item must match up with the first text after the list marker.
+* Images and subsequent paragraphs should each be on their own line and separated by a blank line.
+* All subsequent lines in a list item must match up with the first text after the list marker.
 
 ### Example usage of a list
 
@@ -48,29 +50,31 @@ This content is displayed on the {% data variables.product.prodname_docs %} site
    This is another paragraph in the list.
 1. This is the next item.
 
-## Callout tags
+## Alerts
 
-Callouts highlight important information that users need to know. We use standard formatting and colors for four different types of callouts: notes, tips, warnings, and danger notices.
+Alerts highlight important information that users need to know. For details about supported alert types, how to format them in Markdown, and information on when to use alerts, see [AUTOTITLE](/contributing/style-guide-and-content-model/style-guide#alerts).
 
-For information on when to use callouts, and how to format them in Markdown, see "[AUTOTITLE](/contributing/style-guide-and-content-model/style-guide#callouts)."
-
-### Examples of callouts
+### Examples of alerts
 
 ```markdown
-> [!NOTE] Keep this in mind.
+> [!TIP]
+> Try this out!
 ```
 
 ```markdown
 > [!NOTE]
-> Generally callouts should be short.
+> Generally alerts should be short.
 >
 > But occasionally may require more than one paragraph
 ```
 
-### Example callouts rendered on {% data variables.product.prodname_docs %}
+### Example alerts rendered on {% data variables.product.prodname_docs %}
+
+> [!TIP]
+> Try this out!
 
 > [!NOTE]
-> Generally callouts should be short.
+> Generally alerts should be short.
 >
 > But occasionally may require more than one paragraph
 
@@ -108,7 +112,7 @@ const copyMe = true
 
 Code sample annotations help explain longer code examples by rendering comments as annotations next to the sample code. This lets us write longer explanations of code without cluttering the code itself. Code samples with annotations are rendered in a two pane layout with the code sample on the left and the annotations on the right. The annotations are visually emphasized when someone hovers their cursor over the code example.
 
-Code annotations only work in articles with the `layout: inline` frontmatter property. For more information on how to write and style code annotations, see "[AUTOTITLE](/contributing/syntax-and-versioning-for-github-docs/annotating-code-examples)."
+Code annotations only work in articles with the `layout: inline` frontmatter property. For more information on how to write and style code annotations, see [AUTOTITLE](/contributing/syntax-and-versioning-for-github-docs/annotating-code-examples).
 
 ### Example of an annotated code sample
 
@@ -138,19 +142,89 @@ Code annotations only work in articles with the `layout: inline` frontmatter pro
               PR_URL: ${{ github.event.pull_request.html_url }}
     ```
 
-For an example of an article that uses code annotations on {% data variables.product.prodname_docs %}, see "[AUTOTITLE](/actions/examples/using-scripts-to-test-your-code-on-a-runner)."
+For an example of an article that uses code annotations on {% data variables.product.prodname_docs %}, see [AUTOTITLE](/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions).
+
+## {% data variables.product.prodname_copilot_short %} prompts
+
+Prompts for {% data variables.product.prodname_copilot_short %} can either be displayed in blocks or included inline within text.
+
+### Prompt blocks
+
+These are very similar to code blocks, but use the `copilot` keyword rather than the name of a programming language.
+
+Prompt blocks should always have a copy button, added using the `copy` option, and may also have a {% data variables.product.prodname_copilot_short %} button, added using the `prompt` option. The {% data variables.product.prodname_copilot_short %} button gives the reader a quick way to run the prompt in {% data variables.copilot.copilot_chat_short %} on {% data variables.product.prodname_dotcom_the_website %}. The `copy` and `prompt` options can be used in any order.
+
+#### Example prompt block with {% data variables.product.prodname_copilot_short %} and copy buttons
+
+````markdown
+```copilot prompt copy
+What is git?
+```
+````
+
+This is rendered as:
+
+```copilot prompt copy
+What is git?
+```
+
+You should only add a {% data variables.product.prodname_copilot_short %} button to a prompt block if:
+* The prompt can be run without any further context (as shown in the example above).
+* There is a code block in the same article that provides the required context for the prompt.
+
+#### Including context with a prompt
+
+If you use a {% data variables.product.prodname_copilot_short %} button, you can add context to the prompt that is sent to {% data variables.copilot.copilot_chat_short %} by referencing a code block in the same article. You do this by adding `id=STRING-OF-YOUR-CHOICE` to the code block and `ref=STRING-OF-YOUR-CHOICE` to the prompt block.
+
+#### Example code block used as context within a prompt block
+
+````markdown
+Add an id to the code block whose code you want to add to the prompt as context:
+
+```javascript id=js-age
+function logPersonsAge(a, b, c) {
+  if (c) {
+    console.log(a + " is " + b + " years old.");
+  } else {
+    console.log(a + " does not want to reveal their age.");
+  }
+}
+```
+
+Then, elsewhere in the same article, reference the id in the prompt block:
+
+```copilot copy prompt ref=js-age
+Improve the variable names in this function
+```
+````
+
+There are many examples of prompt blocks with context in the {% data variables.product.prodname_copilot_short %} Cookbook. For example, see [AUTOTITLE](/free-pro-team@latest/copilot/tutorials/copilot-chat-cookbook/refactor-code/improve-code-readability).
+
+### Inline prompts
+
+For most inline prompts, mark these by using backticks, just like inline code.
+
+If the prompt does not require any context, you can add a clickable {% data variables.product.prodname_copilot_short %} icon after the prompt. This allows the reader to run the prompt in {% data variables.copilot.copilot_chat_short %} on {% data variables.product.prodname_dotcom_the_website %}. To add the clickable icon, surround the prompt with Liquid syntax tags:
+
+```markdown
+{% raw %}... you can click {% prompt %}what is git{% endprompt %} to run this ...{% endraw %}
+```
+
+This is rendered as:
+
+... you can click {% prompt %}what is git{% endprompt %} to run this ...
 
 ## Octicons
 
-Octicons are icons used across {% data variables.product.prodname_dotcom %}’s interface. We reference Octicons when documenting the user interface and to indicate binary values in tables. Find the name of specific Octicons on the [Octicons site](https://primer.style/Octicons).
+Octicons are icons used across {% data variables.product.prodname_dotcom %}’s interface. We reference Octicons when documenting the user interface and to indicate binary values in tables. Find the name of specific Octicons on the [Octicons site](https://primer.style/octicons).
 
 If you're referencing an Octicon that appears in the UI, identify whether the Octicon is the entire label of the UI element (for example, a button that is labeled only with "+") or whether it's only decorative, in addition to another label (for example, a button is labeled "+ Add message").
 
- - If the Octicon is the entire label, use your browser's developer tools to inspect the Octicon and determine what screen reader users will hear instead. Then, use that text for the `aria-label` (for example, `{% raw %}{% octicon "plus" aria-label="Add file" %}{% endraw %}`). Occasionally, in the UI, the Octicon itself will not have an `aria-label`, but a surrounding element such as a `<summary>` or `<div>` tag will.
-   - Some Octicons used as labels have dynamic `aria-label` elements that change based on the state of the UI element or a user input. For example, when someone has two security policies-`Policy A` and `Policy B`-their UI will show two trash Octicons labelled `{% raw %}{% octicon "trash" aria-label="Delete Policy A" %}{% endraw %}` and `{% raw %}{% octicon "trash" aria-label="Delete Policy B" %}{% endraw %}`. For dynamic `aria-label` elements, since we can't document the exact `aria-label` that people will encounter, describe the Octicon and a placeholder example of the label (for example, `"{% raw %}{% octicon "trash" aria-label="The trash icon, labelled 'Delete YOUR-POLICY-NAME'." %}{% endraw %}"`). This will help people identify both the Octicon and how it is labelled, and give context for collaborating with people who are visually describing the Octicon.
- - If the Octicon is decorative, it's likely hidden to screen readers with the `aria-hidden=true` attribute. If so, for consistency with the product, use `aria-hidden="true"` in the Liquid syntax for the Octicon in the docs as well (for example, `"{% raw %}{% octicon "plus" aria-hidden="true" %} Add message"{% endraw %}`).
+ * If the Octicon is the entire label, use your browser's developer tools to inspect the Octicon and determine what screen reader users will hear instead. Then, use that text for the `aria-label` (for example, `{% raw %}{% octicon "plus" aria-label="Add file" %}{% endraw %}`). Occasionally, in the UI, the Octicon itself will not have an `aria-label`, but a surrounding element such as a `<summary>` or `<div>` tag will.
+   * Some Octicons used as labels have dynamic `aria-label` elements that change based on the state of the UI element or a user input. For example, when someone has two security policies-`Policy A` and `Policy B`-their UI will show two trash Octicons labeled `{% raw %}{% octicon "trash" aria-label="Delete Policy A" %}{% endraw %}` and `{% raw %}{% octicon "trash" aria-label="Delete Policy B" %}{% endraw %}`. For dynamic `aria-label` elements, since we can't document the exact `aria-label` that people will encounter, describe the Octicon and a placeholder example of the label (for example, `"{% raw %}{% octicon "trash" aria-label="The trash icon, labeled 'Delete YOUR-POLICY-NAME'." %}{% endraw %}"`). This will help people identify both the Octicon and how it is labeled, and give context for collaborating with people who are visually describing the Octicon.
+ * If the Octicon is decorative, it's likely hidden to screen readers with the `aria-hidden=true` attribute. If so, for consistency with the product, use `aria-hidden="true"` in the Liquid syntax for the Octicon in the docs as well (for example, `"{% raw %}{% octicon "plus" aria-hidden="true" %} Add message"{% endraw %}`).
 
-If you're using the Octicon in another way, such as using the "check" and "x" icons to reflect binary values in tables, use the `aria-label` to describe the meaning of the Octicon, not its visual characteristics. For example, if you're using a "x" icon in the "Supported" column of a table, use "Not supported" as the `aria-label`. For more information, see "[AUTOTITLE](/contributing/style-guide-and-content-model/style-guide#tables)."
+If you're using the Octicon in another way, such as using the "check" and "x" icons to reflect binary values in tables, use the `aria-label` to describe the meaning of the Octicon, not its visual characteristics. For example, if you're using a "x" icon in the "Supported" column of a table, use "Not supported" as the `aria-label`. For more information, see [AUTOTITLE](/contributing/style-guide-and-content-model/style-guide#tables).
 
 ### Example usage of Octicons
 
@@ -191,17 +265,17 @@ These instructions are pertinent to Windows users.
 {% endwindows %}{% endraw %}
 ```
 
-You can define a default platform in an article's YAML frontmatter. For more information, see "[AUTOTITLE](/contributing/syntax-and-versioning-for-github-docs/using-yaml-frontmatter#defaultplatform)."
+You can define a default platform in an article's YAML frontmatter. For more information, see [AUTOTITLE](/contributing/syntax-and-versioning-for-github-docs/using-yaml-frontmatter#defaultplatform).
 
 ## Tool tags
 
 We occasionally need to write documentation that has different instructions for different tools. For example, the {% data variables.product.prodname_dotcom %} UI, {% data variables.product.prodname_cli %}, {% data variables.product.prodname_desktop %}, {% data variables.product.prodname_github_codespaces %}, and {% data variables.product.prodname_vscode %} might be able to accomplish the same task using different steps. We use tool tags to control what information is displayed for each tool.
 
-{% data variables.product.prodname_docs %} maintains tool tags for {% data variables.product.prodname_dotcom %} products and selected third-party extensions. See the [`all-tools.js`](https://github.com/github/docs/blob/main/src/tools/lib/all-tools.js) object in the `github/docs` repository for a list of all supported tools.
+{% data variables.product.prodname_docs %} maintains tool tags for {% data variables.product.prodname_dotcom %} products and selected third-party extensions. See the [`all-tools.ts`](https://github.com/github/docs/blob/main/src/tools/lib/all-tools.ts) object in the `github/docs` repository for a list of all supported tools.
 
-On rare occasions, we will add new tools. Before adding a new tool, read "[AUTOTITLE](/contributing/syntax-and-versioning-for-github-docs/creating-tool-switchers-in-articles)." To add a new tool, add an entry to the `allTools` object in [`lib/all-tools.js`](https://github.com/github/docs/blob/main/src/tools/lib/all-tools.js) as a key-value pair. The key is the tag you'll use to refer to the tool in the article, and the value is how the tool will be identified on the tool picker at the top of the article.
+On rare occasions, we will add new tools. Before adding a new tool, read [AUTOTITLE](/contributing/syntax-and-versioning-for-github-docs/creating-tool-switchers-in-articles). To add a new tool, add an entry to the `allTools` object in [`lib/all-tools.ts`](https://github.com/github/docs/blob/main/src/tools/lib/all-tools.ts) as a key-value pair. The key is the tag you'll use to refer to the tool in the article, and the value is how the tool will be identified on the tool picker at the top of the article.
 
-You can define a default tool for an article in the YAML frontmatter. For more information, see "[AUTOTITLE](/contributing/syntax-and-versioning-for-github-docs/using-yaml-frontmatter#defaulttool)."
+You can define a default tool for an article in the YAML frontmatter. For more information, see [AUTOTITLE](/contributing/syntax-and-versioning-for-github-docs/using-yaml-frontmatter#defaulttool).
 
 ### Example usage of tool tags
 
@@ -305,7 +379,7 @@ These instructions are pertinent to GitHub UI users.
 
 Reusable strings (commonly called content references or conrefs) contain content that is used in more than one place in our documentation. Creating these allows us to update the content in a single location rather than every place the string appears.
 
-For longer strings, we use reusables, and for shorter strings, we use variables. For more information about reusables and variables, see "[AUTOTITLE](/contributing/writing-for-github-docs/creating-reusable-content)."
+For longer strings, we use reusables, and for shorter strings, we use variables. For more information about reusables and variables, see [AUTOTITLE](/contributing/writing-for-github-docs/creating-reusable-content).
 
 ## Table pipes
 
@@ -321,7 +395,7 @@ Every row of a table in the {% data variables.product.prodname_docs %} must star
 
 ## Table row headers
 
-If you create a table where the first column contains headers for the table rows, wrap your table in the Liquid tag {% raw %}`{% rowheaders %} {% endrowheaders %}`{% endraw %}. For more information on using markup for tables, see "[AUTOTITLE](/contributing/style-guide-and-content-model/style-guide#use-proper-markup-for-row-and-column-headers)."
+If you create a table where the first column contains headers for the table rows, wrap your table in the Liquid tag {% raw %}`{% rowheaders %} {% endrowheaders %}`{% endraw %}. For more information on using markup for tables, see [AUTOTITLE](/contributing/style-guide-and-content-model/style-guide#use-proper-markup-for-row-and-column-headers).
 
 ### Example table with row headers
 
@@ -360,7 +434,7 @@ If this happens, add the following CSS style to the `<table>` HTML tag:
 <table style="table-layout: fixed;">
 ```
 
-For a current example of this usage, see "[AUTOTITLE](/actions/examples)."
+For a current example of this usage, see [AUTOTITLE](/actions/examples).
 
 ## Links
 
@@ -368,7 +442,7 @@ Links to docs in the `docs` repository must start with a product ID (like `/acti
 
 Image paths must start with `/assets` and contain the entire filepath including the file extension. For example, `/assets/images/help/settings/settings-account-delete.png`.
 
-The links to Markdown pages undergo some transformations on the server side to match the current page's language and version. The handling for these transformations lives in [`lib/render-content/plugins/rewrite-local-links`](https://github.com/github/docs/blob/main/src/content-render/unified/rewrite-local-links.js).
+The links to Markdown pages undergo some transformations on the server side to match the current page's language and version. The handling for these transformations lives in [`lib/render-content/plugins/rewrite-local-links`](https://github.com/github/docs/blob/main/src/content-render/unified/rewrite-local-links.ts).
 
 For example, if you include the following link in a content file:
 
@@ -376,7 +450,7 @@ For example, if you include the following link in a content file:
 /github/writing-on-github/creating-a-saved-reply
 ```
 
-When viewed on {% data variables.product.prodname_dotcom_the_website %} docs, the link gets rendered with the language code:
+When viewed on {% data variables.product.prodname_docs %}, the link gets rendered with the language code:
 
 ```text
 /en/github/writing-on-github/creating-a-saved-reply
@@ -388,37 +462,31 @@ and when viewed on {% data variables.product.prodname_ghe_server %} docs, the ve
 /en/enterprise-server@2.20/github/writing-on-github/creating-a-saved-reply
 ```
 
-For more information about links, see "[AUTOTITLE](/contributing/style-guide-and-content-model/style-guide#links)."
+For more information about links, see [AUTOTITLE](/contributing/style-guide-and-content-model/style-guide#links).
 
 ### Permalinks
 
 Because the site is dynamic, it does not build HTML files for each different version of an article. Instead it generates a "permalink" for every version of the article. It does this based on the article's [`versions` frontmatter](/contributing/syntax-and-versioning-for-github-docs/using-yaml-frontmatter#versions).
 
-{% note %}
-
-**Note**: As of early 2021, the `free-pro-team@latest` version is not included in URLs. A helper function called `lib/remove-fpt-from-path.js` removes the version from URLs.
-
-{% endnote %}
+> [!NOTE]
+> As of early 2021, the `free-pro-team@latest` version is not included in URLs. A helper function called `lib/remove-fpt-from-path.ts` removes the version from URLs.
 
 For example, an article that is available in currently supported versions will have permalink URLs like the following:
 
-- `/en/get-started/getting-started-with-git/set-up-git`
-- `/en/enterprise-cloud@latest/get-started/getting-started-with-git/set-up-git`
-- `/en/enterprise-server@3.10/get-started/getting-started-with-git/set-up-git`
-- `/en/enterprise-server@3.9/get-started/getting-started-with-git/set-up-git`
-- `/en/enterprise-server@3.8/get-started/getting-started-with-git/set-up-git`
-- `/en/enterprise-server@3.7/get-started/getting-started-with-git/set-up-git`
-- `/en/enterprise-server@3.6/get-started/getting-started-with-git/set-up-git`
+* `/en/get-started/git-basics/set-up-git`
+* `/en/enterprise-cloud@latest/get-started/git-basics/set-up-git`
+* `/en/enterprise-server@3.10/get-started/git-basics/set-up-git`
+* `/en/enterprise-server@3.9/get-started/git-basics/set-up-git`
+* `/en/enterprise-server@3.8/get-started/git-basics/set-up-git`
+* `/en/enterprise-server@3.7/get-started/git-basics/set-up-git`
+* `/en/enterprise-server@3.6/get-started/git-basics/set-up-git`
 
 An article that is not available in {% data variables.product.prodname_ghe_server %} will have just one permalink:
 
-- `/en/get-started/getting-started-with-git/set-up-git`
+* `/en/get-started/git-basics/set-up-git`
 
-{% note %}
-
-**Note:** If you are a content contributor, you don't need to worry about supported versions when adding a link to a document. Following the examples above, if you want to reference an article, you can just use its relative location: `/github/getting-started-with-github/set-up-git`.
-
-{% endnote %}
+> [!NOTE]
+> If you are a content contributor, you don't need to worry about supported versions when adding a link to a document. Following the examples above, if you want to reference an article, you can just use its relative location: `/github/getting-started-with-github/set-up-git`.
 
 ### Internal links with AUTOTITLE
 
@@ -426,22 +494,19 @@ When linking to another {% data variables.product.prodname_docs %} page, use sta
 
 #### Example usage of internal links with AUTOTITLE
 
-- `For more information, see "[AUTOTITLE](/path/to/page)."`
-- `For more information, see "[AUTOTITLE](/path/to/page#section-link)."`
-- `For more information, see the TOOLNAME documentation in "[AUTOTITLE](/path/to/page?tool=TOOLNAME)."`
+* `For more information, see [AUTOTITLE](/path/to/page).`
+* `For more information, see [AUTOTITLE](/path/to/page#section-link).`
+* `For more information, see the TOOLNAME documentation in [AUTOTITLE](/path/to/page?tool=TOOLNAME).`
 
-{% note %}
-
-**Note:** Same-page section links do not work with this keyword. Type out the full header text instead.
-
-{% endnote %}
+> [!NOTE]
+> Same-page section links do not work with this keyword. Type out the full header text instead.
 
 ### Linking to the current article in a different version of the docs
 
 Sometimes you may want to link from an article to the same article in a different product version. For example:
 
-- You mention some functionality that is not available for free, pro, or team plans and you want to link to the {% data variables.product.prodname_ghe_cloud %} version of the same page.
-- The {% data variables.product.prodname_ghe_server %} version of an article describes a feature that shipped with that version, but site administrators can upgrade to the latest version of the feature that's in use on {% data variables.product.prodname_ghe_cloud %}.
+* You mention some functionality that is not available for free, pro, or team plans and you want to link to the {% data variables.product.prodname_ghe_cloud %} version of the same page.
+* The {% data variables.product.prodname_ghe_server %} version of an article describes a feature that shipped with that version, but site administrators can upgrade to the latest version of the feature that's in use on {% data variables.product.prodname_ghe_cloud %}.
 
 You can link directly to a different version of the page using the `currentArticle` property. This means that the link will continue to work directly even if the article URL changes.
 
@@ -454,10 +519,10 @@ You can link directly to a different version of the page using the `currentArtic
 Sometimes you want to link to a Dotcom-only article in Enterprise content and you don't want the link to be Enterprise-ified. To prevent the transformation, you should include the preferred version in the path.
 
 ```markdown
-"[GitHub's Terms of Service](/free-pro-team@latest/github/site-policy/github-terms-of-service)"
+[GitHub's Terms of Service](/free-pro-team@latest/github/site-policy/github-terms-of-service)
 ```
 
-Sometimes the canonical home of content moves outside the docs site. None of the links included in [`src/redirects/lib/external-sites.json`](https://github.com/github/docs/blob/main/src/redirects/lib/external-sites.json) get rewritten. See  [`contributing/redirects.md`](https://github.com/github/docs/blob/main/contributing/redirects.md) for more info about this type of redirect.
+Sometimes the canonical home of content moves outside the docs site. None of the links included in [`src/redirects/lib/external-sites.json`](https://github.com/github/docs/blob/main/src/redirects/lib/external-sites.json) get rewritten. See [`contributing/redirects.md`](https://github.com/github/docs/blob/main/contributing/redirects.md) for more info about this type of redirect.
 
 ### Legacy filepaths and redirects for links
 

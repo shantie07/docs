@@ -6,8 +6,8 @@ header:
   notices:
     release_candidate:
       # The version name is rendered before the below text via includes/header-notification.html
-      ' is currently available as a release candidate. For more information, see "<a href="/admin/overview/about-upgrades-to-new-releases">About upgrades to new releases</a>."'
-    early_access: 📣 Please <b>do not share</b> this URL publicly. This page contains content about an early access feature.
+      ' is currently available as a <a href="/admin/overview/about-upgrades-to-new-releases">release candidate</a>.'
+    early_access: 📣 Please <b>do not share</b> this URL publicly. This page contains content about a private preview feature.
     release_notes_use_latest: Please use the latest release for the latest security, performance, and bug fixes.
     # GHES release notes
     ghes_release_notes_upgrade_patch_only: 📣 This is not the <a href="#{{ latestPatch }}">latest patch release</a> of Enterprise Server.
@@ -15,6 +15,7 @@ header:
     ghes_release_notes_upgrade_patch_and_release: 📣 This is not the <a href="#{{ latestPatch }}">latest patch release</a> of this release series, and this is not the <a href="/enterprise-server@{{ latestRelease }}/admin/release-notes">latest release</a> of Enterprise Server.
   sign_up_cta: Sign up
   menu: Menu
+  open_menu_label: Open menu
   go_home: Home
 picker:
   language_picker_label: Language
@@ -23,6 +24,52 @@ picker:
 release_notes:
   banner_text: GitHub began rolling these changes out to enterprises on
 search:
+  input:
+    placeholder: Search or ask {{icon}} Copilot
+    placeholder_no_icon: Search or ask Copilot
+    shortcut: Type {{icon}} to search
+  overlay:
+    aria_label: Search overlay
+    input_aria_label: Search or ask Copilot
+    suggestions_list_aria_label: Search suggestions
+    ai_suggestions_list_aria_label: Copilot search suggestions
+    general_suggestions_list_aria_label: Docs search suggestions
+    general_suggestions_list_heading: Search docs
+    ai_autocomplete_list_heading: Ask Copilot
+    give_feedback: Give feedback
+    beta_tag: Beta
+    return_to_search: Return to search
+    clear_search_query: Clear
+    view_all_search_results: View more results
+    no_results_found: No results found
+    no_results_found_announcement: 'Search Docs: No results found'
+    search_docs_with_query: Search docs for "{{query}}"
+    privacy_disclaimer: For product and service improvement purposes, the GitHub Docs team will retain questions and answers generated in the Docs search function. Please see the <a href="https://docs.github.com/privacy"><u>GitHub Privacy Statement</u></a> to review how GitHub collects and uses your data.
+  ai:
+    disclaimer: <a href="https://docs.github.com/en/copilot/responsible-use-of-github-copilot-features/responsible-use-of-github-copilot-chat-in-githubcom"}>Copilot</a> uses AI. Check for mistakes.
+    references: Copilot Sources
+    loading_status_message: Loading Copilot response...
+    done_loading_status_message: Done loading Copilot response
+    share_answer: Copy answer URL
+    share_copied_announcement: Copied share URL!
+    thumbs_up: This answer was helpful
+    thumbs_down: This answer was not helpful
+    thumbs_announcement: Thank you for your feedback!
+    back_to_search: Back to search
+    responses:
+      unable_to_answer: Sorry, I'm unable to answer that question. Check that you selected the correct GitHub version or try a different question.
+      query_too_large: Sorry, your question is too long. Please try shortening it and asking again.
+      asked_too_many_times: Sorry, you've asked too many questions in a short time period. Please wait a few minutes and try again.
+      invalid_query: Sorry, I'm unable to answer that question. Please try asking a different question.
+    response:
+      copy_code: Copy code to clipboard
+      copy_code_lang: Copy {language} code to clipboard
+      copied_code: Copied!
+  failure:
+    general_title: There was an error loading search results.
+    ai_title: There was an error loading Copilot.
+    description: You can still use this field to search our docs.
+old_search:
   description: Enter a search term to find it in the GitHub Docs.
   placeholder: Search GitHub Docs
   label: Search GitHub Docs
@@ -31,6 +78,8 @@ search_results:
   matches_displayed: Matches displayed
   n_results: '{n} results'
   search_validation_error: Validation error with search query
+  filter: Filter
+  clear_filter: Clear
 homepage:
   explore_by_product: Explore by product
   version_picker: Version
@@ -54,20 +103,20 @@ support:
   contact_support: Contact support
   ask_community: Ask the GitHub community
 survey:
-  able_to_find: Did this doc help you?
+  able_to_find: Did you find what you needed?
   yes: Yes
   no: No
-  comment_yes_label: Let us know what we do well
-  comment_no_label: Let us know what we can do better
+  cancel: Cancel
+  additional_feedback: Can you tell us more about your rating? (Optional)
   optional: Optional
   required: Required
-  email_placeholder: email@example.com
-  email_label: If we can contact you with more questions, please enter your email address
+  email_label: Leave your email if we can contact you. (Optional)
   email_validation: Please enter a valid email address
   send: Send
   feedback: Thank you! We received your feedback.
-  not_support: If you need a reply, please contact support instead.
+  not_support: If you need a reply, please contact <a href="https://support.github.com/">support</a>.
   privacy_policy: Privacy policy
+  server_error: Unable to process comment at the moment. Please try again.
 contribution_cta:
   title: Help us make these docs great!
   body: All GitHub docs are open source. See something that's wrong or unclear? Submit a pull request.
@@ -91,6 +140,8 @@ parameter_table:
 audit_logs:
   action: Action
   description: Description
+  fields: Fields
+  reference: Reference
 graphql:
   reference:
     implements: <code>{{ GraphQLItemTitle }}</code> Implements
@@ -146,6 +197,7 @@ rest_reference:
   http_status_code: HTTP response status codes for "{{ RESTOperationTitle }}"
   code_sample: Code sample
   code_samples: Code samples for "{{ RESTOperationTitle }}"
+  data_residency_notice: If you access GitHub at GHE.com, replace <code>api.github.com</code> with your enterprise's dedicated subdomain at <code>api.SUBDOMAIN.ghe.com</code>.
   preview_notice: Preview notice for "{{ RESTOperationTitle }}"
   preview_notices: Preview notices for "{{ RESTOperationTitle }}"
   fine_grained_access: Fine-grained access tokens for "{{ RESTOperationTitle }}"
@@ -168,16 +220,18 @@ rest_reference:
   button_text:
     copy_to_clipboard: Copy to clipboard
     copied: Copied!
-  works_with_tokens: 'This endpoint works with the following token types'
-  permission_sets: 'The token must have at least one of the following permission sets'
-  permission_set: 'The token must have the following permission set'
-  no_permission_sets: 'The token does not require any permissions.'
+  works_with_fine_grained_tokens: 'This endpoint works with the following fine-grained token types'
+  permission_sets: 'The fine-grained token must have at least one of the following permission sets'
+  permission_set: 'The fine-grained token must have the following permission set'
+  no_permission_sets: 'The fine-grained token does not require any permissions.'
   allows_public_read_access: This endpoint can be used without authentication or the aforementioned permissions if only public resources are requested.
   allows_public_read_access_no_permissions: This endpoint can be used without authentication if only public resources are requested.
   user_access_token_name: GitHub App user access tokens
   installation_access_token_name: GitHub App installation access tokens
   fine_grained_access_token_name: Fine-grained personal access tokens
   no_fine_grained_access: This endpoint does not work with GitHub App user access tokens, GitHub App installation access tokens, or fine-grained personal access tokens.
+  basic_auth_heading: Basic authentication for "{{ RESTOperationTitle }}"
+  basic_auth: You must use <a href="/rest/authentication/authenticating-to-the-rest-api#using-basic-authentication">Basic Authentication</a> to use this endpoint. Use the application's <code>client_id</code> as the username and the <code>client_secret</code> as the password.
 webhooks:
   action_type_switch_error: There was an error switching webhook action types.
   action_type: Action type
@@ -201,12 +255,24 @@ footer:
   pricing: Pricing
   expert_services: Expert services
   blog: Blog
+  machine: Some of this content may be machine- or AI-translated.
+journey_landing:
+  articles: '{{ number }} Articles'
 product_landing:
+  article_grid:
+    heading: Articles
+    all_categories: All categories
+    search_articles: Search articles
+    no_articles_found: No articles found matching your criteria.
+    showing_results: Showing {start}-{end} of {total}
+  carousel:
+    recommended: Recommended
   quickstart: Quickstart
   reference: Reference
   overview: Overview
-  try_ghec_for_free: Try Enterprise Cloud for free
+  try_ghec_for_free: Try GitHub's enterprise features
   try_ghas_for_free: Try GitHub Advanced Security for free
+  generate_secret_risk_assessment_report_for_free: Find out how to run a free secret risk assessment
   plan_your_migration: Plan your migration
   releases: Releases
   guides: Guides
@@ -230,6 +296,7 @@ product_landing:
   view: View all
   view_transcript: View video transcript
   all_docs: 'All {{ title }} docs'
+  all_content: 'View all {{ title }} content'
 product_guides:
   learning_paths_title: '{{ name }} learning paths'
   start_path: Start learning path
@@ -253,14 +320,32 @@ learning_track_nav:
   next_guide: Next
   more_guides: More guides →
   current_progress: '{i} of {n} in learning path'
+journey_track_nav:
+  prev_article: Previous
+  next_article: Next
+  more_articles: More articles →
+  current_progress: 'Article {i} of {n}'
 scroll_button:
   scroll_to_top: Scroll to top
 popovers:
-  role_description: hover card
-  keyboard_shortcut_description: Press alt+up to activate
+  role_description: hovercard link
 alerts:
   NOTE: Note
   IMPORTANT: Important
   WARNING: Warning
   TIP: Tip
   CAUTION: Caution
+
+cookbook_landing:
+  spotlight: Spotlight
+  explore_articles: Explore {{ number }} examples
+  reset_filters: Reset filters
+  search_articles: Search examples
+  category: Category
+  complexity: Complexity
+
+not_found:
+  title: Ooops!
+  message: It looks like this page doesn't exist.
+  contact: We track these errors automatically, but if the problem persists please feel free to contact us.
+  contact_cta: Contact support

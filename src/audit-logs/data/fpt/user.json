@@ -11,6 +11,7 @@
       "_document_id",
       "created_at",
       "action",
+      "request_id",
       "actor",
       "actor_id",
       "org_id"
@@ -27,12 +28,14 @@
       "user_agent",
       "created_at",
       "actor_id",
+      "request_id",
       "@timestamp",
       "user",
       "action",
       "user_id",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "How GitHub billing works"
   },
   {
     "action": "account_recovery_token.confirm",
@@ -41,6 +44,7 @@
     "fields": [
       "actor_id",
       "action",
+      "request_id",
       "@timestamp",
       "user_agent",
       "created_at",
@@ -61,6 +65,7 @@
       "created_at",
       "token_id",
       "user",
+      "request_id",
       "_document_id",
       "user_agent",
       "actor",
@@ -82,6 +87,7 @@
       "created_at",
       "actor",
       "user_agent",
+      "request_id",
       "action",
       "_document_id",
       "user_id",
@@ -94,6 +100,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application_id",
@@ -113,7 +120,8 @@
       "created_at",
       "operation_type",
       "token_scopes",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -127,11 +135,96 @@
       "actor_id",
       "repo",
       "repo_id",
+      "request_id",
       "@timestamp",
       "created_at",
       "_document_id",
       "operation_type",
       "programmatic_access_type"
+    ]
+  },
+  {
+    "action": "billing.budget_create",
+    "description": "A billing budget was created for a business or organization. Includes details about the budget limit, alerting preferences, and recipients.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "customer_id",
+      "target_amount",
+      "target_type",
+      "target_id",
+      "alert_enabled",
+      "status",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "pricing_target_type",
+      "pricing_target_id",
+      "budget_limit_type",
+      "alert_recipient_user_ids"
+    ]
+  },
+  {
+    "action": "billing.budget_delete",
+    "description": "A billing budget was deleted for a business or organization. Includes details about the removed budget and any alerting settings.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "customer_id",
+      "uuid",
+      "status",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "billing.budget_update",
+    "description": "A billing budget was updated for a business or organization. Includes details about the updated limit and alerting settings.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "customer_id",
+      "target_amount",
+      "target_type",
+      "target_id",
+      "alert_enabled",
+      "status",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header",
+      "old_target_amount",
+      "old_budget_limit_type",
+      "old_alert_enabled",
+      "old_target_id",
+      "old_pricing_target_type",
+      "old_pricing_target_id"
     ]
   },
   {
@@ -148,8 +241,10 @@
       "created_at",
       "operation_type",
       "_document_id",
-      "user_agent"
-    ]
+      "user_agent",
+      "request_id"
+    ],
+    "docs_reference_titles": "Managing your payment and billing information"
   },
   {
     "action": "billing.change_email",
@@ -162,11 +257,50 @@
       "org_id",
       "@timestamp",
       "user_agent",
+      "request_id",
       "created_at",
       "_document_id",
       "org",
       "email",
-      "action"
+      "action",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Managing your payment and billing information"
+  },
+  {
+    "action": "billing_customer.azure_subscription_linked",
+    "description": "Azure subscription has been linked on this account.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type"
+    ]
+  },
+  {
+    "action": "billing_customer.azure_subscription_unlinked",
+    "description": "Azure subscription has been unlinked on this account.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type"
     ]
   },
   {
@@ -179,6 +313,7 @@
       "actor_id",
       "operation_type",
       "_document_id",
+      "request_id",
       "actor",
       "user",
       "user_id",
@@ -186,6 +321,27 @@
       "created_at",
       "action"
     ]
+  },
+  {
+    "action": "billing.overage_policy_updated",
+    "description": "The premium request paid usage policy for your GitHub account was changed.",
+    "docs_reference_links": "/copilot/how-tos/manage-and-track-spending/manage-request-allowances#setting-a-policy-for-paid-usage",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ],
+    "docs_reference_titles": "/copilot/how-tos/manage-and-track-spending/manage-request-allowances#setting-a-policy-for-paid-usage"
   },
   {
     "action": "billing.unlock",
@@ -198,6 +354,7 @@
       "user_agent",
       "created_at",
       "user_id",
+      "request_id",
       "actor",
       "action",
       "@timestamp",
@@ -211,6 +368,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -223,11 +381,159 @@
     ]
   },
   {
+    "action": "business.security_center_export_code_scanning_metrics",
+    "description": "A CSV export was requested on the \"CodeQL pull request alerts\" page.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "business",
+      "business_id",
+      "user",
+      "user_id",
+      "query",
+      "filename",
+      "requested_at",
+      "start_date",
+      "end_date",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "business.security_center_export_coverage",
+    "description": "A CSV export was requested on the \"Coverage\" page.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "business",
+      "business_id",
+      "user",
+      "user_id",
+      "query",
+      "filename",
+      "requested_at",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "business.security_center_export_overview_dashboard",
+    "description": "A CSV export was requested on the \"Overview Dashboard\" page.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "business",
+      "business_id",
+      "user",
+      "user_id",
+      "query",
+      "filename",
+      "requested_at",
+      "start_date",
+      "end_date",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "business.security_center_export_risk",
+    "description": "A CSV export was requested on the \"Risk\" page.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "business",
+      "business_id",
+      "user",
+      "user_id",
+      "query",
+      "filename",
+      "requested_at",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ]
+  },
+  {
+    "action": "business.set_actions_cache_retention_policy",
+    "description": "The cache retention policy for GitHub Actions was set for an enterprise.",
+    "docs_reference_links": "/admin/policies/enforcing-policies-for-your-enterprise/enforcing-policies-for-github-actions-in-your-enterprise",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "name",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ],
+    "docs_reference_titles": "Enforcing policies for GitHub Actions in your enterprise"
+  },
+  {
+    "action": "business.set_actions_cache_storage_policy",
+    "description": "The cache storage policy for GitHub Actions was set for an enterprise.",
+    "docs_reference_links": "/admin/policies/enforcing-policies-for-your-enterprise/enforcing-policies-for-github-actions-in-your-enterprise",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "name",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ],
+    "docs_reference_titles": "Enforcing policies for GitHub Actions in your enterprise"
+  },
+  {
     "action": "business.set_actions_fork_pr_approvals_policy",
     "description": "The policy for requiring approvals for workflows from public forks was changed for an enterprise.",
     "docs_reference_links": "/admin/policies/enforcing-policies-for-your-enterprise/enforcing-policies-for-github-actions-in-your-enterprise#enforcing-a-policy-for-fork-pull-requests-in-your-enterprise",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -239,7 +545,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "Enforcing policies for GitHub Actions in your enterprise"
   },
   {
     "action": "business.set_actions_private_fork_pr_approvals_policy",
@@ -249,6 +556,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "policy",
       "business",
@@ -257,8 +565,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Enforcing policies for GitHub Actions in your enterprise"
   },
   {
     "action": "business.set_actions_retention_limit",
@@ -266,6 +576,7 @@
     "docs_reference_links": "/admin/policies/enforcing-policies-for-your-enterprise/enforcing-policies-for-github-actions-in-your-enterprise#enforcing-a-policy-for-artifact-and-log-retention-in-your-enterprise",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -277,7 +588,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "Enforcing policies for GitHub Actions in your enterprise"
   },
   {
     "action": "business.set_default_workflow_permissions",
@@ -287,6 +599,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "business",
       "business_id",
@@ -294,8 +607,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Enforcing policies for GitHub Actions in your enterprise"
   },
   {
     "action": "business.set_fork_pr_workflows_policy",
@@ -303,6 +618,7 @@
     "docs_reference_links": "/admin/policies/enforcing-policies-for-your-enterprise/enforcing-policies-for-github-actions-in-your-enterprise#enforcing-a-policy-for-fork-pull-requests-in-your-enterprise",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -313,8 +629,10 @@
       "operation_type",
       "@timestamp",
       "created_at",
-      "_document_id"
-    ]
+      "_document_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Enforcing policies for GitHub Actions in your enterprise"
   },
   {
     "action": "business.set_workflow_permission_can_approve_pr",
@@ -324,6 +642,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "business",
       "business_id",
@@ -331,8 +650,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Enforcing policies for GitHub Actions in your enterprise"
   },
   {
     "action": "checks.auto_trigger_disabled",
@@ -350,9 +671,11 @@
       "created_at",
       "actor",
       "operation_type",
+      "request_id",
       "repo_id",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/rest/checks#update-repository-preferences-for-check-suites"
   },
   {
     "action": "checks.auto_trigger_enabled",
@@ -360,6 +683,7 @@
     "docs_reference_links": "/rest/checks#update-repository-preferences-for-check-suites",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "visibility",
@@ -373,7 +697,8 @@
       "created_at",
       "_document_id",
       "public_repo"
-    ]
+    ],
+    "docs_reference_titles": "/rest/checks#update-repository-preferences-for-check-suites"
   },
   {
     "action": "checks.delete_logs",
@@ -389,6 +714,7 @@
       "created_at",
       "_document_id",
       "user_agent",
+      "request_id",
       "repo",
       "programmatic_access_type"
     ]
@@ -399,6 +725,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "origin_repository",
@@ -415,8 +742,11 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
+      "repository_id",
+      "repository",
       "pull_request_id",
       "user_id",
       "org_id",
@@ -441,8 +771,11 @@
     "docs_reference_links": "/codespaces/developing-in-codespaces/creating-a-codespace-for-a-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
+      "repository_id",
+      "repository",
       "pull_request_id",
       "owner",
       "name",
@@ -456,7 +789,8 @@
       "actor_is_bot",
       "machine_type",
       "devcontainer_path"
-    ]
+    ],
+    "docs_reference_titles": "Creating a codespace for a repository"
   },
   {
     "action": "codespaces.destroy",
@@ -464,8 +798,11 @@
     "docs_reference_links": "/codespaces/developing-in-codespaces/deleting-a-codespace",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
+      "repository_id",
+      "repository",
       "pull_request_id",
       "owner",
       "name",
@@ -476,7 +813,8 @@
       "_document_id",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Deleting a codespace"
   },
   {
     "action": "codespaces.export_environment",
@@ -484,6 +822,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application_id",
@@ -502,6 +841,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "owner",
@@ -523,6 +863,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "org",
       "owner",
@@ -538,7 +879,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -547,6 +889,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "owner",
@@ -566,6 +909,7 @@
     "docs_reference_links": "/codespaces/managing-codespaces-for-your-organization/managing-repository-access-for-your-organizations-codespaces",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "business",
@@ -576,14 +920,16 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "Managing access to other repositories within your codespace"
   },
   {
     "action": "copilot.cfb_seat_added",
-    "description": "A seat was added to the Copilot Business subscription for a user and they have received access to GitHub Copilot.",
+    "description": "A Copilot Business or Copilot Enterprise seat was added for a user and they have received access to GitHub Copilot. This can occur as the result of directly assigning a seat for a user, assigning a seat for a team, or setting the organization to allow access for all members.",
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "token_id",
       "hashed_token",
       "programmatic_access_type",
@@ -597,30 +943,35 @@
       "created_at",
       "operation_type",
       "business",
-      "business_id"
+      "business_id",
+      "request_access_security_header"
     ]
   },
   {
     "action": "copilot.cfb_seat_assignment_created",
-    "description": "A seat assignment was newly created for a user.",
+    "description": "A Copilot Business or Copilot Enterprise seat assignment was newly created for a user or a team, and seats are being created.",
     "docs_reference_links": "/copilot/overview-of-github-copilot/about-github-copilot-for-business",
     "fields": [
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "action",
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "What is GitHub Copilot?"
   },
   {
     "action": "copilot.cfb_seat_assignment_refreshed",
-    "description": "A seat assignment that was previously pending cancellation was re-assigned and the user will retain access to GitHub Copilot.",
+    "description": "A seat assignment that was previously pending cancellation was re-assigned and the user will retain access to Copilot.",
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "hashed_token",
       "programmatic_access_type",
       "actor",
@@ -635,17 +986,19 @@
       "created_at",
       "operation_type",
       "business",
-      "business_id"
+      "business_id",
+      "request_access_security_header"
     ]
   },
   {
     "action": "copilot.cfb_seat_assignment_reused",
-    "description": "A seat assignment was re-created for a user who already had a seat with no pending cancellation date.",
+    "description": "A Copilot Business or Copilot Enterprise seat assignment was re-created for a user who already had a seat with no pending cancellation date, and the user will retain access to Copilot.",
     "docs_reference_links": "N/A",
     "fields": [
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "org",
       "org_id",
       "action",
@@ -657,12 +1010,13 @@
   },
   {
     "action": "copilot.cfb_seat_assignment_unassigned",
-    "description": "A seat was unassigned from a user and they will lose access to GitHub Copilot at the end of the billing cycle.",
+    "description": "A user or team's Copilot Business or Copilot Enterprise seat assignment was unassigned, and the user(s) will lose access to Copilot at the end of the current billing cycle.",
     "docs_reference_links": "N/A",
     "fields": [
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "org",
       "org_id",
       "action",
@@ -671,17 +1025,19 @@
       "created_at",
       "operation_type",
       "business",
-      "business_id"
+      "business_id",
+      "request_access_security_header"
     ]
   },
   {
     "action": "copilot.cfb_seat_cancelled",
-    "description": "A seat was canceled from the Copilot Business subscription and the user no longer has access to GitHub Copilot.",
+    "description": "A user's Copilot Business or Copilot Enterprise seat was canceled, and the user no longer has access to Copilot.",
     "docs_reference_links": "N/A",
     "fields": [
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user",
       "user_id",
       "action",
@@ -689,17 +1045,19 @@
       "@timestamp",
       "created_at",
       "operation_type",
-      "seat_assignment"
+      "seat_assignment",
+      "request_access_security_header"
     ]
   },
   {
     "action": "copilot.cfb_seat_cancelled_by_staff",
-    "description": "A seat was canceled from the Copilot Business subscription manually by GitHub and the user no longer has access to GitHub Copilot.",
+    "description": "A user's Copilot Business or Copilot Enterprise seat was canceled manually by GitHub staff, and the user no longer has access to Copilot.",
     "docs_reference_links": "N/A",
     "fields": [
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user_id",
       "user",
       "org",
@@ -711,6 +1069,76 @@
       "operation_type",
       "business",
       "business_id"
+    ]
+  },
+  {
+    "action": "copilot.swe_agent_repo_disabled",
+    "description": "Specific repositories were disabled from using Copilot coding agent.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "org_id",
+      "owner_type",
+      "actor_id",
+      "owner",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "business",
+      "business_id"
+    ]
+  },
+  {
+    "action": "copilot.swe_agent_repo_enabled",
+    "description": "Specific repositories were enabled to use Copilot coding agent.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "org_id",
+      "owner_type",
+      "owner",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type"
+    ]
+  },
+  {
+    "action": "copilot.swe_agent_repo_enablement_updated",
+    "description": "Copilot coding agent access was updated for the organization's or user's repositories.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "new_access",
+      "old_access",
+      "org_id",
+      "owner_type",
+      "owner",
+      "org",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type"
     ]
   },
   {
@@ -719,6 +1147,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -742,6 +1171,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -763,6 +1193,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -786,6 +1217,7 @@
     "docs_reference_links": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization#enabling-or-disabling-a-feature-for-all-existing-repositories",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -797,7 +1229,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization#enabling-or-disabling-a-feature-for-all-existing-repositories"
   },
   {
     "action": "dependabot_alerts.enable",
@@ -805,6 +1238,7 @@
     "docs_reference_links": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization#enabling-or-disabling-a-feature-for-all-existing-repositories",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -816,7 +1250,8 @@
       "operation_type",
       "@timestamp",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization#enabling-or-disabling-a-feature-for-all-existing-repositories"
   },
   {
     "action": "dependabot_alerts_new_repos.disable",
@@ -824,6 +1259,7 @@
     "docs_reference_links": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization#enabling-or-disabling-a-feature-automatically-when-new-repositories-are-added",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -835,7 +1271,8 @@
       "operation_type",
       "@timestamp",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization#enabling-or-disabling-a-feature-automatically-when-new-repositories-are-added"
   },
   {
     "action": "dependabot_alerts_new_repos.enable",
@@ -843,6 +1280,7 @@
     "docs_reference_links": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization#enabling-or-disabling-a-feature-automatically-when-new-repositories-are-added",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -854,7 +1292,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization#enabling-or-disabling-a-feature-automatically-when-new-repositories-are-added"
   },
   {
     "action": "dependabot_repository_access.repositories_updated",
@@ -862,6 +1301,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
@@ -879,6 +1319,7 @@
     "docs_reference_links": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -890,7 +1331,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization"
   },
   {
     "action": "dependabot_security_updates.enable",
@@ -898,6 +1340,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -917,6 +1360,7 @@
     "docs_reference_links": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -928,7 +1372,8 @@
       "operation_type",
       "@timestamp",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization"
   },
   {
     "action": "dependabot_security_updates_new_repos.enable",
@@ -936,6 +1381,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -955,6 +1401,7 @@
     "docs_reference_links": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -966,7 +1413,8 @@
       "operation_type",
       "@timestamp",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization"
   },
   {
     "action": "dependency_graph.enable",
@@ -974,6 +1422,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -993,6 +1442,7 @@
     "docs_reference_links": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -1004,7 +1454,8 @@
       "operation_type",
       "@timestamp",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-security-and-analysis-settings-for-your-organization"
   },
   {
     "action": "dependency_graph_new_repos.enable",
@@ -1012,6 +1463,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -1022,7 +1474,8 @@
       "action",
       "operation_type",
       "@timestamp",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -1031,6 +1484,7 @@
     "docs_reference_links": "/actions/deployment/targeting-different-environments/using-environments-for-deployment#deployment-protection-rules",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -1043,8 +1497,10 @@
       "@timestamp",
       "created_at",
       "_document_id",
-      "programmatic_access_type"
-    ]
+      "programmatic_access_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Managing environments for deployment"
   },
   {
     "action": "environment.create",
@@ -1054,6 +1510,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "environment_name",
       "repo",
       "repo_id",
@@ -1064,7 +1521,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -1073,6 +1531,7 @@
     "docs_reference_links": "/actions/deployment/targeting-different-environments/using-environments-for-deployment#environment-secrets",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application_id",
@@ -1091,8 +1550,10 @@
       "business_id",
       "public_repo",
       "token_scopes",
-      "programmatic_access_type"
-    ]
+      "programmatic_access_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Managing environments for deployment"
   },
   {
     "action": "environment.create_actions_variable",
@@ -1102,6 +1563,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "key",
       "visibility",
       "environment_name",
@@ -1117,8 +1579,10 @@
       "operation_type",
       "business",
       "business_id",
-      "actor_is_bot"
-    ]
+      "actor_is_bot",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Store information in variables"
   },
   {
     "action": "environment.delete",
@@ -1126,6 +1590,7 @@
     "docs_reference_links": "/actions/deployment/targeting-different-environments/using-environments-for-deployment#deleting-an-environment",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -1141,8 +1606,10 @@
       "public_repo",
       "token_scopes",
       "programmatic_access_type",
-      "actor_is_bot"
-    ]
+      "actor_is_bot",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Managing environments for deployment"
   },
   {
     "action": "environment.remove_actions_secret",
@@ -1150,6 +1617,7 @@
     "docs_reference_links": "/actions/deployment/targeting-different-environments/using-environments-for-deployment#environment-secrets",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application_id",
@@ -1166,8 +1634,10 @@
       "business",
       "business_id",
       "public_repo",
-      "token_scopes"
-    ]
+      "token_scopes",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Managing environments for deployment"
   },
   {
     "action": "environment.remove_actions_variable",
@@ -1177,6 +1647,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "key",
       "environment_name",
       "repo",
@@ -1186,8 +1657,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Store information in variables"
   },
   {
     "action": "environment.remove_protection_rule",
@@ -1195,6 +1668,7 @@
     "docs_reference_links": "/actions/deployment/targeting-different-environments/using-environments-for-deployment#deployment-protection-rules",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -1207,8 +1681,10 @@
       "@timestamp",
       "created_at",
       "_document_id",
-      "public_repo"
-    ]
+      "public_repo",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Managing environments for deployment"
   },
   {
     "action": "environment.update_actions_secret",
@@ -1216,6 +1692,7 @@
     "docs_reference_links": "/actions/deployment/targeting-different-environments/using-environments-for-deployment#environment-secrets",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application_id",
@@ -1231,8 +1708,10 @@
       "created_at",
       "_document_id",
       "public_repo",
-      "programmatic_access_type"
-    ]
+      "programmatic_access_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Managing environments for deployment"
   },
   {
     "action": "environment.update_actions_variable",
@@ -1242,6 +1721,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "key",
       "visibility",
       "environment_name",
@@ -1252,8 +1732,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Store information in variables"
   },
   {
     "action": "environment.update_protection_rule",
@@ -1261,18 +1743,87 @@
     "docs_reference_links": "/actions/deployment/targeting-different-environments/using-environments-for-deployment#deployment-protection-rules",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
-      "name",
       "repo",
       "repo_id",
       "org",
       "org_id",
       "action",
-      "operation_type",
+      "@timestamp",
+      "_document_id",
+      "new_value",
+      "approvers_was",
+      "approvers",
+      "programmatic_access_type",
+      "can_admins_bypass",
+      "prevent_self_review"
+    ],
+    "docs_reference_titles": "Managing environments for deployment"
+  },
+  {
+    "action": "gist.create",
+    "description": "A gist was created.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "request_id",
+      "user_id",
+      "user",
+      "gist_id",
       "@timestamp",
       "created_at",
+      "operation_type",
+      "user_agent",
+      "actor",
+      "actor_id",
+      "visibility",
+      "action",
       "_document_id",
+      "token_scopes",
+      "programmatic_access_type"
+    ]
+  },
+  {
+    "action": "gist.destroy",
+    "description": "A gist was deleted.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "user_id",
+      "gist_id",
+      "visibility",
+      "created_at",
+      "_document_id",
+      "user",
+      "request_id",
+      "operation_type",
+      "actor",
+      "actor_id",
+      "action",
+      "user_agent",
+      "@timestamp",
+      "programmatic_access_type"
+    ]
+  },
+  {
+    "action": "gist.visibility_change",
+    "description": "The visibility of a gist was updated.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "action",
+      "operation_type",
+      "@timestamp",
+      "user_agent",
+      "actor",
+      "user",
+      "gist_id",
+      "actor_id",
+      "request_id",
+      "visibility",
+      "user_id",
+      "created_at",
+      "_document_id",
+      "token_scopes",
       "programmatic_access_type"
     ]
   },
@@ -1284,6 +1835,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "title",
       "key",
       "fingerprint",
@@ -1294,8 +1846,10 @@
       "@timestamp",
       "created_at",
       "operation_type",
-      "token_scopes"
-    ]
+      "token_scopes",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key"
   },
   {
     "action": "git_signing_ssh_public_key.delete",
@@ -1305,6 +1859,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "title",
       "key",
       "fingerprint",
@@ -1316,8 +1871,10 @@
       "@timestamp",
       "created_at",
       "operation_type",
-      "token_scopes"
-    ]
+      "token_scopes",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key"
   },
   {
     "action": "github_hosted_runner.create",
@@ -1327,6 +1884,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "runner_group_id",
       "business",
@@ -1338,7 +1896,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -1349,6 +1908,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "business",
       "user",
       "user_id",
@@ -1370,6 +1930,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "runner_group_id",
       "business",
@@ -1389,6 +1950,7 @@
     "description": "N/A",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "actor_id",
       "created_at",
       "user_id",
@@ -1398,7 +1960,8 @@
       "_document_id",
       "actor",
       "action",
-      "user_agent"
+      "user_agent",
+      "request_access_security_header"
     ]
   },
   {
@@ -1408,6 +1971,7 @@
     "fields": [
       "user_id",
       "operation_type",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -1415,7 +1979,8 @@
       "created_at",
       "_document_id",
       "user_agent",
-      "@timestamp"
+      "@timestamp",
+      "request_access_security_header"
     ]
   },
   {
@@ -1424,6 +1989,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -1456,6 +2022,7 @@
       "name",
       "org",
       "user_agent",
+      "request_id",
       "hook_id",
       "repo",
       "repo_id",
@@ -1480,6 +2047,7 @@
       "actor_id",
       "oauth_application_id",
       "repo_id",
+      "request_id",
       "hook_id",
       "events",
       "repo",
@@ -1492,7 +2060,8 @@
       "org",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "About webhooks"
   },
   {
     "action": "hook.destroy",
@@ -1505,6 +2074,7 @@
       "created_at",
       "org",
       "name",
+      "request_id",
       "actor_id",
       "repo_id",
       "org_id",
@@ -1540,6 +2110,7 @@
       "org_id",
       "org",
       "user_agent",
+      "request_id",
       "oauth_application_id",
       "token_scopes",
       "programmatic_access_type"
@@ -1557,12 +2128,15 @@
       "actor",
       "user_agent",
       "actor_id",
+      "request_id",
       "name",
       "user_id",
       "_document_id",
       "integration",
       "created_at",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header",
+      "application_client_id"
     ]
   },
   {
@@ -1573,6 +2147,7 @@
       "actor",
       "user_id",
       "actor_id",
+      "request_id",
       "@timestamp",
       "name",
       "integration",
@@ -1590,6 +2165,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -1601,7 +2177,9 @@
       "@timestamp",
       "created_at",
       "_document_id",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header",
+      "application_client_id"
     ]
   },
   {
@@ -1612,6 +2190,7 @@
       "operation_type",
       "@timestamp",
       "name",
+      "request_id",
       "repository_selection",
       "user_id",
       "action",
@@ -1620,8 +2199,10 @@
       "created_at",
       "integration",
       "_document_id",
-      "programmatic_access_type"
-    ]
+      "programmatic_access_type",
+      "application_client_id"
+    ],
+    "docs_reference_titles": "/apps/using-github-apps/authorizing-github-apps"
   },
   {
     "action": "integration_installation.destroy",
@@ -1629,6 +2210,7 @@
     "docs_reference_links": "/apps/using-github-apps/reviewing-and-modifying-installed-github-apps#blocking-access",
     "fields": [
       "@timestamp",
+      "request_id",
       "actor",
       "created_at",
       "_document_id",
@@ -1641,8 +2223,10 @@
       "name",
       "actor_id",
       "user_agent",
-      "programmatic_access_type"
-    ]
+      "programmatic_access_type",
+      "application_client_id"
+    ],
+    "docs_reference_titles": "/apps/using-github-apps/reviewing-and-modifying-installed-github-apps#blocking-access"
   },
   {
     "action": "integration_installation.repositories_added",
@@ -1653,6 +2237,7 @@
       "repository_selection",
       "name",
       "user",
+      "request_id",
       "integration",
       "operation_type",
       "actor_id",
@@ -1666,8 +2251,10 @@
       "token_scopes",
       "repositories_added_names",
       "programmatic_access_type",
-      "actor_is_bot"
-    ]
+      "actor_is_bot",
+      "application_client_id"
+    ],
+    "docs_reference_titles": "/apps/using-github-apps/reviewing-and-modifying-installed-github-apps#modifying-repository-access"
   },
   {
     "action": "integration_installation.repositories_removed",
@@ -1684,14 +2271,17 @@
       "user_id",
       "created_at",
       "_document_id",
+      "request_id",
       "@timestamp",
       "name",
       "action",
       "actor_id",
       "repositories_removed_names",
       "programmatic_access_type",
-      "actor_is_bot"
-    ]
+      "actor_is_bot",
+      "application_client_id"
+    ],
+    "docs_reference_titles": "/apps/using-github-apps/reviewing-and-modifying-installed-github-apps#modifying-repository-access"
   },
   {
     "action": "integration_installation.suspend",
@@ -1699,6 +2289,7 @@
     "docs_reference_links": "/apps/using-github-apps/reviewing-and-modifying-installed-github-apps#blocking-access",
     "fields": [
       "user_agent",
+      "request_id",
       "name",
       "repository_selection",
       "actor_id",
@@ -1709,8 +2300,11 @@
       "operation_type",
       "@timestamp",
       "created_at",
-      "_document_id"
-    ]
+      "_document_id",
+      "request_access_security_header",
+      "application_client_id"
+    ],
+    "docs_reference_titles": "/apps/using-github-apps/reviewing-and-modifying-installed-github-apps#blocking-access"
   },
   {
     "action": "integration_installation.unsuspend",
@@ -1718,6 +2312,7 @@
     "docs_reference_links": "/apps/using-github-apps/reviewing-and-modifying-installed-github-apps#blocking-access",
     "fields": [
       "user_agent",
+      "request_id",
       "name",
       "repository_selection",
       "actor_id",
@@ -1729,7 +2324,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/apps/using-github-apps/reviewing-and-modifying-installed-github-apps#blocking-access"
   },
   {
     "action": "integration_installation.version_updated",
@@ -1745,11 +2341,14 @@
       "actor_id",
       "action",
       "_document_id",
+      "request_id",
       "created_at",
       "repository_selection",
       "@timestamp",
-      "actor"
-    ]
+      "actor",
+      "application_client_id"
+    ],
+    "docs_reference_titles": "/apps/using-github-apps/approving-updated-permissions-for-a-github-app"
   },
   {
     "action": "integration.manager_added",
@@ -1768,8 +2367,10 @@
       "org",
       "@timestamp",
       "actor_id",
+      "request_id",
       "user_agent"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/managing-programmatic-access-to-your-organization/adding-and-removing-github-app-managers-in-your-organization#giving-someone-the-ability-to-manage-all-github-apps-owned-by-the-organization"
   },
   {
     "action": "integration.manager_removed",
@@ -1777,6 +2378,7 @@
     "docs_reference_links": "/organizations/managing-programmatic-access-to-your-organization/adding-and-removing-github-app-managers-in-your-organization#removing-a-github-app-managers-permissions-for-the-entire-organization",
     "fields": [
       "user_agent",
+      "request_id",
       "actor_id",
       "org",
       "operation_type",
@@ -1789,7 +2391,8 @@
       "created_at",
       "manager",
       "@timestamp"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/managing-programmatic-access-to-your-organization/adding-and-removing-github-app-managers-in-your-organization#removing-a-github-app-managers-permissions-for-the-entire-organization"
   },
   {
     "action": "integration.remove_client_secret",
@@ -1797,6 +2400,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -1807,7 +2411,8 @@
       "operation_type",
       "@timestamp",
       "created_at",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -1816,6 +2421,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -1826,7 +2432,8 @@
       "operation_type",
       "@timestamp",
       "created_at",
-      "_document_id"
+      "_document_id",
+      "application_client_id"
     ]
   },
   {
@@ -1835,6 +2442,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -1845,7 +2453,8 @@
       "operation_type",
       "@timestamp",
       "created_at",
-      "_document_id"
+      "_document_id",
+      "application_client_id"
     ]
   },
   {
@@ -1856,6 +2465,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "integration",
       "user",
@@ -1864,8 +2474,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "application_client_id"
+    ],
+    "docs_reference_titles": "/apps/maintaining-github-apps/suspending-a-github-app-installation"
   },
   {
     "action": "integration.transfer",
@@ -1875,16 +2487,26 @@
       "@timestamp",
       "user_id",
       "name",
+      "transfer_to_id",
       "user",
+      "requester",
       "action",
+      "requester_id",
       "actor_id",
       "created_at",
       "_document_id",
       "user_agent",
+      "transfer_to",
       "operation_type",
+      "request_id",
       "actor",
-      "integration"
-    ]
+      "integration",
+      "transfer_from",
+      "transfer_from_id",
+      "transfer_from_type",
+      "transfer_to_type"
+    ],
+    "docs_reference_titles": "/apps/maintaining-github-apps/transferring-ownership-of-a-github-app"
   },
   {
     "action": "integration.unsuspend",
@@ -1894,6 +2516,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "integration",
       "user",
@@ -1902,7 +2525,103 @@
       "_document_id",
       "@timestamp",
       "created_at",
+      "operation_type",
+      "application_client_id"
+    ],
+    "docs_reference_titles": "/apps/maintaining-github-apps/suspending-a-github-app-installation"
+  },
+  {
+    "action": "issue_dependencies.blocked_by_add",
+    "description": "An issue was marked as blocked by another issue.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "title",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "org_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ]
+  },
+  {
+    "action": "issue_dependencies.blocked_by_remove",
+    "description": "The blocked by relationship between an issue and another issue was removed.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "title",
+      "org",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
       "operation_type"
+    ]
+  },
+  {
+    "action": "issue_dependencies.blocking_add",
+    "description": "An issue was marked as blocking another issue.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "title",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "org_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ]
+  },
+  {
+    "action": "issue_dependencies.blocking_remove",
+    "description": "The blocking relationship between an issue and another issue was removed.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "title",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "org_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
     ]
   },
   {
@@ -1910,6 +2629,7 @@
     "description": "The GitHub Marketplace Developer Agreement was signed.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "actor",
       "actor_id",
       "@timestamp",
@@ -1919,7 +2639,8 @@
       "created_at",
       "action",
       "user",
-      "user_id"
+      "user_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -1937,6 +2658,7 @@
       "user_agent",
       "operation_type",
       "created_at",
+      "request_id",
       "actor_id",
       "marketplace_listing",
       "integration",
@@ -1950,6 +2672,7 @@
     "fields": [
       "primary_category",
       "user_agent",
+      "request_id",
       "actor",
       "marketplace_listing",
       "@timestamp",
@@ -1976,6 +2699,7 @@
       "user_agent",
       "oauth_application",
       "action",
+      "request_id",
       "marketplace_listing",
       "user_id",
       "secondary_category",
@@ -1995,6 +2719,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "org_id",
       "created_at",
       "secondary_category",
@@ -2020,6 +2745,7 @@
       "marketplace_listing",
       "has_free_trial",
       "user_agent",
+      "request_id",
       "actor_id",
       "yearly_price_in_cents",
       "description",
@@ -2045,6 +2771,7 @@
       "_document_id",
       "action",
       "user_agent",
+      "request_id",
       "actor",
       "monthly_price_in_cents",
       "yearly_price_in_cents",
@@ -2059,6 +2786,7 @@
       "actor",
       "marketplace_listing_plan",
       "_document_id",
+      "request_id",
       "description",
       "yearly_price_in_cents",
       "@timestamp",
@@ -2085,6 +2813,7 @@
       "description",
       "bullets",
       "yearly_price_in_cents",
+      "request_id",
       "actor_id",
       "has_free_trial",
       "marketplace_listing_plan",
@@ -2112,6 +2841,7 @@
       "actor",
       "created_at",
       "marketplace_listing",
+      "request_id",
       "actor_id",
       "primary_category",
       "user"
@@ -2123,6 +2853,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "primary_category",
@@ -2147,6 +2878,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "repo_id",
       "public_repo",
       "repo",
@@ -2154,7 +2886,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -2163,6 +2896,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "hashed_token",
       "programmatic_access_type",
       "actor",
@@ -2188,6 +2922,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "repo_id",
       "public_repo",
       "repo",
@@ -2206,6 +2941,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "max_entries_to_build",
       "min_entries_to_merge",
       "repo_id",
@@ -2229,7 +2965,8 @@
       "user_id",
       "action",
       "operation_type",
-      "created_at"
+      "created_at",
+      "request_access_security_header"
     ]
   },
   {
@@ -2238,6 +2975,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
@@ -2265,7 +3003,9 @@
       "@timestamp",
       "_document_id",
       "user_agent",
-      "actor"
+      "request_id",
+      "actor",
+      "request_access_security_header"
     ]
   },
   {
@@ -2284,10 +3024,12 @@
       "operation_type",
       "@timestamp",
       "user_agent",
+      "request_id",
       "actor_id",
       "token_scopes",
       "programmatic_access_type",
-      "actor_is_bot"
+      "actor_is_bot",
+      "request_access_security_header"
     ]
   },
   {
@@ -2305,9 +3047,13 @@
       "created_at",
       "action",
       "actor_id",
+      "request_id",
       "token_scopes",
-      "programmatic_access_type"
-    ]
+      "programmatic_access_type",
+      "request_access_security_header",
+      "oauth_application_name"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps, Managing your personal access tokens"
   },
   {
     "action": "oauth_access.destroy",
@@ -2323,11 +3069,14 @@
       "created_at",
       "user",
       "user_id",
+      "request_id",
       "explanation",
       "hashed_token",
       "actor_id",
-      "token_scopes"
-    ]
+      "token_scopes",
+      "oauth_application_name"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps"
   },
   {
     "action": "oauth_access.regenerate",
@@ -2342,10 +3091,31 @@
       "operation_type",
       "action",
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "token_scopes",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "oauth_application_name"
+    ]
+  },
+  {
+    "action": "oauth_access.revoke",
+    "description": "An OAuth access token was revoked.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "request_id",
+      "request_access_security_header",
+      "hashed_token",
+      "token_id",
+      "token_scopes",
+      "user",
+      "user_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type"
     ]
   },
   {
@@ -2353,6 +3123,7 @@
     "description": "An OAuth access token was updated.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "actor_id",
       "actor",
       "operation_type",
@@ -2362,7 +3133,8 @@
       "action",
       "@timestamp",
       "user",
-      "user_agent"
+      "user_agent",
+      "request_access_security_header"
     ]
   },
   {
@@ -2381,8 +3153,11 @@
       "actor",
       "oauth_application",
       "@timestamp",
-      "_document_id"
-    ]
+      "_document_id",
+      "request_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app"
   },
   {
     "action": "oauth_application.destroy",
@@ -2399,9 +3174,12 @@
       "_document_id",
       "actor",
       "actor_id",
+      "request_id",
       "action",
-      "user"
-    ]
+      "user",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app"
   },
   {
     "action": "oauth_application.generate_client_secret",
@@ -2409,6 +3187,7 @@
     "docs_reference_links": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application",
@@ -2419,8 +3198,10 @@
       "operation_type",
       "@timestamp",
       "created_at",
-      "_document_id"
-    ]
+      "_document_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app"
   },
   {
     "action": "oauth_application.remove_client_secret",
@@ -2428,6 +3209,7 @@
     "docs_reference_links": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application",
@@ -2438,8 +3220,10 @@
       "operation_type",
       "@timestamp",
       "created_at",
-      "_document_id"
-    ]
+      "_document_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app"
   },
   {
     "action": "oauth_application.reset_secret",
@@ -2451,6 +3235,7 @@
       "action",
       "oauth_application",
       "operation_type",
+      "request_id",
       "actor_id",
       "_document_id",
       "created_at",
@@ -2458,7 +3243,8 @@
       "oauth_application_id",
       "@timestamp",
       "user_agent"
-    ]
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app"
   },
   {
     "action": "oauth_application.revoke_all_tokens",
@@ -2466,6 +3252,7 @@
     "docs_reference_links": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application",
@@ -2476,8 +3263,10 @@
       "operation_type",
       "@timestamp",
       "created_at",
-      "_document_id"
-    ]
+      "_document_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app"
   },
   {
     "action": "oauth_application.revoke_tokens",
@@ -2489,14 +3278,17 @@
       "actor_id",
       "user_agent",
       "@timestamp",
+      "request_id",
       "user_id",
       "action",
       "_document_id",
       "actor",
       "user",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app"
   },
   {
     "action": "oauth_application.transfer",
@@ -2513,9 +3305,11 @@
       "@timestamp",
       "user_id",
       "_document_id",
+      "request_id",
       "user",
       "action"
-    ]
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/building-oauth-apps/authenticating-to-the-rest-api-with-an-oauth-app#registering-your-app"
   },
   {
     "action": "oauth_authorization.create",
@@ -2528,6 +3322,7 @@
       "actor",
       "org_id",
       "_document_id",
+      "request_id",
       "action",
       "@timestamp",
       "created_at",
@@ -2537,8 +3332,11 @@
       "business_id",
       "token_scopes",
       "programmatic_access_type",
-      "actor_is_bot"
-    ]
+      "actor_is_bot",
+      "request_access_security_header",
+      "oauth_application_name"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps"
   },
   {
     "action": "oauth_authorization.destroy",
@@ -2547,6 +3345,7 @@
     "fields": [
       "user_agent",
       "_document_id",
+      "request_id",
       "operation_type",
       "@timestamp",
       "actor",
@@ -2558,8 +3357,33 @@
       "action",
       "actor_id",
       "token_scopes",
-      "actor_is_bot"
-    ]
+      "actor_is_bot",
+      "oauth_application_name"
+    ],
+    "docs_reference_titles": "Reviewing and revoking authorization of GitHub Apps"
+  },
+  {
+    "action": "oauth_authorization.update",
+    "description": "An authorization for an OAuth application was updated.",
+    "docs_reference_links": "/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps",
+    "fields": [
+      "org_id",
+      "request_id",
+      "user_id",
+      "actor",
+      "actor_id",
+      "user_agent",
+      "@timestamp",
+      "operation_type",
+      "action",
+      "user",
+      "created_at",
+      "_document_id",
+      "actor_is_bot",
+      "request_access_security_header",
+      "oauth_application_name"
+    ],
+    "docs_reference_titles": "/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps"
   },
   {
     "action": "org.add_member",
@@ -2570,6 +3394,7 @@
       "_document_id",
       "org",
       "operation_type",
+      "request_id",
       "actor",
       "user",
       "@timestamp",
@@ -2591,6 +3416,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "inviter",
       "org",
       "org_id",
@@ -2603,7 +3429,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -2612,6 +3439,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
@@ -2632,6 +3460,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -2654,6 +3483,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
@@ -2674,6 +3504,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -2696,6 +3527,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "_document_id",
+      "request_id",
       "actor_id",
       "user_agent",
       "actor",
@@ -2712,11 +3544,169 @@
     ]
   },
   {
+    "action": "org.security_center_export_code_scanning_metrics",
+    "description": "A CSV export was requested on the CodeQL pull request alerts page.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "org",
+      "org_id",
+      "user",
+      "user_id",
+      "query",
+      "filename",
+      "requested_at",
+      "start_date",
+      "end_date",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "business",
+      "business_id",
+      "actor_is_bot"
+    ]
+  },
+  {
+    "action": "org.security_center_export_coverage",
+    "description": "A CSV export was requested on the Coverage page.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "org",
+      "org_id",
+      "user",
+      "user_id",
+      "query",
+      "filename",
+      "requested_at",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "business",
+      "business_id",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "org.security_center_export_overview_dashboard",
+    "description": "A CSV export was requested on the Overview Dashboard page.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "org",
+      "org_id",
+      "user",
+      "user_id",
+      "query",
+      "filename",
+      "requested_at",
+      "start_date",
+      "end_date",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "business",
+      "business_id",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "org.security_center_export_risk",
+    "description": "A CSV export was requested on the Risk page.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "org",
+      "org_id",
+      "user",
+      "user_id",
+      "query",
+      "filename",
+      "requested_at",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "business",
+      "business_id",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "org.set_actions_cache_retention_policy",
+    "description": "The cache retention policy for GitHub Actions was set for an organization.",
+    "docs_reference_links": "/organizations/managing-organization-settings/managing-github-actions-settings-for-your-organization",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "org",
+      "org_id",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ],
+    "docs_reference_titles": "/organizations/managing-organization-settings/managing-github-actions-settings-for-your-organization"
+  },
+  {
+    "action": "org.set_actions_cache_storage_policy",
+    "description": "The cache storage policy for GitHub Actions was set for an organization.",
+    "docs_reference_links": "/organizations/managing-organization-settings/managing-github-actions-settings-for-your-organization",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "org",
+      "org_id",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ],
+    "docs_reference_titles": "/organizations/managing-organization-settings/managing-github-actions-settings-for-your-organization"
+  },
+  {
     "action": "org.set_actions_fork_pr_approvals_policy",
     "description": "The setting for requiring approvals for workflows from public forks was changed for an organization.",
     "docs_reference_links": "/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization#requiring-approval-for-workflows-from-public-forks",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "policy",
@@ -2729,7 +3719,8 @@
       "operation_type",
       "business",
       "business_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization#requiring-approval-for-workflows-from-public-forks"
   },
   {
     "action": "org.set_actions_private_fork_pr_approvals_policy",
@@ -2739,6 +3730,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "policy",
       "org",
       "org_id",
@@ -2747,7 +3739,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization#enabling-workflows-for-private-repository-forks"
   },
   {
     "action": "org.set_actions_retention_limit",
@@ -2755,6 +3748,7 @@
     "docs_reference_links": "/organizations/managing-organization-settings/configuring-the-retention-period-for-github-actions-artifacts-and-logs-in-your-organization",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "limit",
@@ -2765,7 +3759,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/managing-organization-settings/configuring-the-retention-period-for-github-actions-artifacts-and-logs-in-your-organization"
   },
   {
     "action": "org.set_default_workflow_permissions",
@@ -2775,14 +3770,17 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "org",
       "org_id",
       "action",
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization#setting-the-permissions-of-the-github_token-for-your-organization"
   },
   {
     "action": "org.set_fork_pr_workflows_policy",
@@ -2790,6 +3788,7 @@
     "docs_reference_links": "/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization#enabling-workflows-for-private-repository-forks",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "policy",
@@ -2800,7 +3799,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization#enabling-workflows-for-private-repository-forks"
   },
   {
     "action": "org.set_workflow_permission_can_approve_pr",
@@ -2810,14 +3810,17 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "org",
       "org_id",
       "action",
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization#preventing-github-actions-from-creating-or-approving-pull-requests"
   },
   {
     "action": "org.update_member",
@@ -2831,6 +3834,7 @@
       "user",
       "user_id",
       "action",
+      "request_id",
       "actor_id",
       "old_permission",
       "permission",
@@ -2848,6 +3852,7 @@
       "actor",
       "action",
       "@timestamp",
+      "request_id",
       "actor_id",
       "permission",
       "created_at",
@@ -2875,9 +3880,11 @@
       "operation_type",
       "org",
       "user_agent",
+      "request_id",
       "business",
       "@timestamp"
-    ]
+    ],
+    "docs_reference_titles": "Setting permissions for adding outside collaborators"
   },
   {
     "action": "pages_protected_domain.create",
@@ -2885,6 +3892,7 @@
     "docs_reference_links": "/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "owner",
@@ -2895,8 +3903,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages"
   },
   {
     "action": "pages_protected_domain.delete",
@@ -2904,6 +3914,7 @@
     "docs_reference_links": "/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "owner",
@@ -2915,7 +3926,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages"
   },
   {
     "action": "pages_protected_domain.verify",
@@ -2923,6 +3935,7 @@
     "docs_reference_links": "/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "owner",
@@ -2933,8 +3946,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages"
   },
   {
     "action": "passkey.register",
@@ -2944,6 +3959,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "nickname",
       "user",
       "user_id",
@@ -2951,7 +3967,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -2962,6 +3979,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "nickname",
       "user",
       "user_id",
@@ -2969,7 +3987,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -2978,6 +3997,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "user",
       "operation_type",
       "user_id",
@@ -2986,7 +4006,8 @@
       "actor",
       "actor_id",
       "@timestamp",
-      "created_at"
+      "created_at",
+      "request_access_security_header"
     ]
   },
   {
@@ -3002,7 +4023,8 @@
       "action",
       "operation_type",
       "actor",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -3011,6 +4033,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "operation_type",
+      "request_id",
       "org_id",
       "created_at",
       "actor_id",
@@ -3019,7 +4042,8 @@
       "actor",
       "org",
       "user_agent",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -3028,8 +4052,10 @@
     "docs_reference_links": "/organizations/managing-programmatic-access-to-your-organization/managing-requests-for-personal-access-tokens-in-your-organization",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
+      "user_programmatic_access_id",
       "user_programmatic_access_name",
       "repository_selection",
       "user",
@@ -3039,7 +4065,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/managing-programmatic-access-to-your-organization/managing-requests-for-personal-access-tokens-in-your-organization"
   },
   {
     "action": "personal_access_token.access_revoked",
@@ -3047,8 +4074,10 @@
     "docs_reference_links": "/organizations/managing-programmatic-access-to-your-organization/reviewing-and-revoking-personal-access-tokens-in-your-organization",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
+      "user_programmatic_access_id",
       "user_programmatic_access_name",
       "repository_selection",
       "user",
@@ -3058,7 +4087,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/organizations/managing-programmatic-access-to-your-organization/reviewing-and-revoking-personal-access-tokens-in-your-organization"
   },
   {
     "action": "personal_access_token.create",
@@ -3066,6 +4096,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user_programmatic_access_name",
@@ -3085,6 +4116,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user_programmatic_access_name",
@@ -3094,7 +4126,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -3110,7 +4143,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/code-security/getting-started/github-security-features#secret-scanning-alerts-for-users"
   },
   {
     "action": "personal_access_token.destroy",
@@ -3118,6 +4152,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user_programmatic_access_name",
@@ -3128,7 +4163,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -3137,6 +4173,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user_programmatic_access_name",
@@ -3147,7 +4184,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "user_programmatic_access_request_id"
     ]
   },
   {
@@ -3156,8 +4194,10 @@
     "docs_reference_links": "/organizations/managing-programmatic-access-to-your-organization/managing-requests-for-personal-access-tokens-in-your-organization",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
+      "user_programmatic_access_id",
       "user_programmatic_access_name",
       "user",
       "user_id",
@@ -3166,8 +4206,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "user_programmatic_access_request_id"
+    ],
+    "docs_reference_titles": "/organizations/managing-programmatic-access-to-your-organization/managing-requests-for-personal-access-tokens-in-your-organization"
   },
   {
     "action": "personal_access_token.request_denied",
@@ -3177,6 +4219,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user_programmatic_access_name",
       "org",
       "org_id",
@@ -3185,8 +4228,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "user_programmatic_access_request_id"
+    ],
+    "docs_reference_titles": "/organizations/managing-programmatic-access-to-your-organization/managing-requests-for-personal-access-tokens-in-your-organization"
   },
   {
     "action": "personal_access_token.update",
@@ -3194,6 +4239,7 @@
     "docs_reference_links": "/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#fine-grained-personal-access-tokens",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user_programmatic_access_name",
@@ -3205,7 +4251,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#fine-grained-personal-access-tokens"
   },
   {
     "action": "premium_runner.create",
@@ -3213,6 +4260,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -3230,6 +4278,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -3249,6 +4298,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "name",
@@ -3268,6 +4318,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user",
       "user_id",
       "org",
@@ -3287,6 +4338,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user",
       "user_id",
       "org",
@@ -3306,6 +4358,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user",
       "user_id",
       "org",
@@ -3325,6 +4378,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user",
       "user_id",
       "org",
@@ -3349,10 +4403,12 @@
       "owner",
       "action",
       "_document_id",
+      "request_id",
       "user_agent",
       "actor",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "Personalize your profile"
   },
   {
     "action": "project.access",
@@ -3367,6 +4423,7 @@
       "created_at",
       "user_id",
       "action",
+      "request_id",
       "_document_id",
       "@timestamp"
     ]
@@ -3378,16 +4435,93 @@
     "fields": [
       "org_id",
       "user_agent",
+      "request_id",
       "operation_type",
       "@timestamp",
       "created_at",
       "repo_id",
       "org",
       "_document_id",
+      "project_id",
       "action",
       "actor",
       "actor_id",
-      "repo"
+      "repo",
+      "project_kind"
+    ],
+    "docs_reference_titles": "Closing a project (classic)"
+  },
+  {
+    "action": "project_collaborator.add",
+    "description": "A collaborator was added to a project.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "collaborator_type",
+      "org",
+      "org_id",
+      "collaborator",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "public_project",
+      "project_name",
+      "project_role",
+      "old_project_role",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "project_collaborator.remove",
+    "description": "A collaborator was removed from a project.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "collaborator_type",
+      "user",
+      "user_id",
+      "collaborator",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "project_collaborator.update",
+    "description": "A project collaborator's permission level was changed.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "public_project",
+      "project_name",
+      "collaborator_type",
+      "project_role",
+      "old_project_role",
+      "project_id",
+      "user",
+      "user_id",
+      "collaborator",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -3398,6 +4532,7 @@
       "operation_type",
       "user",
       "_document_id",
+      "request_id",
       "user_id",
       "user_agent",
       "@timestamp",
@@ -3412,6 +4547,7 @@
     "description": "A project board was deleted.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "action",
       "actor_id",
       "operation_type",
@@ -3430,6 +4566,7 @@
     "docs_reference_links": "/issues/planning-and-tracking-with-projects/understanding-fields",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
@@ -3438,8 +4575,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/issues/planning-and-tracking-with-projects/understanding-fields"
   },
   {
     "action": "project_field.delete",
@@ -3447,6 +4586,7 @@
     "docs_reference_links": "/issues/planning-and-tracking-with-projects/understanding-fields/deleting-custom-fields",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
@@ -3455,8 +4595,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/issues/planning-and-tracking-with-projects/understanding-fields/deleting-custom-fields"
   },
   {
     "action": "project.link",
@@ -3468,6 +4610,7 @@
       "actor_id",
       "org_id",
       "user_agent",
+      "request_id",
       "actor",
       "operation_type",
       "@timestamp",
@@ -3483,16 +4626,21 @@
     "docs_reference_links": "/issues/organizing-your-work-with-project-boards/managing-project-boards/reopening-a-closed-project-board",
     "fields": [
       "actor",
+      "request_id",
       "actor_id",
       "action",
       "user_id",
+      "project_id",
       "_document_id",
       "user_agent",
       "operation_type",
       "user",
       "@timestamp",
-      "created_at"
-    ]
+      "created_at",
+      "project_kind",
+      "project_name"
+    ],
+    "docs_reference_titles": "Reopening a closed project (classic)"
   },
   {
     "action": "project.rename",
@@ -3501,6 +4649,7 @@
     "fields": [
       "action",
       "created_at",
+      "request_id",
       "actor_id",
       "old_name",
       "operation_type",
@@ -3529,6 +4678,7 @@
       "created_at",
       "actor_id",
       "_document_id",
+      "request_id",
       "@timestamp",
       "user_agent",
       "org",
@@ -3546,6 +4696,7 @@
       "_document_id",
       "operation_type",
       "created_at",
+      "request_id",
       "actor_id",
       "action",
       "org_id",
@@ -3563,6 +4714,7 @@
       "org",
       "actor_id",
       "_document_id",
+      "request_id",
       "team",
       "@timestamp",
       "action",
@@ -3575,6 +4727,7 @@
     "description": "A user was added to or removed from a project board or had their permission level changed.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "user_id",
       "operation_type",
       "@timestamp",
@@ -3596,6 +4749,7 @@
     "docs_reference_links": "/issues/planning-and-tracking-with-projects/customizing-views-in-your-project/managing-your-views",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
@@ -3604,8 +4758,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/issues/planning-and-tracking-with-projects/customizing-views-in-your-project/managing-your-views"
   },
   {
     "action": "project_view.delete",
@@ -3613,6 +4769,7 @@
     "docs_reference_links": "/issues/planning-and-tracking-with-projects/customizing-views-in-your-project/managing-your-views",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
@@ -3621,7 +4778,52 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/issues/planning-and-tracking-with-projects/customizing-views-in-your-project/managing-your-views"
+  },
+  {
+    "action": "project.visibility_private",
+    "description": "A project's visibility was changed from public to private.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "user_agent",
+      "request_id",
+      "actor",
+      "actor_id",
+      "project_id",
+      "org",
+      "org_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "project_kind",
+      "project_name"
+    ]
+  },
+  {
+    "action": "project.visibility_public",
+    "description": "A project's visibility was changed from private to public.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "user_agent",
+      "request_id",
+      "actor",
+      "actor_id",
+      "project_id",
+      "org",
+      "org_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "project_kind",
+      "project_name",
+      "request_access_security_header"
     ]
   },
   {
@@ -3632,6 +4834,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "merge_queue_enforcement_level",
       "repo",
@@ -3642,7 +4845,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches#require-merge-queue"
   },
   {
     "action": "public_key.create",
@@ -3662,10 +4866,12 @@
       "user",
       "user_id",
       "@timestamp",
+      "request_id",
       "title",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account"
   },
   {
     "action": "public_key.delete",
@@ -3684,12 +4890,14 @@
       "_document_id",
       "actor",
       "title",
+      "request_id",
       "actor_id",
       "repo_id",
       "created_at",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/authentication/keeping-your-account-and-data-secure/reviewing-your-ssh-keys"
   },
   {
     "action": "public_key.unverification_failure",
@@ -3697,6 +4905,7 @@
     "docs_reference_links": "/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys",
     "fields": [
       "user_agent",
+      "request_id",
       "title",
       "key",
       "fingerprint",
@@ -3709,7 +4918,8 @@
       "created_at",
       "operation_type",
       "token_scopes"
-    ]
+    ],
+    "docs_reference_titles": "/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys"
   },
   {
     "action": "public_key.unverify",
@@ -3720,6 +4930,7 @@
       "operation_type",
       "_document_id",
       "title",
+      "request_id",
       "key",
       "action",
       "actor",
@@ -3731,7 +4942,8 @@
       "repo",
       "user_agent",
       "fingerprint"
-    ]
+    ],
+    "docs_reference_titles": "/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys"
   },
   {
     "action": "public_key.update",
@@ -3750,10 +4962,12 @@
       "repo",
       "action",
       "_document_id",
+      "request_id",
       "title",
       "@timestamp",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys"
   },
   {
     "action": "public_key.verification_failure",
@@ -3765,6 +4979,7 @@
       "key",
       "fingerprint",
       "@timestamp",
+      "request_id",
       "actor_id",
       "oauth_application_id",
       "title",
@@ -3778,7 +4993,8 @@
       "user",
       "user_id",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys"
   },
   {
     "action": "public_key.verify",
@@ -3798,10 +5014,12 @@
       "title",
       "user_agent",
       "user_id",
+      "request_id",
       "read_only",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys"
   },
   {
     "action": "repo.access",
@@ -3810,6 +5028,7 @@
     "fields": [
       "repo_id",
       "user",
+      "request_id",
       "operation_type",
       "@timestamp",
       "actor_id",
@@ -3823,7 +5042,8 @@
       "_document_id",
       "previous_visibility",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility"
   },
   {
     "action": "repo.actions_enabled",
@@ -3831,6 +5051,7 @@
     "docs_reference_links": "organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/reviewing-the-audit-log-for-your-organization#using-the-audit-log-api",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -3844,7 +5065,8 @@
       "_document_id",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/reviewing-the-audit-log-for-your-organization#using-the-audit-log-api"
   },
   {
     "action": "repo.add_member",
@@ -3862,6 +5084,7 @@
       "actor_id",
       "repo_id",
       "user",
+      "request_id",
       "action",
       "user_id",
       "oauth_application_id",
@@ -3869,7 +5092,8 @@
       "org_id",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Inviting collaborators to a personal repository"
   },
   {
     "action": "repo.add_topic",
@@ -3884,6 +5108,7 @@
       "user",
       "org",
       "org_id",
+      "request_id",
       "actor_id",
       "topic",
       "@timestamp",
@@ -3892,7 +5117,8 @@
       "created_at",
       "operation_type",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/classifying-your-repository-with-topics"
   },
   {
     "action": "repo.advanced_security_disabled",
@@ -3900,10 +5126,13 @@
     "docs_reference_links": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-security-and-analysis-settings-for-your-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
       "org_id",
+      "repository",
+      "repository_id",
       "business",
       "business_id",
       "action",
@@ -3912,8 +5141,10 @@
       "created_at",
       "_document_id",
       "programmatic_access_type",
-      "actor_is_bot"
-    ]
+      "actor_is_bot",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-security-and-analysis-settings-for-your-repository"
   },
   {
     "action": "repo.advanced_security_enabled",
@@ -3921,10 +5152,13 @@
     "docs_reference_links": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-security-and-analysis-settings-for-your-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
       "org_id",
+      "repository",
+      "repository_id",
       "business",
       "business_id",
       "action",
@@ -3935,7 +5169,8 @@
       "public_repo",
       "programmatic_access_type",
       "actor_is_bot"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-security-and-analysis-settings-for-your-repository"
   },
   {
     "action": "repo.archived",
@@ -3955,9 +5190,11 @@
       "actor_id",
       "actor",
       "_document_id",
+      "request_id",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/archiving-a-github-repository"
   },
   {
     "action": "repo.change_merge_setting",
@@ -3967,6 +5204,7 @@
       "actor",
       "oauth_application_id",
       "user_agent",
+      "request_id",
       "created_at",
       "@timestamp",
       "_document_id",
@@ -3985,6 +5223,7 @@
     "docs_reference_links": "/rest/code-scanning#delete-a-code-scanning-analysis-from-a-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application_id",
@@ -3999,8 +5238,10 @@
       "_document_id",
       "public_repo",
       "tool",
-      "category"
-    ]
+      "category",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/rest/code-scanning#delete-a-code-scanning-analysis-from-a-repository"
   },
   {
     "action": "repo.code_scanning_configuration_for_branch_deleted",
@@ -4010,6 +5251,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "tool",
       "branch",
       "category",
@@ -4025,7 +5267,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "Resolving code scanning alerts"
   },
   {
     "action": "repo.config.disable_collaborators_only",
@@ -4041,8 +5284,10 @@
       "created_at",
       "repo",
       "operation_type",
-      "@timestamp"
-    ]
+      "@timestamp",
+      "request_id"
+    ],
+    "docs_reference_titles": "/communities/moderating-comments-and-conversations/limiting-interactions-in-your-repository"
   },
   {
     "action": "repo.config.disable_contributors_only",
@@ -4051,6 +5296,7 @@
     "fields": [
       "repo",
       "@timestamp",
+      "request_id",
       "actor",
       "_document_id",
       "user_agent",
@@ -4059,7 +5305,8 @@
       "action",
       "operation_type",
       "created_at"
-    ]
+    ],
+    "docs_reference_titles": "/communities/moderating-comments-and-conversations/limiting-interactions-in-your-repository"
   },
   {
     "action": "repo.config.disable_sockpuppet_disallowed",
@@ -4067,6 +5314,7 @@
     "docs_reference_links": "/communities/moderating-comments-and-conversations/limiting-interactions-in-your-repository",
     "fields": [
       "actor",
+      "request_id",
       "repo_id",
       "action",
       "user_agent",
@@ -4076,7 +5324,8 @@
       "actor_id",
       "repo",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/communities/moderating-comments-and-conversations/limiting-interactions-in-your-repository"
   },
   {
     "action": "repo.config.enable_collaborators_only",
@@ -4087,6 +5336,7 @@
       "oauth_application_id",
       "created_at",
       "action",
+      "request_id",
       "repo_id",
       "repo",
       "@timestamp",
@@ -4094,7 +5344,8 @@
       "user_agent",
       "actor_id",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/communities/moderating-comments-and-conversations/limiting-interactions-in-your-repository"
   },
   {
     "action": "repo.config.enable_contributors_only",
@@ -4102,6 +5353,7 @@
     "docs_reference_links": "/communities/moderating-comments-and-conversations/limiting-interactions-in-your-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "operation_type",
       "created_at",
       "actor",
@@ -4113,7 +5365,8 @@
       "org_id",
       "@timestamp",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/communities/moderating-comments-and-conversations/limiting-interactions-in-your-repository"
   },
   {
     "action": "repo.config.enable_sockpuppet_disallowed",
@@ -4124,20 +5377,23 @@
       "operation_type",
       "created_at",
       "user_agent",
+      "request_id",
       "action",
       "actor_id",
       "repo",
       "repo_id",
       "@timestamp",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/communities/moderating-comments-and-conversations/limiting-interactions-in-your-repository"
   },
   {
     "action": "repo.configure_self_hosted_jit_runner",
-    "description": "N/A",
-    "docs_reference_links": "N/A",
+    "description": "A new just-in-time GitHub Actions self-hosted runner was configured",
+    "docs_reference_links": "/rest/actions/self-hosted-runners#create-configuration-for-a-just-in-time-runner-for-a-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "hashed_token",
       "programmatic_access_type",
       "actor",
@@ -4154,8 +5410,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/rest/actions/self-hosted-runners#create-configuration-for-a-just-in-time-runner-for-a-repository"
   },
   {
     "action": "repo.create",
@@ -4167,6 +5425,7 @@
       "visibility",
       "repo_id",
       "user",
+      "request_id",
       "actor_id",
       "action",
       "operation_type",
@@ -4186,7 +5445,8 @@
       "token_scopes",
       "programmatic_access_type",
       "actor_is_bot"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/creating-and-managing-repositories/creating-a-new-repository"
   },
   {
     "action": "repo.create_actions_secret",
@@ -4194,6 +5454,7 @@
     "docs_reference_links": "/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "key",
@@ -4206,7 +5467,8 @@
       "_document_id",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Using secrets in GitHub Actions"
   },
   {
     "action": "repo.create_actions_variable",
@@ -4216,6 +5478,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "key",
       "visibility",
       "repo",
@@ -4229,8 +5492,10 @@
       "created_at",
       "operation_type",
       "business",
-      "business_id"
-    ]
+      "business_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Store information in variables"
   },
   {
     "action": "repo.create_integration_secret",
@@ -4238,6 +5503,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "key",
@@ -4251,7 +5517,8 @@
       "created_at",
       "_document_id",
       "public_repo",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -4271,6 +5538,7 @@
       "request_category",
       "actor_id",
       "visibility",
+      "request_id",
       "created_at",
       "@timestamp",
       "request_method",
@@ -4278,7 +5546,8 @@
       "token_scopes",
       "programmatic_access_type",
       "actor_is_bot"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/creating-and-managing-repositories/deleting-a-repository"
   },
   {
     "action": "repo.pages_cname",
@@ -4291,13 +5560,16 @@
       "repo",
       "repo_id",
       "user",
+      "request_id",
       "actor_id",
+      "cname",
       "user_agent",
       "user_id",
       "created_at",
       "_document_id",
       "action",
       "operation_type",
+      "old_cname",
       "programmatic_access_type"
     ]
   },
@@ -4317,6 +5589,7 @@
       "repo_id",
       "created_at",
       "@timestamp",
+      "request_id",
       "actor",
       "repo",
       "programmatic_access_type"
@@ -4330,6 +5603,7 @@
       "created_at",
       "user_id",
       "action",
+      "request_id",
       "user",
       "repo",
       "user_agent",
@@ -4356,12 +5630,14 @@
       "actor",
       "visibility",
       "user_id",
+      "request_id",
       "repo",
       "@timestamp",
       "operation_type",
       "action",
       "created_at",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -4369,6 +5645,7 @@
     "description": "HTTPS redirects were enabled for a GitHub Pages site.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "@timestamp",
       "user_agent",
       "user_id",
@@ -4381,7 +5658,8 @@
       "repo_id",
       "action",
       "repo",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -4390,6 +5668,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "visibility",
@@ -4410,6 +5689,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "visibility",
@@ -4422,7 +5702,8 @@
       "@timestamp",
       "created_at",
       "_document_id",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -4440,7 +5721,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -4451,6 +5733,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "visibility",
       "repo",
       "repo_id",
@@ -4461,7 +5744,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -4478,6 +5762,7 @@
       "repo_id",
       "user",
       "_document_id",
+      "request_id",
       "visibility",
       "repo",
       "created_at",
@@ -4499,8 +5784,11 @@
       "user_agent",
       "created_at",
       "_document_id",
-      "repo_id"
-    ]
+      "request_id",
+      "repo_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Adding self-hosted runners"
   },
   {
     "action": "repo.remove_actions_secret",
@@ -4508,6 +5796,7 @@
     "docs_reference_links": "/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "key",
@@ -4522,7 +5811,8 @@
       "_document_id",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Using secrets in GitHub Actions"
   },
   {
     "action": "repo.remove_actions_variable",
@@ -4532,6 +5822,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "key",
       "repo",
       "repo_id",
@@ -4544,8 +5835,10 @@
       "created_at",
       "operation_type",
       "business",
-      "business_id"
-    ]
+      "business_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Store information in variables"
   },
   {
     "action": "repo.remove_integration_secret",
@@ -4553,6 +5846,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "key",
@@ -4566,7 +5860,8 @@
       "@timestamp",
       "created_at",
       "_document_id",
-      "public_repo"
+      "public_repo",
+      "request_access_security_header"
     ]
   },
   {
@@ -4574,6 +5869,7 @@
     "description": "A collaborator was removed from a repository.",
     "docs_reference_links": "/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/removing-a-collaborator-from-a-personal-repository",
     "fields": [
+      "request_id",
       "user",
       "business",
       "action",
@@ -4593,13 +5889,15 @@
       "repo",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Removing a collaborator from a personal repository"
   },
   {
     "action": "repo.remove_self_hosted_runner",
     "description": "A self-hosted runner was removed.",
     "docs_reference_links": "/actions/hosting-your-own-runners/managing-self-hosted-runners/removing-self-hosted-runners#removing-a-runner-from-a-repository",
     "fields": [
+      "request_id",
       "actor_id",
       "repo_id",
       "@timestamp",
@@ -4614,7 +5912,8 @@
       "org",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Removing self-hosted runners"
   },
   {
     "action": "repo.remove_topic",
@@ -4632,6 +5931,7 @@
       "org_id",
       "actor",
       "business",
+      "request_id",
       "repo",
       "@timestamp",
       "created_at",
@@ -4648,6 +5948,7 @@
     "fields": [
       "user_agent",
       "@timestamp",
+      "request_id",
       "actor_id",
       "actor",
       "old_name",
@@ -4661,7 +5962,8 @@
       "repo_id",
       "_document_id",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/creating-and-managing-repositories/renaming-a-repository"
   },
   {
     "action": "repo.restore",
@@ -4675,6 +5977,7 @@
       "user",
       "operation_type",
       "user_agent",
+      "request_id",
       "repo_id",
       "@timestamp",
       "created_at",
@@ -4683,11 +5986,66 @@
     ]
   },
   {
+    "action": "repo.set_actions_cache_retention_policy",
+    "description": "The cache retention policy for GitHub Actions was set for a repository.",
+    "docs_reference_links": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "visibility",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "org_id",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository"
+  },
+  {
+    "action": "repo.set_actions_cache_storage_policy",
+    "description": "The cache storage policy for GitHub Actions was set for a repository.",
+    "docs_reference_links": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "visibility",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "org_id",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot"
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository"
+  },
+  {
     "action": "repo.set_actions_fork_pr_approvals_policy",
     "description": "The setting for requiring approvals for workflows from public forks was changed for a repository.",
     "docs_reference_links": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#configuring-required-approval-for-workflows-from-public-forks",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "visibility",
@@ -4704,7 +6062,8 @@
       "business",
       "business_id",
       "public_repo"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#configuring-required-approval-for-workflows-from-public-forks"
   },
   {
     "action": "repo.set_actions_private_fork_pr_approvals_policy",
@@ -4714,6 +6073,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "visibility",
       "policy",
       "repo",
@@ -4726,7 +6086,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-forks-of-private-repositories"
   },
   {
     "action": "repo.set_actions_retention_limit",
@@ -4734,6 +6095,7 @@
     "docs_reference_links": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#configuring-the-retention-period-for-github-actions-artifacts-and-logs-in-your-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "visibility",
@@ -4747,7 +6109,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#configuring-the-retention-period-for-github-actions-artifacts-and-logs-in-your-repository"
   },
   {
     "action": "repo.set_default_workflow_permissions",
@@ -4757,6 +6120,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "visibility",
       "repo",
       "repo_id",
@@ -4767,8 +6131,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#setting-the-permissions-of-the-github_token-for-your-repository"
   },
   {
     "action": "repo.set_fork_pr_workflows_policy",
@@ -4776,6 +6142,7 @@
     "docs_reference_links": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-private-repository-forks",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "visibility",
@@ -4789,7 +6156,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-private-repository-forks"
   },
   {
     "action": "repo.set_workflow_permission_can_approve_pr",
@@ -4799,6 +6167,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "visibility",
       "repo",
       "repo_id",
@@ -4809,8 +6178,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#preventing-github-actions-from-creating-or-approving-pull-requests"
   },
   {
     "action": "repo.staff_unlock",
@@ -4827,6 +6198,7 @@
       "action",
       "org",
       "org_id",
+      "request_id",
       "repo",
       "operation_type"
     ]
@@ -4839,6 +6211,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user",
       "user_id",
       "repo",
@@ -4851,7 +6224,8 @@
       "operation_type",
       "business",
       "business_id"
-    ]
+    ],
+    "docs_reference_titles": "Accessing user-owned repositories in your enterprise"
   },
   {
     "action": "repo.transfer",
@@ -4861,6 +6235,7 @@
       "@timestamp",
       "user_id",
       "_document_id",
+      "request_id",
       "actor_id",
       "repo_id",
       "owner",
@@ -4874,7 +6249,8 @@
       "visibility",
       "repo_was",
       "actor"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/creating-and-managing-repositories/transferring-a-repository"
   },
   {
     "action": "repo.transfer_outgoing",
@@ -4882,10 +6258,12 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "repo",
       "repo_id",
+      "new_nwo",
       "visibility",
       "org",
       "org_id",
@@ -4894,7 +6272,8 @@
       "@timestamp",
       "created_at",
       "operation_type",
-      "public_repo"
+      "public_repo",
+      "request_access_security_header"
     ]
   },
   {
@@ -4906,6 +6285,7 @@
       "_document_id",
       "operation_type",
       "user_id",
+      "request_id",
       "user",
       "action",
       "user_agent",
@@ -4914,7 +6294,8 @@
       "visibility",
       "repo_id",
       "actor_id",
-      "repo"
+      "repo",
+      "request_access_security_header"
     ]
   },
   {
@@ -4923,6 +6304,7 @@
     "docs_reference_links": "/repositories/archiving-a-github-repository",
     "fields": [
       "actor",
+      "request_id",
       "actor_id",
       "repo",
       "operation_type",
@@ -4936,7 +6318,8 @@
       "user_id",
       "action",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/archiving-a-github-repository"
   },
   {
     "action": "repo.update_actions_access_settings",
@@ -4944,6 +6327,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "visibility",
@@ -4968,6 +6352,7 @@
     "docs_reference_links": "/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "oauth_application_id",
@@ -4985,7 +6370,8 @@
       "business_id",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Using secrets in GitHub Actions"
   },
   {
     "action": "repo.update_actions_settings",
@@ -4993,6 +6379,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "visibility",
@@ -5020,6 +6407,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "key",
       "visibility",
       "repo",
@@ -5033,8 +6421,10 @@
       "created_at",
       "operation_type",
       "business",
-      "business_id"
-    ]
+      "business_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Store information in variables"
   },
   {
     "action": "repo.update_default_branch",
@@ -5042,6 +6432,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "visibility",
@@ -5065,6 +6456,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "key",
@@ -5081,7 +6473,8 @@
       "_document_id",
       "public_repo",
       "token_scopes",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -5100,6 +6493,7 @@
       "@timestamp",
       "repo",
       "operation_type",
+      "request_id",
       "org_id",
       "actor_id",
       "visibility",
@@ -5127,13 +6521,15 @@
       "actor_id",
       "repo_id",
       "action",
+      "request_id",
       "actor",
       "content_type",
       "repo",
       "@timestamp",
       "_document_id",
       "user",
-      "user_id"
+      "user_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -5146,6 +6542,7 @@
       "actor_id",
       "user_id",
       "operation_type",
+      "request_id",
       "_document_id",
       "actor",
       "repo_id",
@@ -5153,7 +6550,8 @@
       "repo",
       "user",
       "action",
-      "@timestamp"
+      "@timestamp",
+      "request_access_security_header"
     ]
   },
   {
@@ -5163,6 +6561,7 @@
     "fields": [
       "actor_id",
       "created_at",
+      "request_id",
       "repo",
       "invitee",
       "operation_type",
@@ -5192,8 +6591,10 @@
       "user_agent",
       "invitee",
       "created_at",
+      "request_id",
       "actor",
-      "actor_id"
+      "actor_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -5207,6 +6608,7 @@
       "@timestamp",
       "invitee",
       "action",
+      "request_id",
       "inviter",
       "repo",
       "created_at",
@@ -5228,6 +6630,7 @@
       "invitee",
       "action",
       "@timestamp",
+      "request_id",
       "actor_id",
       "operation_type",
       "created_at",
@@ -5244,6 +6647,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "repo",
       "repo_id",
@@ -5263,8 +6667,10 @@
       "ruleset_source_type",
       "ruleset_rules",
       "ruleset_conditions",
-      "ruleset_bypass_actors"
-    ]
+      "ruleset_bypass_actors",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/creating-rulesets-for-a-repository"
   },
   {
     "action": "repository_ruleset.destroy",
@@ -5274,6 +6680,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "name",
       "repo",
       "repo_id",
@@ -5284,8 +6691,16 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "ruleset_id",
+      "ruleset_name",
+      "ruleset_enforcement",
+      "ruleset_source_type",
+      "ruleset_rules",
+      "ruleset_bypass_actors",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository#deleting-a-ruleset"
   },
   {
     "action": "repository_ruleset.update",
@@ -5295,6 +6710,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "old_name",
       "repo",
       "repo_id",
@@ -5324,7 +6740,8 @@
       "ruleset_bypass_actors_deleted",
       "ruleset_bypass_actors_updated",
       "actor_is_bot"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository#editing-a-ruleset"
   },
   {
     "action": "security_key.register",
@@ -5337,10 +6754,12 @@
       "user_id",
       "action",
       "operation_type",
+      "request_id",
       "@timestamp",
       "_document_id",
       "actor",
-      "user_agent"
+      "user_agent",
+      "request_access_security_header"
     ]
   },
   {
@@ -5354,10 +6773,64 @@
       "_document_id",
       "user_agent",
       "@timestamp",
+      "request_id",
       "actor_id",
       "action",
       "created_at",
-      "user"
+      "user",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "social_identity.linked",
+    "description": "A user linked a social identity to their account.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "user_id",
+      "action",
+      "actor_id",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type"
+    ]
+  },
+  {
+    "action": "social_identity.unlinked",
+    "description": "A user unlinked a social identity from their account.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type"
+    ]
+  },
+  {
+    "action": "social_identity.unlinked_all",
+    "description": "A user unlinked all social identities from their account.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "request_access_security_header",
+      "user_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type"
     ]
   },
   {
@@ -5366,10 +6839,12 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
       "user_id",
+      "sponsors_listing_id",
       "action",
       "_document_id",
       "@timestamp",
@@ -5383,16 +6858,19 @@
     "docs_reference_links": "/sponsors/receiving-sponsorships-through-github-sponsors/managing-your-sponsorship-tiers",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
       "org_id",
+      "sponsors_listing_id",
       "action",
       "operation_type",
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/receiving-sponsorships-through-github-sponsors/managing-your-sponsorship-tiers"
   },
   {
     "action": "sponsors.fiscal_host_change",
@@ -5400,10 +6878,12 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "org",
       "org_id",
+      "sponsors_listing_id",
       "action",
       "_document_id",
       "@timestamp",
@@ -5420,11 +6900,15 @@
       "action",
       "created_at",
       "_document_id",
+      "request_id",
+      "repository",
+      "repository_id",
       "actor",
       "user_agent",
       "actor_id",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository"
   },
   {
     "action": "sponsors.sponsor_sponsorship_cancel",
@@ -5440,7 +6924,8 @@
       "actor_id",
       "user_id",
       "@timestamp"
-    ]
+    ],
+    "docs_reference_titles": "Downgrading a sponsorship"
   },
   {
     "action": "sponsors.sponsor_sponsorship_create",
@@ -5452,12 +6937,14 @@
       "action",
       "@timestamp",
       "user_agent",
+      "request_id",
       "user",
       "operation_type",
       "created_at",
       "actor_id",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/sponsoring-open-source-contributors/about-sponsorships-fees-and-taxes"
   },
   {
     "action": "sponsors.sponsor_sponsorship_payment_complete",
@@ -5473,8 +6960,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/sponsors/sponsoring-open-source-contributors/about-sponsorships-fees-and-taxes"
   },
   {
     "action": "sponsors.sponsor_sponsorship_preference_change",
@@ -5484,6 +6973,7 @@
       "actor_id",
       "action",
       "@timestamp",
+      "request_id",
       "user_id",
       "created_at",
       "user",
@@ -5491,7 +6981,8 @@
       "user_agent",
       "actor",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/sponsoring-open-source-contributors/managing-your-sponsorship"
   },
   {
     "action": "sponsors.sponsor_sponsorship_tier_change",
@@ -5507,7 +6998,8 @@
       "@timestamp",
       "_document_id",
       "created_at"
-    ]
+    ],
+    "docs_reference_titles": "Upgrading a sponsorship, Downgrading a sponsorship"
   },
   {
     "action": "sponsors.sponsored_developer_approve",
@@ -5517,6 +7009,7 @@
       "user_id",
       "action",
       "user_agent",
+      "request_id",
       "actor",
       "user",
       "operation_type",
@@ -5524,7 +7017,8 @@
       "created_at",
       "actor_id",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/receiving-sponsorships-through-github-sponsors/setting-up-github-sponsors-for-your-personal-account"
   },
   {
     "action": "sponsors.sponsored_developer_create",
@@ -5533,6 +7027,7 @@
     "fields": [
       "user_id",
       "operation_type",
+      "request_id",
       "actor_id",
       "@timestamp",
       "_document_id",
@@ -5541,7 +7036,8 @@
       "created_at",
       "user_agent",
       "actor"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/receiving-sponsorships-through-github-sponsors/setting-up-github-sponsors-for-your-personal-account"
   },
   {
     "action": "sponsors.sponsored_developer_disable",
@@ -5549,10 +7045,12 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
       "user_id",
+      "sponsors_listing_id",
       "action",
       "operation_type",
       "@timestamp",
@@ -5570,10 +7068,13 @@
       "operation_type",
       "created_at",
       "user_agent",
+      "request_id",
       "actor",
       "action",
-      "_document_id"
-    ]
+      "_document_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/sponsors/receiving-sponsorships-through-github-sponsors/editing-your-profile-details-for-github-sponsors"
   },
   {
     "action": "sponsors.sponsored_developer_redraft",
@@ -5582,6 +7083,7 @@
     "fields": [
       "@timestamp",
       "created_at",
+      "request_id",
       "user",
       "action",
       "user_agent",
@@ -5602,12 +7104,14 @@
       "@timestamp",
       "actor_id",
       "user_id",
+      "request_id",
       "_document_id",
       "actor",
       "action",
       "operation_type",
       "created_at"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/receiving-sponsorships-through-github-sponsors/setting-up-github-sponsors-for-your-personal-account"
   },
   {
     "action": "sponsors.sponsored_developer_tier_description_update",
@@ -5615,6 +7119,7 @@
     "docs_reference_links": "/sponsors/receiving-sponsorships-through-github-sponsors/managing-your-sponsorship-tiers",
     "fields": [
       "operation_type",
+      "request_id",
       "actor",
       "user_id",
       "action",
@@ -5624,13 +7129,15 @@
       "actor_id",
       "user",
       "created_at"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/receiving-sponsorships-through-github-sponsors/managing-your-sponsorship-tiers"
   },
   {
     "action": "sponsors.sponsored_developer_update_newsletter_send",
     "description": "Triggered when you send an email update to your sponsors.",
     "docs_reference_links": "/sponsors/receiving-sponsorships-through-github-sponsors/contacting-your-sponsors",
     "fields": [
+      "request_id",
       "actor",
       "action",
       "user_agent",
@@ -5641,7 +7148,8 @@
       "user",
       "user_id",
       "@timestamp"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/receiving-sponsorships-through-github-sponsors/contacting-your-sponsors"
   },
   {
     "action": "sponsors.sponsors_patreon_user_create",
@@ -5651,6 +7159,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "patreon_email",
       "patreon_username",
       "user",
@@ -5660,7 +7169,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/receiving-sponsorships-through-github-sponsors/enabling-sponsorships-through-patreon#linking-your-patreon-account-to-your-github-account"
   },
   {
     "action": "sponsors.sponsors_patreon_user_destroy",
@@ -5670,6 +7180,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "patreon_email",
       "patreon_username",
       "user",
@@ -5679,7 +7190,8 @@
       "@timestamp",
       "created_at",
       "operation_type"
-    ]
+    ],
+    "docs_reference_titles": "Unlinking your Patreon account from GitHub"
   },
   {
     "action": "sponsors.update_tier_repository",
@@ -5687,10 +7199,12 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
       "user_id",
+      "sponsors_listing_id",
       "repo",
       "repo_id",
       "action",
@@ -5706,10 +7220,12 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
       "user_id",
+      "sponsors_listing_id",
       "action",
       "_document_id",
       "@timestamp",
@@ -5722,6 +7238,7 @@
     "description": "You join the waitlist to join GitHub Sponsors.",
     "docs_reference_links": "/sponsors/receiving-sponsorships-through-github-sponsors/setting-up-github-sponsors-for-your-personal-account",
     "fields": [
+      "request_id",
       "actor",
       "user_id",
       "user_agent",
@@ -5732,7 +7249,8 @@
       "user",
       "@timestamp",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "/sponsors/receiving-sponsorships-through-github-sponsors/setting-up-github-sponsors-for-your-personal-account"
   },
   {
     "action": "sponsors.withdraw_agreement_signature",
@@ -5740,10 +7258,12 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
       "user_id",
+      "sponsors_listing_id",
       "action",
       "_document_id",
       "@timestamp",
@@ -5752,11 +7272,108 @@
     ]
   },
   {
+    "action": "sub_issues.parent_issue_add",
+    "description": "A parent issue was added to an issue.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "title",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "org_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "sub_issues.parent_issue_remove",
+    "description": "A parent issue was removed from an issue.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "title",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "org_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "sub_issues.sub_issue_add",
+    "description": "A sub-issue was added to an issue.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "title",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "org_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "sub_issues.sub_issue_remove",
+    "description": "A sub-issue was removed from an issue.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "title",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "org",
+      "org_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
     "action": "successor_invitation.accept",
     "description": "Triggered when you accept a succession invitation.",
     "docs_reference_links": "/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/maintaining-ownership-continuity-of-your-personal-accounts-repositories",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "action",
@@ -5764,7 +7381,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "Maintaining ownership continuity of your personal account's repositories"
   },
   {
     "action": "successor_invitation.cancel",
@@ -5772,6 +7390,7 @@
     "docs_reference_links": "/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/maintaining-ownership-continuity-of-your-personal-accounts-repositories",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "action",
@@ -5779,7 +7398,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "Maintaining ownership continuity of your personal account's repositories"
   },
   {
     "action": "successor_invitation.create",
@@ -5787,6 +7407,7 @@
     "docs_reference_links": "/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/maintaining-ownership-continuity-of-your-personal-accounts-repositories",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "action",
@@ -5794,7 +7415,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "Maintaining ownership continuity of your personal account's repositories"
   },
   {
     "action": "successor_invitation.decline",
@@ -5802,6 +7424,7 @@
     "docs_reference_links": "/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/maintaining-ownership-continuity-of-your-personal-accounts-repositories",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "action",
@@ -5809,7 +7432,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "Maintaining ownership continuity of your personal account's repositories"
   },
   {
     "action": "successor_invitation.destroy",
@@ -5817,6 +7441,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "action",
@@ -5832,6 +7457,7 @@
     "docs_reference_links": "/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/maintaining-ownership-continuity-of-your-personal-accounts-repositories",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "action",
@@ -5839,7 +7465,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "Maintaining ownership continuity of your personal account's repositories"
   },
   {
     "action": "trusted_device.register",
@@ -5847,6 +7474,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -5864,6 +7492,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -5882,6 +7511,7 @@
     "fields": [
       "created_at",
       "action",
+      "request_id",
       "user_id",
       "@timestamp",
       "_document_id",
@@ -5895,6 +7525,7 @@
     "description": "N/A",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "@timestamp",
       "created_at",
       "user_id",
@@ -5928,6 +7559,7 @@
       "actor",
       "actor_id",
       "@timestamp",
+      "request_id",
       "user",
       "user_id",
       "user_agent",
@@ -5949,6 +7581,7 @@
       "operation_type",
       "user",
       "created_at",
+      "request_id",
       "actor_id",
       "_document_id"
     ]
@@ -5962,10 +7595,12 @@
       "operation_type",
       "@timestamp",
       "user_agent",
+      "request_id",
       "created_at",
       "user_id",
       "action",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -5980,7 +7615,8 @@
       "created_at",
       "user_agent",
       "user",
-      "_document_id"
+      "_document_id",
+      "request_id"
     ]
   },
   {
@@ -5991,14 +7627,17 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user",
       "user_id",
       "action",
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication"
   },
   {
     "action": "two_factor_authentication.disabled",
@@ -6014,8 +7653,11 @@
       "actor_id",
       "created_at",
       "operation_type",
-      "@timestamp"
-    ]
+      "request_id",
+      "@timestamp",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Disabling two-factor authentication for your personal account"
   },
   {
     "action": "two_factor_authentication.enabled",
@@ -6029,10 +7671,13 @@
       "created_at",
       "actor_id",
       "@timestamp",
+      "request_id",
       "user",
       "user_id",
-      "_document_id"
-    ]
+      "_document_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Configuring two-factor authentication"
   },
   {
     "action": "two_factor_authentication.password_reset_fallback_sms",
@@ -6045,6 +7690,7 @@
       "user_id",
       "action",
       "@timestamp",
+      "request_id",
       "_document_id",
       "user_agent"
     ]
@@ -6054,6 +7700,7 @@
     "description": "Two factor recovery codes were regenerated for a user account.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "actor",
       "operation_type",
       "_document_id",
@@ -6074,20 +7721,24 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user",
       "user_id",
       "action",
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication"
   },
   {
     "action": "two_factor_authentication.sign_in_fallback_sms",
     "description": "A one-time password code was sent to a user account fallback phone number.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "operation_type",
       "user_id",
       "user",
@@ -6111,6 +7762,7 @@
       "operation_type",
       "user_agent",
       "action",
+      "request_id",
       "actor",
       "actor_id"
     ]
@@ -6121,6 +7773,7 @@
     "docs_reference_links": "/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/adding-an-email-address-to-your-github-account",
     "fields": [
       "action",
+      "request_id",
       "user",
       "user_id",
       "user_agent",
@@ -6130,8 +7783,10 @@
       "actor",
       "email",
       "@timestamp",
-      "created_at"
-    ]
+      "created_at",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Adding an email address to your GitHub account"
   },
   {
     "action": "user.async_delete",
@@ -6144,10 +7799,12 @@
       "user",
       "@timestamp",
       "_document_id",
+      "request_id",
       "actor_id",
       "operation_type",
       "user_agent",
-      "action"
+      "action",
+      "request_access_security_header"
     ]
   },
   {
@@ -6158,6 +7815,7 @@
       "actor_id",
       "user",
       "action",
+      "request_id",
       "actor",
       "@timestamp",
       "_document_id",
@@ -6180,10 +7838,12 @@
       "@timestamp",
       "user_agent",
       "user",
+      "request_id",
       "blocked_user",
       "operation_type",
       "created_at",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6191,6 +7851,7 @@
     "description": "A user changed their password.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "@timestamp",
       "user_agent",
       "actor_id",
@@ -6200,7 +7861,8 @@
       "user_id",
       "action",
       "created_at",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -6209,6 +7871,7 @@
     "docs_reference_links": "/codespaces/managing-codespaces-for-your-organization/managing-repository-access-for-your-organizations-codespaces",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -6219,7 +7882,8 @@
       "created_at",
       "_document_id",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Managing access to other repositories within your codespace"
   },
   {
     "action": "user.codespaces_trusted_repo_access_revoked",
@@ -6227,6 +7891,7 @@
     "docs_reference_links": "/codespaces/managing-codespaces-for-your-organization/managing-repository-access-for-your-organizations-codespaces",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -6236,7 +7901,8 @@
       "@timestamp",
       "created_at",
       "_document_id"
-    ]
+    ],
+    "docs_reference_titles": "Managing access to other repositories within your codespace"
   },
   {
     "action": "user.create",
@@ -6247,6 +7913,7 @@
       "user_id",
       "operation_type",
       "@timestamp",
+      "request_id",
       "user",
       "created_at",
       "_document_id",
@@ -6265,6 +7932,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "key",
       "visibility",
       "integration",
@@ -6274,7 +7942,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6291,6 +7960,7 @@
       "action",
       "actor",
       "actor_id",
+      "request_id",
       "user_id",
       "@timestamp",
       "token_scopes",
@@ -6306,12 +7976,14 @@
       "created_at",
       "user_agent",
       "action",
+      "request_id",
       "user_id",
       "actor",
       "actor_id",
       "user",
       "@timestamp",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -6325,12 +7997,14 @@
       "user",
       "created_at",
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "operation_type",
       "_document_id",
       "user_id",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6338,6 +8012,7 @@
     "description": "A user deleted his or her account, triggering user.async_delete.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "actor",
       "user",
       "_document_id",
@@ -6347,7 +8022,8 @@
       "operation_type",
       "actor_id",
       "action",
-      "@timestamp"
+      "@timestamp",
+      "request_access_security_header"
     ]
   },
   {
@@ -6355,6 +8031,7 @@
     "description": "N/A",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "actor",
       "created_at",
       "_document_id",
@@ -6364,7 +8041,8 @@
       "user_id",
       "actor_id",
       "action",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6373,6 +8051,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "user_id",
       "actor",
       "operation_type",
@@ -6381,7 +8060,8 @@
       "@timestamp",
       "user",
       "actor_id",
-      "action"
+      "action",
+      "request_access_security_header"
     ]
   },
   {
@@ -6396,9 +8076,11 @@
       "operation_type",
       "user_agent",
       "created_at",
+      "request_id",
       "actor",
       "actor_id",
-      "user_id"
+      "user_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -6407,6 +8089,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -6424,6 +8107,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -6441,6 +8125,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -6453,11 +8138,57 @@
     ]
   },
   {
+    "action": "user_email.confirm_claim",
+    "description": "An enterprise managed user claimed an email address.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "user",
+      "user_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "business",
+      "business_id",
+      "actor_is_bot",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "user_email.mark_as_unclaimed",
+    "description": "N/A",
+    "docs_reference_links": "An enterprise managed user unclaimed an email address.",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "user",
+      "user_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "business",
+      "business_id",
+      "actor_is_bot",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "An, GitHub Help Documentation, managed, user, unclaimed, an, email, address."
+  },
+  {
     "action": "user.enable_collaborators_only",
     "description": "N/A",
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -6475,6 +8206,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -6492,6 +8224,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -6511,6 +8244,7 @@
       "user_id",
       "action",
       "operation_type",
+      "request_id",
       "created_at",
       "_document_id",
       "@timestamp",
@@ -6529,13 +8263,16 @@
       "action",
       "_document_id",
       "user_agent",
+      "request_id",
       "user",
       "operation_type",
       "@timestamp",
       "email",
       "created_at",
-      "user_id"
-    ]
+      "user_id",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "/authentication/keeping-your-account-and-data-secure/updating-your-github-access-credentials"
   },
   {
     "action": "user.grant_github_developer",
@@ -6551,7 +8288,8 @@
       "user",
       "user_id",
       "actor",
-      "operation_type"
+      "operation_type",
+      "request_id"
     ]
   },
   {
@@ -6560,6 +8298,7 @@
     "docs_reference_links": "/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile/showing-your-private-contributions-and-achievements-on-your-profile",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "user",
@@ -6568,8 +8307,10 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
-    ]
+      "operation_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Manage visibility settings for private contributions"
   },
   {
     "action": "user.login",
@@ -6584,8 +8325,11 @@
       "action",
       "operation_type",
       "_document_id",
+      "request_id",
       "created_at",
-      "actor"
+      "actor",
+      "passkey_nickname",
+      "request_access_security_header"
     ]
   },
   {
@@ -6596,13 +8340,15 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "user",
       "user_id",
       "action",
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6619,7 +8365,9 @@
       "actor_id",
       "action",
       "@timestamp",
-      "_document_id"
+      "_document_id",
+      "request_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -6636,10 +8384,12 @@
       "created_at",
       "user_agent",
       "oauth_application_id",
+      "request_id",
       "operation_type",
       "_document_id",
       "token_scopes",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6653,6 +8403,7 @@
       "actor_id",
       "@timestamp",
       "_document_id",
+      "request_id",
       "user_id",
       "created_at",
       "actor",
@@ -6668,6 +8419,7 @@
       "action",
       "@timestamp",
       "_document_id",
+      "request_id",
       "user",
       "user_id",
       "operation_type",
@@ -6687,6 +8439,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "key",
       "integration",
       "user",
@@ -6695,7 +8448,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6705,6 +8459,7 @@
     "fields": [
       "user",
       "action",
+      "request_id",
       "actor_id",
       "old_login",
       "created_at",
@@ -6727,12 +8482,14 @@
       "action",
       "user_agent",
       "user",
+      "request_id",
       "user_id",
       "created_at",
       "@timestamp",
       "_document_id",
       "actor",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6741,6 +8498,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "created_at",
+      "request_id",
       "user_id",
       "action",
       "@timestamp",
@@ -6759,6 +8517,7 @@
     "fields": [
       "@timestamp",
       "_document_id",
+      "request_id",
       "user_id",
       "action",
       "actor",
@@ -6766,14 +8525,17 @@
       "operation_type",
       "user_agent",
       "actor_id",
-      "created_at"
-    ]
+      "created_at",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Manage visibility settings for private contributions"
   },
   {
     "action": "user.sign_in_from_unrecognized_device",
     "description": "A user signed in from an unrecognized device.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "action",
       "_document_id",
       "user_agent",
@@ -6783,7 +8545,8 @@
       "created_at",
       "actor",
       "actor_id",
-      "@timestamp"
+      "@timestamp",
+      "request_access_security_header"
     ]
   },
   {
@@ -6799,8 +8562,10 @@
       "user_agent",
       "created_at",
       "_document_id",
+      "request_id",
       "action",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6815,13 +8580,15 @@
       "user",
       "actor_id",
       "created_at",
+      "request_id",
       "limited_availability",
       "action",
       "emoji",
       "operation_type",
       "user_agent",
       "@timestamp",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -6837,6 +8604,7 @@
       "user_id",
       "created_at",
       "_document_id",
+      "request_id",
       "@timestamp",
       "user_agent",
       "emoji",
@@ -6845,7 +8613,8 @@
       "operation_type",
       "token_scopes",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Personalize your profile"
   },
   {
     "action": "user.suspend",
@@ -6857,6 +8626,7 @@
       "actor_id",
       "user",
       "user_agent",
+      "request_id",
       "actor",
       "created_at",
       "_document_id",
@@ -6864,7 +8634,8 @@
       "user_id",
       "action",
       "token_scopes",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -6872,6 +8643,7 @@
     "description": "N/A",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "user",
       "actor_id",
       "@timestamp",
@@ -6881,7 +8653,8 @@
       "actor",
       "action",
       "user_id",
-      "created_at"
+      "created_at",
+      "request_access_security_header"
     ]
   },
   {
@@ -6898,7 +8671,9 @@
       "actor",
       "user_id",
       "@timestamp",
-      "action"
+      "action",
+      "request_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -6914,8 +8689,10 @@
       "user",
       "actor",
       "user_agent",
+      "request_id",
       "action",
-      "created_at"
+      "created_at",
+      "request_access_security_header"
     ]
   },
   {
@@ -6926,13 +8703,15 @@
       "user_id",
       "operation_type",
       "user_agent",
+      "request_id",
       "user",
       "action",
       "actor",
       "actor_id",
       "created_at",
       "@timestamp",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -6944,12 +8723,14 @@
       "operation_type",
       "actor_id",
       "user",
+      "request_id",
       "action",
       "@timestamp",
       "created_at",
       "user_agent",
       "actor",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -6961,6 +8742,7 @@
       "action",
       "operation_type",
       "user_agent",
+      "request_id",
       "user_id",
       "created_at",
       "_document_id",
@@ -6983,7 +8765,9 @@
       "user",
       "operation_type",
       "@timestamp",
-      "_document_id"
+      "request_id",
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -6995,13 +8779,15 @@
       "actor_id",
       "action",
       "user_agent",
+      "request_id",
       "created_at",
       "_document_id",
       "user_id",
       "operation_type",
       "@timestamp",
       "actor"
-    ]
+    ],
+    "docs_reference_titles": "/authentication/securing-your-account-with-two-factor-authentication-2fa/accessing-github-using-two-factor-authentication"
   },
   {
     "action": "user.unblock_user",
@@ -7010,6 +8796,7 @@
     "fields": [
       "actor_id",
       "action",
+      "request_id",
       "_document_id",
       "blocked_user",
       "operation_type",
@@ -7018,7 +8805,8 @@
       "user_agent",
       "user_id",
       "user",
-      "created_at"
+      "created_at",
+      "request_access_security_header"
     ]
   },
   {
@@ -7026,6 +8814,7 @@
     "description": "A user account was unsuspended.",
     "docs_reference_links": "N/A",
     "fields": [
+      "request_id",
       "_document_id",
       "user",
       "action",
@@ -7038,7 +8827,8 @@
       "@timestamp",
       "user_id",
       "token_scopes",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -7049,6 +8839,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "key",
       "visibility",
       "integration",
@@ -7058,7 +8849,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -7067,6 +8859,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "created_at",
@@ -7075,7 +8868,8 @@
       "action",
       "operation_type",
       "@timestamp",
-      "_document_id"
+      "_document_id",
+      "request_access_security_header"
     ]
   },
   {
@@ -7084,6 +8878,7 @@
     "docs_reference_links": "/actions/managing-workflow-runs/reviewing-deployments",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "workflow_run_id",
@@ -7101,8 +8896,10 @@
       "_document_id",
       "public_repo",
       "token_scopes",
-      "programmatic_access_type"
-    ]
+      "programmatic_access_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Reviewing deployments"
   },
   {
     "action": "workflows.bypass_protection_rules",
@@ -7112,6 +8909,7 @@
       "actor",
       "actor_id",
       "user_agent",
+      "request_id",
       "workflow_run_id",
       "run_number",
       "repo",
@@ -7123,7 +8921,8 @@
       "_document_id",
       "@timestamp",
       "created_at",
-      "operation_type"
+      "operation_type",
+      "request_access_security_header"
     ]
   },
   {
@@ -7132,6 +8931,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "token_id",
       "hashed_token",
       "programmatic_access_type",
@@ -7157,6 +8957,7 @@
     "docs_reference_links": "/actions/managing-workflow-runs/deleting-a-workflow-run",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "repo",
@@ -7172,7 +8973,8 @@
       "head_sha",
       "trigger_id",
       "programmatic_access_type"
-    ]
+    ],
+    "docs_reference_titles": "Deleting a workflow run"
   },
   {
     "action": "workflows.disable_workflow",
@@ -7180,6 +8982,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "repo",
@@ -7192,7 +8995,8 @@
       "_document_id",
       "public_repo",
       "programmatic_access_type",
-      "actor_is_bot"
+      "actor_is_bot",
+      "request_access_security_header"
     ]
   },
   {
@@ -7201,6 +9005,7 @@
     "docs_reference_links": "N/A",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "repo",
@@ -7212,7 +9017,34 @@
       "created_at",
       "_document_id",
       "public_repo",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
+    ]
+  },
+  {
+    "action": "workflows.pin_workflow",
+    "description": "A workflow was pinned.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "workflow_id",
+      "org",
+      "org_id",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
     ]
   },
   {
@@ -7221,6 +9053,7 @@
     "docs_reference_links": "/actions/managing-workflow-runs/reviewing-deployments",
     "fields": [
       "user_agent",
+      "request_id",
       "actor",
       "actor_id",
       "workflow_run_id",
@@ -7235,7 +9068,35 @@
       "created_at",
       "_document_id",
       "public_repo",
-      "programmatic_access_type"
+      "programmatic_access_type",
+      "request_access_security_header"
+    ],
+    "docs_reference_titles": "Reviewing deployments"
+  },
+  {
+    "action": "workflows.unpin_workflow",
+    "description": "A workflow was unpinned after previously being pinned.",
+    "docs_reference_links": "N/A",
+    "fields": [
+      "actor",
+      "actor_id",
+      "user_agent",
+      "request_id",
+      "repo",
+      "repo_id",
+      "public_repo",
+      "workflow_id",
+      "org",
+      "org_id",
+      "business",
+      "business_id",
+      "action",
+      "_document_id",
+      "@timestamp",
+      "created_at",
+      "operation_type",
+      "actor_is_bot",
+      "request_access_security_header"
     ]
   }
 ]

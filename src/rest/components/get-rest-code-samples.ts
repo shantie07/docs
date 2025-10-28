@@ -1,9 +1,30 @@
 import { parseTemplate } from 'url-template'
 import { stringify } from 'javascript-stringify'
 
-import type { CodeSample, Operation } from 'src/rest/components/types'
-import { useVersion } from 'src/versions/components/useVersion'
-import { useMainContext } from 'src/frame/components/context/MainContext'
+import type { CodeSample, Operation } from '@/rest/components/types'
+import { type VersionItem } from '@/frame/components/context/MainContext'
+
+// Helper function to determine if authentication should be omitted
+function shouldOmitAuthentication(operation: Operation, currentVersion: string): boolean {
+  // Only omit auth for operations that explicitly allow permissionless access
+  if (!operation?.progAccess?.allowPermissionlessAccess) {
+    return false
+  }
+
+  // Only omit auth on dotcom versions (free-pro-team, enterprise-cloud)
+  // GHES and other versions still require authentication
+  const isDotcomVersion =
+    currentVersion.startsWith('free-pro-team') || currentVersion.startsWith('enterprise-cloud')
+
+  return isDotcomVersion
+}
+
+// Helper function to escape shell values containing single quotes (contractions)
+// This prevents malformed shell commands when contractions like "there's" are used
+function escapeShellValue(value: string): string {
+  // Replace single quotes with '\'' to properly escape them in shell commands
+  return value.replace(/'/g, "'\\''")
+}
 
 type CodeExamples = Record<string, any>
 
@@ -26,17 +47,36 @@ const CURL_CONTENT_TYPE_MAPPING: { [key: string]: string } = {
   https://{hostname}/api/v3/repos/OWNER/REPO/deployments \
   -d '{"ref":"topic-branch","payload":"{ \"deploy\": \"migrate\" }","description":"Deploy request from hubot"}'
 */
-export function getShellExample(operation: Operation, codeSample: CodeSample) {
-  const { currentVersion } = useVersion()
-  const { allVersions } = useMainContext()
-  const defaultAcceptHeader = getAcceptHeader(codeSample)
+export function getShellExample(
+  operation: Operation,
+  codeSample: CodeSample,
+  currentVersion: string,
+  allVersions: Record<string, VersionItem>,
+) {
+  let contentTypeHeader = ''
 
-  // For operations that upload data using octet-stream, you need
-  // to explicitly set the content-type header.
-  const contentTypeHeader =
-    codeSample?.request?.contentType === 'application/octet-stream'
-      ? '-H "Content-Type: application/octet-stream"'
-      : ''
+  if (codeSample?.request?.contentType === 'application/octet-stream') {
+    contentTypeHeader = '-H "Content-Type: application/octet-stream"'
+  } else if (codeSample?.request?.contentType === 'multipart/form-data') {
+    contentTypeHeader = '-H "Content-Type: multipart/form-data"'
+  }
+
+  // Check if we should omit authentication for this operation
+  const omitAuth = shouldOmitAuthentication(operation, currentVersion)
+
+  // GHES Manage API requests differ from the dotcom API requests and make use of multipart/form-data and json content types
+  if (operation.subcategory === 'manage-ghes') {
+    // GET requests don't have a requestBody set, therefore let's default them to application/json
+    if (operation.verb === 'get') {
+      contentTypeHeader = '-H "Content-Type: application/json"'
+    } else {
+      contentTypeHeader = `-H "Content-Type: ${codeSample?.request?.contentType}"`
+    }
+  }
+
+  if (operation.subcategory === 'inference') {
+    contentTypeHeader = '-H "Content-Type: application/json"'
+  }
 
   let requestPath = codeSample?.request?.parameters
     ? parseTemplate(operation.requestPath).expand(codeSample.request.parameters)
@@ -62,30 +102,23 @@ export function getShellExample(operation: Operation, codeSample: CodeSample) {
       if (bodyParameters && typeof bodyParameters === 'object' && !Array.isArray(bodyParameters)) {
         const paramNames = Object.keys(bodyParameters)
         paramNames.forEach((elem) => {
-          requestBodyParams = `${requestBodyParams} ${CURL_CONTENT_TYPE_MAPPING[contentType]} '${elem}=${bodyParameters[elem]}'`
+          const escapedValue = escapeShellValue(String(bodyParameters[elem]))
+          requestBodyParams = `${requestBodyParams} ${CURL_CONTENT_TYPE_MAPPING[contentType]} '${elem}=${escapedValue}'`
         })
       } else {
-        requestBodyParams = `${CURL_CONTENT_TYPE_MAPPING[contentType]} "${bodyParameters}"`
+        const escapedValue = escapeShellValue(String(bodyParameters))
+        requestBodyParams = `${CURL_CONTENT_TYPE_MAPPING[contentType]} "${escapedValue}"`
       }
     }
   }
 
-  let authHeader
-  let apiVersionHeader
-
-  if (operation.subcategory === 'management-console' || operation.subcategory === 'manage-ghes') {
-    authHeader = '-u "api_key:your-password"'
-    apiVersionHeader = ''
-  } else {
-    authHeader = '-H "Authorization: Bearer <YOUR-TOKEN>"'
-
-    apiVersionHeader =
-      allVersions[currentVersion].apiVersions.length > 0 &&
-      allVersions[currentVersion].latestApiVersion
-        ? ` \\\n  -H "X-GitHub-Api-Version: ${allVersions[currentVersion].latestApiVersion}"`
-        : ''
-  }
-
+  let authHeader = omitAuth ? '' : '-H "Authorization: Bearer <YOUR-TOKEN>"'
+  let apiVersionHeader =
+    allVersions[currentVersion].apiVersions.length > 0 &&
+    allVersions[currentVersion].latestApiVersion
+      ? `-H "X-GitHub-Api-Version: ${allVersions[currentVersion].latestApiVersion}"`
+      : ''
+  let acceptHeader = `-H "Accept: ${getAcceptHeader(codeSample)}"`
   let urlArg = `${operation.serverUrl}${requestPath}`
   // If the `requestPath` contains a `?` character, if you need to escape
   // the whole URL otherwise, when you paste it into your terminal, it
@@ -93,9 +126,32 @@ export function getShellExample(operation: Operation, codeSample: CodeSample) {
   if (requestPath.includes('?')) {
     urlArg = `"${urlArg}"`
   }
+
+  // Overwrite curl examples since the github enterprise related apis are seperate from the dotcom api standards
+  if (operation.subcategory === 'management-console' || operation.subcategory === 'manage-ghes') {
+    authHeader = '-u "api_key:your-password"'
+    apiVersionHeader = ''
+    acceptHeader = acceptHeader === `-H "Accept: application/vnd.github+json"` ? '' : acceptHeader
+  }
+
+  // For unauthenticated endpoints, remove the auth header completely
+  if (
+    omitAuth &&
+    operation.subcategory !== 'management-console' &&
+    operation.subcategory !== 'manage-ghes'
+  ) {
+    authHeader = ''
+  }
+
+  if (operation?.progAccess?.basicAuth) {
+    authHeader = '-u "<YOUR_CLIENT_ID>:<YOUR_CLIENT_SECRET>"'
+  }
+
   const args = [
     operation.verb !== 'get' && `-X ${operation.verb.toUpperCase()}`,
-    `-H "Accept: ${defaultAcceptHeader}" \\\n  ${authHeader}${apiVersionHeader}`,
+    acceptHeader,
+    authHeader,
+    apiVersionHeader,
     contentTypeHeader,
     urlArg,
     requestBodyParams,
@@ -113,11 +169,17 @@ export function getShellExample(operation: Operation, codeSample: CodeSample) {
     /repos/OWNER/REPO/deployments \
     -f ref,topic-branch=0,payload,{ "deploy": "migrate" }=1,description,Deploy request from hubot=2
 */
-export function getGHExample(operation: Operation, codeSample: CodeSample) {
+export function getGHExample(
+  operation: Operation,
+  codeSample: CodeSample,
+  currentVersion: string,
+  allVersions: Record<string, VersionItem>,
+) {
+  // Basic authentication is not supported by GH CLI
+  if (operation?.progAccess?.basicAuth) return
+
   const defaultAcceptHeader = getAcceptHeader(codeSample)
   const hostname = operation.serverUrl !== 'https://api.github.com' ? '--hostname HOSTNAME' : ''
-  const { currentVersion } = useVersion()
-  const { allVersions } = useMainContext()
 
   let requestPath = codeSample?.request?.parameters
     ? parseTemplate(operation.requestPath).expand(codeSample.request.parameters)
@@ -132,93 +194,6 @@ export function getGHExample(operation: Operation, codeSample: CodeSample) {
   const requiredQueryParams = getRequiredQueryParamsPath(operation, codeSample)
   requestPath += requiredQueryParams ? `?${requiredQueryParams}` : ''
 
-  type TypedItem = 'string' | 'number' | 'boolean'
-  type NestedObjectParameter =
-    | TypedItem
-    | { [key: string]: NestedObjectParameter }
-    | NestedObjectParameter[]
-
-  const startTransformKey = (currentKey: string): string => currentKey
-
-  function handleSingleParameter(
-    key: string,
-    value: NestedObjectParameter,
-    transformKey = startTransformKey,
-  ): string {
-    let cliLine = ''
-    const keyString = `${transformKey(key)}`
-    // When only a value is passed to bodyParameters we don't show the '=' since there isn't a key
-    let separator = '='
-    if (!key) {
-      separator = ''
-    }
-    if (typeof value === 'string') {
-      cliLine += ` -f "${keyString}${separator}${value}"`
-    } else if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
-      cliLine += ` -F "${keyString}${separator}${value}"`
-    } else if (Array.isArray(value)) {
-      for (const param of value) {
-        if (Array.isArray(param)) {
-          throw new Error('Nested arrays are not valid in the bodyParameters')
-        }
-
-        if (typeof param === 'object' && param !== null) {
-          cliLine += handleObjectParameter(
-            param,
-            (nextKey: string): string => `${keyString}[]${nextKey}`,
-          )
-        } else {
-          // Transform key in this case needs to account for the `key` being passed in
-          cliLine += handleSingleParameter(key, param, (nextKey: string): string => `${nextKey}[]`)
-        }
-      }
-    } else if (typeof value === 'object') {
-      cliLine += handleObjectParameter(value, (nextKey) => `${keyString}[${nextKey}]`)
-    }
-    return cliLine
-  }
-
-  function handleObjectParameter(
-    objectParams: NestedObjectParameter,
-    transformKey = startTransformKey,
-  ): string {
-    let cliLine = ''
-    for (const [key, value] of Object.entries(objectParams)) {
-      if (Array.isArray(value)) {
-        for (const param of value) {
-          // This isn't valid in a REST context, our REST API should not be designed to take
-          // something like { "letterSegments": [["a", "b", "c"], ["d", "e", "f"]] }
-          // If this is a possibility, we can update the code to handle it
-          if (Array.isArray(param)) {
-            throw new Error('Nested arrays are not valid in the bodyParameters')
-          }
-
-          if (typeof param === 'object' && param !== null) {
-            // When an array of objects, we want to display the key and value as two separate parameters
-            // E.g. -F "properties[][property_name]=repo" -F "properties[][value]=docs-internal"
-            for (const [nestedKey, nestedValue] of Object.entries(param)) {
-              cliLine += handleSingleParameter(
-                `${key}[][${nestedKey}]`,
-                nestedValue as NestedObjectParameter,
-                transformKey,
-              )
-            }
-          } else {
-            cliLine += handleSingleParameter(`${key}[]`, param, transformKey)
-          }
-        }
-      } else if (typeof value === 'object' && value !== null) {
-        cliLine += handleObjectParameter(
-          value as NestedObjectParameter,
-          (nextKey: string) => `${key}[${nextKey}]`,
-        )
-      } else {
-        cliLine += handleSingleParameter(key, value, transformKey)
-      }
-    }
-    return cliLine
-  }
-
   let requestBodyParams = ''
   // Most of the time the example body parameters have a name and value
   // and are included in an object. But, some cases are a single value
@@ -231,7 +206,32 @@ export function getGHExample(operation: Operation, codeSample: CodeSample) {
     }
 
     if (typeof bodyParameters === 'object') {
-      requestBodyParams += handleObjectParameter(bodyParameters as NestedObjectParameter)
+      // Special handling for gist endpoints - use --input for nested file structures
+      const isGistEndpoint =
+        operation.requestPath.includes('/gists') &&
+        (operation.title === 'Create a gist' || operation.title === 'Update a gist')
+
+      // For complex objects with arrays, use --input with JSON
+      const hasArrays = hasNestedArrays(bodyParameters as NestedObjectParameter)
+      if (hasArrays || isGistEndpoint) {
+        const jsonBody = JSON.stringify(
+          bodyParameters,
+          (key: string, value: any) => {
+            // Convert numeric strings back to numbers for API compatibility
+            if (typeof value === 'string' && /^\d+$/.test(value)) {
+              return parseInt(value, 10)
+            }
+            // Convert boolean strings to actual booleans
+            if (value === 'true') return true
+            if (value === 'false') return false
+            return value
+          },
+          2,
+        ).replace(/'/g, "'\\''")
+        requestBodyParams = `--input - <<< '${jsonBody}'`
+      } else {
+        requestBodyParams += handleObjectParameter(bodyParameters as NestedObjectParameter)
+      }
     } else {
       requestBodyParams += handleSingleParameter('', bodyParameters)
     }
@@ -250,6 +250,118 @@ export function getGHExample(operation: Operation, codeSample: CodeSample) {
   )}`
 }
 
+const startTransformKey = (currentKey: string): string => currentKey
+
+type TypedItem = 'string' | 'number' | 'boolean'
+type NestedObjectParameter =
+  | TypedItem
+  | { [key: string]: NestedObjectParameter }
+  | NestedObjectParameter[]
+
+// Helper function to detect if an object has nested arrays
+function hasNestedArrays(obj: NestedObjectParameter): boolean {
+  if (Array.isArray(obj)) {
+    return true
+  }
+  if (typeof obj === 'object' && obj !== null) {
+    for (const value of Object.values(obj)) {
+      if (hasNestedArrays(value)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+function handleSingleParameter(
+  key: string,
+  value: NestedObjectParameter,
+  transformKey = startTransformKey,
+): string {
+  let cliLine = ''
+  const keyString = `${transformKey(key)}`
+  // When only a value is passed to bodyParameters we don't show the '=' since there isn't a key
+  let separator = '='
+  if (!key) {
+    separator = ''
+  }
+  if (typeof value === 'string') {
+    // Escape single quotes in string values to prevent shell command issues with contractions
+    const escapedValue = escapeShellValue(value)
+    cliLine += ` -f '${keyString}${separator}${escapedValue}'`
+  } else if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
+    cliLine += ` -F "${keyString}${separator}${value}"`
+  } else if (Array.isArray(value)) {
+    // For simple arrays, use individual parameters with indices
+    for (let i = 0; i < value.length; i++) {
+      const param = value[i]
+      if (Array.isArray(param)) {
+        throw new Error('Nested arrays are not valid in the bodyParameters')
+      }
+
+      if (typeof param === 'object' && param !== null) {
+        cliLine += handleObjectParameter(
+          param,
+          (nextKey: string): string => `${keyString}[${i}]${nextKey}`,
+        )
+      } else {
+        // Transform key in this case needs to account for the `key` being passed in and use array index
+        const arrayTransform = () => `${transformKey(key)}[${i}]`
+        cliLine += handleSingleParameter(key, param, arrayTransform)
+      }
+    }
+  } else if (typeof value === 'object') {
+    cliLine += handleObjectParameter(value, (nextKey) => `${keyString}[${nextKey}]`)
+  }
+  return cliLine
+}
+
+function handleObjectParameter(
+  objectParams: NestedObjectParameter,
+  transformKey = startTransformKey,
+) {
+  let cliLine = ''
+  for (const [key, value] of Object.entries(objectParams)) {
+    if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i++) {
+        const param = value[i]
+        // This isn't valid in a REST context, our REST API should not be designed to take
+        // something like { "letterSegments": [["a", "b", "c"], ["d", "e", "f"]] }
+        // If this is a possibility, we can update the code to handle it
+        if (Array.isArray(param)) {
+          throw new Error('Nested arrays are not valid in the bodyParameters')
+        }
+
+        if (typeof param === 'object' && param !== null) {
+          // When an array of objects, we want to display the key and value as two separate parameters
+          // E.g. -F "properties[0][property_name]=repo" -F "properties[0][value]=docs-internal"
+          for (const [nestedKey, nestedValue] of Object.entries(param)) {
+            cliLine += handleSingleParameter(
+              `${key}[${i}][${nestedKey}]`,
+              nestedValue as NestedObjectParameter,
+              transformKey,
+            )
+          }
+        } else {
+          cliLine += handleSingleParameter(
+            key,
+            param,
+            (nextKey: string) => `${transformKey(nextKey)}[${i}]`,
+          )
+        }
+      }
+    } else if (typeof value === 'object' && value !== null) {
+      cliLine += handleObjectParameter(
+        value as NestedObjectParameter,
+        (nextKey: string) => `${transformKey(key)}[${nextKey}]`,
+      )
+    } else {
+      cliLine += handleSingleParameter(key, value, transformKey)
+    }
+  }
+  return cliLine
+}
+
 /*
   Generates an octokit.js example
 
@@ -263,9 +375,14 @@ export function getGHExample(operation: Operation, codeSample: CodeSample) {
   })
 
 */
-export function getJSExample(operation: Operation, codeSample: CodeSample) {
-  const { currentVersion } = useVersion()
-  const { allVersions } = useMainContext()
+export function getJSExample(
+  operation: Operation,
+  codeSample: CodeSample,
+  currentVersion: string,
+  allVersions: Record<string, VersionItem>,
+) {
+  // Check if we should omit authentication for this operation
+  const omitAuth = shouldOmitAuthentication(operation, currentVersion)
   const parameters: { [key: string]: string | object } = {}
 
   if (codeSample.request) {
@@ -318,9 +435,18 @@ export function getJSExample(operation: Operation, codeSample: CodeSample) {
   }
 
   const comment = `// Octokit.js\n// https://github.com/octokit/core.js#readme\n`
-  const require = `const octokit = new Octokit(${stringify({ auth: 'YOUR-TOKEN' }, null, 2)})\n\n`
+  const authOctokit = `const octokit = new Octokit(${stringify({ auth: 'YOUR-TOKEN' }, null, 2)})\n\n`
+  const unauthenticatedOctokit = `const octokit = new Octokit()\n\n`
+  const oauthOctokit = `import { createOAuthAppAuth } from "@octokit/auth-oauth-app"\n\nconst octokit = new Octokit({\n  authStrategy: createOAuthAppAuth,\n  auth:{\n    clientType: 'oauth-app',\n    clientId: '<YOUR_CLIENT ID>',\n    clientSecret: '<YOUR_CLIENT SECRET>'\n  }\n})\n\n`
+  const isBasicAuth = operation?.progAccess?.basicAuth
+  let authString = isBasicAuth ? oauthOctokit : authOctokit
 
-  return `${comment}${require}await octokit.request('${operation.verb.toUpperCase()} ${
+  // Use unauthenticated Octokit for endpoints that allow permissionless access
+  if (omitAuth) {
+    authString = unauthenticatedOctokit
+  }
+
+  return `${comment}${authString}await octokit.request('${operation.verb.toUpperCase()} ${
     operation.requestPath
   }${queryParameters}', ${stringify(parameters, null, 2)})`
 }
@@ -377,8 +503,11 @@ function getRequiredQueryParamsPath(operation: Operation, codeSample: CodeSample
 }
 
 function getAcceptHeader(codeSample: CodeSample) {
-  // This allows us to display custom media types like application/sarif+json
-  return codeSample?.response?.contentType?.includes('+json')
-    ? codeSample.response.contentType
-    : 'application/vnd.github+json'
+  const contentType = codeSample?.response?.contentType
+
+  if (!contentType || contentType === 'application/json') {
+    return 'application/vnd.github+json'
+  }
+
+  return contentType
 }

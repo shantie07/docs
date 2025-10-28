@@ -4,9 +4,9 @@ import tcpPortUsed from 'tcp-port-used'
 import dotenv from 'dotenv'
 
 import { checkNodeVersion } from './lib/check-node-version'
-import '../observability/lib/handle-exceptions.js'
+import '../observability/lib/handle-exceptions'
 import createApp from './lib/app'
-import warmServer from './lib/warm-server.js'
+import warmServer from './lib/warm-server'
 
 dotenv.config()
 

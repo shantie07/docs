@@ -17,11 +17,11 @@ versions:
 topics:
   - Enterprise
 children:
-  - /roles-in-an-enterprise
   - /best-practices-for-user-security
+  - /create-enterprise-teams
+  - /invite-users-directly
   - /inviting-people-to-manage-your-enterprise
   - /managing-invitations-to-organizations-within-your-enterprise
-  - /managing-organization-members-in-your-enterprise
   - /about-reserved-usernames-for-github-enterprise-server
   - /promoting-or-demoting-a-site-administrator
   - /managing-support-entitlements-for-your-enterprise
@@ -33,6 +33,7 @@ children:
   - /removing-a-member-from-your-enterprise
   - /managing-dormant-users
   - /suspending-and-unsuspending-users
+  - /deleting-users-from-your-instance
   - /placing-a-legal-hold-on-a-user-or-organization
   - /auditing-ssh-keys
   - /rebuilding-contributions-data

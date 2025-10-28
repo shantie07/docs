@@ -5,7 +5,7 @@ versions: # DO NOT MANUALLY EDIT. CHANGES WILL BE OVERWRITTEN BY A 🤖
   ghec: '*'
   ghes: '*'
 topics:
-  - Advanced Security
+  - Code Security
   - Code scanning
   - CodeQL
 type: reference
@@ -18,6 +18,9 @@ redirect_from:
   - /code-security/codeql-cli/manual/database-interpret-results
 ---
 
+<!-- markdownlint-disable GHD053 -->
+
+<!-- markdownlint-disable GHD030 -->
 
 <!-- Content after this section is automatically generated -->
 
@@ -45,7 +48,7 @@ directory using [codeql database run-queries](/code-security/codeql-cli/codeql-c
 
 \[Mandatory] Path to the CodeQL database that has been queried.
 
-#### `<filesuite>...`
+#### `<file|dir|suite>...`
 
 Repeat the specification of which queries were executed here.
 
@@ -129,6 +132,13 @@ This option has no effect when passed to [codeql bqrs interpret](/code-security/
 
 Available since `v2.15.2`.
 
+#### `--no-sarif-include-alert-provenance`
+
+\[Advanced] \[SARIF formats only] Do not include alert provenance
+information in the SARIF output.
+
+Available since `v2.18.1`.
+
 #### `--[no-]sarif-group-rules-by-pack`
 
 \[SARIF formats only] Place the rule object for each query under its
@@ -140,6 +150,16 @@ option has no effect when passed to [codeql bqrs interpret](/code-security/codeq
 \[SARIF formats only] For alerts that have multiple causes, include
 them as a Markdown-formatted itemized list in the output in addition to
 as a plain string.
+
+#### `--no-sarif-minify`
+
+\[SARIF formats only] Produce pretty-printed SARIF output. By default,
+SARIF output is minified to reduce the size of the output file.
+
+#### `--sarif-run-property=<String=String>`
+
+\[SARIF formats only] A key value pair to add to the generated SARIF
+'run' property bag. Can be repeated.
 
 #### `--no-group-results`
 
@@ -239,6 +259,14 @@ To authenticate to GitHub Enterprise Server Container registries, pass
 variable.
 
 This overrides the GITHUB\_TOKEN environment variable.
+
+### Options to specify which extensions to use when interpreting the results
+
+#### `--model-packs=<`<name@range>>...
+
+A list of CodeQL pack names, each with an optional version range, to be
+used as model packs to customize the queries that are about to be
+evaluated.
 
 ### Options for finding QL packs (which may be necessary to interpret query suites)
 

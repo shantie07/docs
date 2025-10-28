@@ -1,12 +1,11 @@
-import cx from 'classnames'
-import dayjs from 'dayjs'
-import { ActionList } from '@primer/react'
-import { useTranslation } from 'src/languages/components/useTranslation'
-import { Link } from 'src/frame/components/Link'
+import { Link } from '@/frame/components/Link'
+import { FeaturedLink } from '@/landings/components/ProductLandingContext'
+import { useTranslation } from '@/languages/components/useTranslation'
 import { ArrowRightIcon } from '@primer/octicons-react'
-import { FeaturedLink } from 'src/landings/components/ProductLandingContext'
-import { useMainContext } from 'src/frame/components/context/MainContext'
-import { BumpLink } from 'src/frame/components/ui/BumpLink'
+import { ActionList } from '@primer/react'
+import { clsx } from 'clsx'
+import dayjs from 'dayjs'
+import styles from './ArticleList.module.scss'
 
 export type ArticleListPropsT = {
   title?: string
@@ -22,22 +21,22 @@ export const ArticleList = ({
   articles,
 }: ArticleListPropsT) => {
   const { t } = useTranslation('product_landing')
-  const mainContext = useMainContext()
   // Use TypeScript's "not null assertion" because `mainContext.page` should
   // will present in mainContext if it's gotten to the stage of React
   // rendering.
-  const page = mainContext.page!
 
   return (
     <>
       {title && (
         <div className="mb-4 d-flex flex-items-baseline">
-          <h2 className={cx('f4 text-semibold')}>{title}</h2>
+          <h2 className={clsx('f4', 'text-semibold')}>{title}</h2>
           {viewAllHref && (
             <Link
               href={viewAllHref}
               className="ml-4"
-              {...(viewAllTitleText ? { 'aria-label': `${page.title} - ${viewAllTitleText}` } : {})}
+              {...(viewAllTitleText
+                ? { 'aria-label': t('all_content').replace('{{ title }}', viewAllTitleText) }
+                : {})}
             >
               {t('view')} <ArrowRightIcon size={14} className="v-align-middle" />
             </Link>
@@ -45,37 +44,26 @@ export const ArticleList = ({
         </div>
       )}
 
-      <ActionList as="ul" data-testid="article-list" variant="full">
+      <ActionList data-testid="article-list" variant="full">
         {articles.map((link) => {
           return (
-            <ActionList.Item
-              as="li"
+            <ActionList.LinkItem
+              as="a"
               key={link.href}
-              className={cx('width-full border-top')}
-              sx={{
-                borderRadius: 0,
-                ':hover': {
-                  borderRadius: 0,
-                },
-              }}
-              tabIndex={undefined}
+              href={link.href}
+              data-testid="bump-link"
+              className={clsx(styles.linkItem, 'width-full', 'border-top', 'py-3')}
             >
-              <BumpLink
-                as={Link}
-                href={link.href}
-                className="py-3"
-                title={
-                  link.intro ? (
-                    <h3 className="f4" data-testid="link-with-intro-title">
-                      <span>{link.fullTitle ? link.fullTitle : link.title}</span>
-                    </h3>
-                  ) : (
-                    <span className="f4 text-bold d-block" data-testid="link-with-intro-title">
-                      {link.fullTitle ? link.fullTitle : link.title}
-                    </span>
-                  )
-                }
-              >
+              <div>
+                {link.intro ? (
+                  <h3 className="f4" data-testid="link-with-intro-title">
+                    <span>{link.fullTitle ? link.fullTitle : link.title}</span>
+                  </h3>
+                ) : (
+                  <span className="f4 text-bold d-block" data-testid="link-with-intro-title">
+                    {link.fullTitle ? link.fullTitle : link.title}
+                  </span>
+                )}
                 {link.intro && (
                   <p className="color-fg-muted mb-0 mt-1" data-testid="link-with-intro-intro">
                     {link.intro}
@@ -89,8 +77,8 @@ export const ArticleList = ({
                     {dayjs(link.date).format('MMMM DD')}
                   </time>
                 )}
-              </BumpLink>
-            </ActionList.Item>
+              </div>
+            </ActionList.LinkItem>
           )
         })}
       </ActionList>

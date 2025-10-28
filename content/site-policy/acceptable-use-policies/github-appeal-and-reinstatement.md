@@ -2,6 +2,8 @@
 title: GitHub Appeal and Reinstatement
 versions:
   fpt: '*'
+redirect_from:
+  - /articles/github-appeal-and-reinstatement
 topics:
   - Policy
   - Legal
@@ -14,10 +16,10 @@ While the majority of interactions between individuals in GitHub’s community f
 
 Both Appeals and Reinstatements may arise in relation to decisions to disable or limit access to content or an account, including decisions whether or not to:
 
-- Remove, disable access to, or restrict visibility of content
-- Suspend or terminate access to an account
-- Suspend or terminate access to the service, in whole or in part
-- Suspend, terminate or otherwise restrict the ability to monetize content
+* Remove, disable access to, or restrict visibility of content
+* Suspend or terminate access to an account
+* Suspend or terminate access to the service, in whole or in part
+* Suspend, terminate or otherwise restrict the ability to monetize content
 
 A “Reinstatement” is where a user wishes to regain access to their account or content and is willing to make any necessary changes to address the violation and agrees not to violate our terms going forward.
 
@@ -51,4 +53,4 @@ We track Appeals and Reinstatements in our [Transparency Center](https://transpa
 
 ### Legal Rights
 
-If you believe that a final decision made on Appeal is still incorrect you may, in certain circumstances, have additional rights to seek review of the decision under your local law. For example, if you are located in the European Union, it might be possible to access an out-of-court dispute settlement process under the [Digital Services Act](https://eur-lex.europa.eu/eli/reg/2022/2065/oj#d1e2819-1-1).
+If you believe that a final decision made on Appeal is still incorrect you may, in certain circumstances, have additional rights to seek review of the decision under your local law. For example, if you are located in the European Union, it might be possible to access an out-of-court dispute settlement process under the [Digital Services Act](https://eur-lex.europa.eu/eli/reg/2022/2065/oj#d1e2819-1-1). This process reflects GitHub's commitment to internationally recognized human rights set out in the United Nations Guiding Principles on Business and Human Rights (UNGPs), privacy, and free expression.

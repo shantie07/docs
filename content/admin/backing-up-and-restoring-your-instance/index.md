@@ -8,6 +8,8 @@ topics:
   - Enterprise
 children:
   - /configuring-backups-on-your-instance
-  - /known-issues-with-backups-for-your-instance
+  - /backup-service-for-github-enterprise-server
+redirect_from:
+  - /admin/backing-up-and-restoring-your-instance/known-issues-with-backups-for-your-instance
 ---
 

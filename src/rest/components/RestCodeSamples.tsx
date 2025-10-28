@@ -1,26 +1,29 @@
 import { useState, useEffect, useRef, FormEvent } from 'react'
-import { FormControl, Select, Tooltip, TabNav } from '@primer/react'
-import { CheckIcon, CopyIcon } from '@primer/octicons-react'
-import Cookies from 'src/frame/components/lib/cookies'
+import { FormControl, IconButton, Select, SegmentedControl } from '@primer/react'
+import { CheckIcon, CopyIcon, InfoIcon } from '@primer/octicons-react'
+import { announce } from '@primer/live-region-element'
+import Cookies from '@/frame/components/lib/cookies'
 import cx from 'classnames'
 
 import hljs from 'highlight.js/lib/core'
 import json from 'highlight.js/lib/languages/json'
 import javascript from 'highlight.js/lib/languages/javascript'
+import { generateExampleOptions } from '@/rest/lib/code-example-utils'
 import hljsCurl from 'highlightjs-curl'
 
-import { useTranslation } from 'src/languages/components/useTranslation'
-import useClipboard from 'src/rest/components/useClipboard'
+import { useTranslation } from '@/languages/components/useTranslation'
+import useClipboard from '@/rest/components/useClipboard'
 import {
   getShellExample,
   getGHExample,
   getJSExample,
-} from 'src/rest/components/get-rest-code-samples'
+} from '@/rest/components/get-rest-code-samples'
 import styles from './RestCodeSamples.module.scss'
 import { RestMethod } from './RestMethod'
 import type { Operation, ExampleT } from './types'
 import { ResponseKeys, CodeSampleKeys } from './types'
-import { useVersion } from 'src/versions/components/useVersion'
+import { useVersion } from '@/versions/components/useVersion'
+import { useMainContext } from '@/frame/components/context/MainContext'
 
 type Props = {
   slug: string
@@ -50,7 +53,7 @@ function highlightElement(element: HTMLElement) {
 
 export function RestCodeSamples({ operation, slug, heading }: Props) {
   const { t } = useTranslation(['rest_reference'])
-  const { isEnterpriseServer } = useVersion()
+  const { isEnterpriseServer, isEnterpriseCloud } = useVersion()
 
   // Refs to track the request example, response example
   // and the first render
@@ -59,20 +62,29 @@ export function RestCodeSamples({ operation, slug, heading }: Props) {
   const firstRender = useRef(true)
   const scrollRef = useRef<HTMLDivElement>(null)
 
+  const { currentVersion } = useVersion()
+  const { allVersions } = useMainContext()
+
   // Get format examples for each language
   const languageExamples = operation.codeExamples.map((sample) => ({
     description: sample.request.description,
-    curl: getShellExample(operation, sample),
-    javascript: getJSExample(operation, sample),
-    ghcli: getGHExample(operation, sample),
+    curl: getShellExample(operation, sample, currentVersion, allVersions),
+    javascript: getJSExample(operation, sample, currentVersion, allVersions),
+    ghcli: getGHExample(operation, sample, currentVersion, allVersions),
     response: sample.response,
+    request: sample.request,
   }))
 
   // Menu options for the language selector
   const languageSelectOptions: CodeSampleKeys[] = [CodeSampleKeys.curl]
 
-  // Management Console and GHES Manage API operations are not supported by Octokit
-  if (operation.subcategory !== 'management-console' && operation.subcategory !== 'manage-ghes') {
+  // Management Console, GHES Manage API, and GitHub Models
+  // operations are not supported by Octokit
+  if (
+    operation.category !== 'models' &&
+    operation.subcategory !== 'management-console' &&
+    operation.subcategory !== 'manage-ghes'
+  ) {
     languageSelectOptions.push(CodeSampleKeys.javascript)
 
     // Not all examples support the GH CLI language option. If any of
@@ -83,28 +95,11 @@ export function RestCodeSamples({ operation, slug, heading }: Props) {
   }
 
   // Menu options for the example selector
-
-  // We show the media type in the examples menu items for each example if
-  // there's more than one example and if the media types aren't all the same
-  // for the examples (e.g. if all examples have content type `application/json`,
-  // we won't show that information in the menu items).
-  const showExampleOptionMediaType =
-    languageExamples.length > 1 &&
-    !languageExamples.every(
-      (example) => example.response.contentType === languageExamples[0].response.contentType,
-    )
-  const exampleSelectOptions = languageExamples.map((example, index) => ({
-    text: showExampleOptionMediaType
-      ? `${example.description} (${example.response.contentType})`
-      : example.description,
-    // maps to the index of the example in the languageExamples array
-    languageIndex: index,
-  }))
+  const exampleSelectOptions = generateExampleOptions(languageExamples)
 
   const [selectedLanguage, setSelectedLanguage] = useState(languageSelectOptions[0])
   const [selectedExample, setSelectedExample] = useState(exampleSelectOptions[0])
   const [selectedResponse, setSelectedResponse] = useState(responseSelectOptions[0])
-  const [responseMaxHeight, setResponseMaxHeight] = useState(0)
 
   const isSingleExample = languageExamples.length === 1
   const displayedExample: ExampleT = languageExamples[selectedExample.languageIndex]
@@ -120,19 +115,6 @@ export function RestCodeSamples({ operation, slug, heading }: Props) {
   const handleLanguageSelection = (languageKey: CodeSampleKeys) => {
     setSelectedLanguage(languageKey)
     Cookies.set('codeSampleLanguagePreferred', languageKey)
-  }
-
-  const handleResponseResize = () => {
-    if (requestCodeExample.current) {
-      const requestCodeHeight = requestCodeExample.current.clientHeight || 0
-      const { innerHeight: height } = window
-      if (responseCodeExample) {
-        // 520 pixels roughly accounts for the space taken up by the
-        // nav bar, headers, language picker, method section, and response
-        // picker
-        setResponseMaxHeight(height - requestCodeHeight - 520)
-      }
-    }
   }
 
   // Change the language based on cookies
@@ -156,7 +138,6 @@ export function RestCodeSamples({ operation, slug, heading }: Props) {
     // (ClientSideHighlightJS) will have already handled highlighting
     if (reqElem && !firstRender.current) {
       highlightElement(reqElem)
-      handleResponseResize()
     }
   }, [selectedLanguage])
 
@@ -200,15 +181,6 @@ export function RestCodeSamples({ operation, slug, heading }: Props) {
     }
   }, [])
 
-  // Handle the resizing of the response section when the window is resized
-  useEffect(() => {
-    handleResponseResize()
-    window.addEventListener('resize', handleResponseResize)
-    return () => {
-      window.removeEventListener('resize', handleResponseResize)
-    }
-  })
-
   const [isCopied, setCopied] = useClipboard(displayedExample[selectedLanguage] as string, {
     successDuration: 1400,
   })
@@ -228,6 +200,16 @@ export function RestCodeSamples({ operation, slug, heading }: Props) {
       <h3 className="mt-0 pt-0 h4" id={`${slug}--code-samples`}>
         <a href={`#${slug}--code-samples`}>{heading}</a>
       </h3>
+      {isEnterpriseCloud && selectedLanguage === CodeSampleKeys.curl ? (
+        <span className="f5">
+          <InfoIcon className="d-inline mx-1" />
+          <p
+            className="d-inline"
+            dangerouslySetInnerHTML={{ __html: t('data_residency_notice') }}
+          />
+        </span>
+      ) : null}
+
       <h4 className="mt-3 mb-3 h5">
         {isSingleExample ? t('request_example') : t('request_examples')}
       </h4>
@@ -254,47 +236,39 @@ export function RestCodeSamples({ operation, slug, heading }: Props) {
         </div>
         <div className="border-top d-inline-flex flex-justify-between width-full flex-items-center pt-2">
           <div className="d-inline-flex ml-2">
-            <TabNav aria-label={`Example language selector for ${operation.title}`}>
+            <SegmentedControl
+              className={styles.segmentedControl}
+              aria-label={`Example language selector for ${operation.title}`}
+            >
               {languageSelectOptions.map((optionKey) => (
-                <TabNav.Link
+                <SegmentedControl.Button
                   key={optionKey}
                   selected={optionKey === selectedLanguage}
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent) => {
                     e.preventDefault()
                     handleLanguageSelection(optionKey)
                   }}
-                  onKeyDown={(event) => {
+                  onKeyDown={(event: React.KeyboardEvent) => {
                     if (event.key === 'Enter') {
                       handleLanguageSelection(optionKey)
                     }
                   }}
-                  href="#"
                 >
                   {t(`code_sample_options.${optionKey}`)}
-                </TabNav.Link>
+                </SegmentedControl.Button>
               ))}
-            </TabNav>
+            </SegmentedControl>
           </div>
           <div className="mr-2">
-            <Tooltip
-              className="mr-2"
-              direction="w"
-              aria-label={isCopied ? t('button_text.copied') : t('button_text.copy_to_clipboard')}
-            >
-              <button
-                className="js-btn-copy btn-octicon"
-                aria-label={
-                  isCopied
-                    ? t('button_text.copied')
-                    : `${t('button_text.copy_to_clipboard')} ${selectedLanguage} request example`
-                }
-                aria-live="polite"
-                aria-atomic="true"
-                onClick={() => setCopied()}
-              >
-                {isCopied ? <CheckIcon /> : <CopyIcon />}
-              </button>
-            </Tooltip>
+            <IconButton
+              icon={isCopied ? CheckIcon : CopyIcon}
+              className="js-btn-copy btn-octicon"
+              aria-label={`${t('button_text.copy_to_clipboard')} ${selectedLanguage} request example`}
+              onClick={() => {
+                setCopied()
+                announce('Copied!')
+              }}
+            ></IconButton>
           </div>
         </div>
 
@@ -320,31 +294,30 @@ export function RestCodeSamples({ operation, slug, heading }: Props) {
           __html: displayedExample.response.description || t('response'),
         }}
       ></h4>
-      <div className="border rounded-1">
+      <div className="border rounded-1 pt-2">
         {displayedExample.response.schema ? (
-          <TabNav
-            className="pt-2 mx-2"
+          <SegmentedControl
+            className={cx(styles.segmentedControl, 'mx-2')}
             aria-label={`Example response format selector for ${operation.title}`}
           >
             {responseSelectOptions.map((optionKey) => (
-              <TabNav.Link
+              <SegmentedControl.Button
                 key={optionKey}
                 selected={optionKey === selectedResponse}
-                onClick={(e) => {
+                onClick={(e: React.MouseEvent) => {
                   e.preventDefault()
                   handleResponseSelection(optionKey)
                 }}
-                onKeyDown={(event) => {
+                onKeyDown={(event: React.KeyboardEvent) => {
                   if (event.key === 'Enter') {
                     handleResponseSelection(optionKey)
                   }
                 }}
-                href="#"
               >
                 {t(`response_options.${optionKey}`)}
-              </TabNav.Link>
+              </SegmentedControl.Button>
             ))}
-          </TabNav>
+          </SegmentedControl>
         ) : null}
         <div className="">
           {/* Status code */}
@@ -363,7 +336,6 @@ export function RestCodeSamples({ operation, slug, heading }: Props) {
                 'border-top rounded-1 my-0',
               )}
               data-highlight={'json'}
-              style={{ maxHeight: responseMaxHeight }}
               // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
               tabIndex={0}
             >

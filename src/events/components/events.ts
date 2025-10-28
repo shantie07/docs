@@ -1,12 +1,16 @@
-/* eslint-disable camelcase */
-import Cookies from 'src/frame/components/lib/cookies'
+import Cookies from '@/frame/components/lib/cookies'
 import { parseUserAgent } from './user-agent'
 import { Router } from 'next/router'
-import { isLoggedIn } from 'src/frame/components/hooks/useHasAccount'
+import { isLoggedIn } from '@/frame/components/hooks/useHasAccount'
+import { getExperimentVariationForContext } from './experiments/experiment'
+import { EventType, EventPropsByType } from '../types'
+import { isHeadless } from './is-headless'
 
 const COOKIE_NAME = '_docs-events'
 
-export const startVisitTime = Date.now()
+const startVisitTime = Date.now()
+
+const BATCH_INTERVAL = 5000 // 5 seconds
 
 let initialized = false
 let cookieValue: string | undefined
@@ -20,6 +24,16 @@ let scrollFlipCount = 0
 let maxScrollY = 0
 let previousPath: string | undefined
 let hoveredUrls = new Set()
+let eventQueue: any[] = []
+
+function scheduleNextFlush() {
+  setTimeout(() => {
+    flushQueue()
+    scheduleNextFlush()
+  }, BATCH_INTERVAL)
+}
+
+scheduleNextFlush()
 
 function resetPageParams() {
   sentExit = false
@@ -34,10 +48,10 @@ function resetPageParams() {
 
 // Temporary polyfill for crypto.randomUUID()
 // Necessary for localhost development (doesn't have https://)
-function uuidv4(): string {
+export function uuidv4(): string {
   try {
     return crypto.randomUUID()
-  } catch (err) {
+  } catch {
     // https://stackoverflow.com/a/2117523
     return (<any>[1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c: number) =>
       (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16),
@@ -54,74 +68,6 @@ export function getUserEventsId() {
   return cookieValue
 }
 
-export enum EventType {
-  page = 'page',
-  exit = 'exit',
-  link = 'link',
-  hover = 'hover',
-  search = 'search',
-  searchResult = 'searchResult',
-  survey = 'survey',
-  experiment = 'experiment',
-  preference = 'preference',
-  clipboard = 'clipboard',
-  print = 'print',
-}
-
-type SendEventProps = {
-  [EventType.clipboard]: {
-    clipboard_operation: string
-    clipboard_target?: string
-  }
-  [EventType.exit]: {
-    exit_render_duration?: number
-    exit_first_paint?: number
-    exit_dom_interactive?: number
-    exit_dom_complete?: number
-    exit_visit_duration?: number
-    exit_scroll_length?: number
-    exit_scroll_flip?: number
-  }
-  [EventType.experiment]: {
-    experiment_name: string
-    experiment_variation: string
-    experiment_success?: boolean
-  }
-  [EventType.hover]: {
-    hover_url: string
-    hover_samesite?: boolean
-  }
-  [EventType.link]: {
-    link_url: string
-    link_samesite?: boolean
-    link_container?: string
-  }
-  [EventType.page]: {}
-  [EventType.preference]: {
-    preference_name: string
-    preference_value: string
-  }
-  [EventType.print]: {}
-  [EventType.search]: {
-    search_query: string
-    search_context?: string
-  }
-  [EventType.searchResult]: {
-    search_result_query: string
-    search_result_index: number
-    search_result_total: number
-    search_result_rank: number
-    search_result_url: string
-  }
-  [EventType.survey]: {
-    survey_token?: string // Honeypot, doesn't exist in schema
-    survey_vote: boolean
-    survey_comment?: string
-    survey_email?: string
-    survey_visit_duration?: number
-  }
-}
-
 function getMetaContent(name: string) {
   const metaTag = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement
   return metaTag?.content
@@ -130,11 +76,15 @@ function getMetaContent(name: string) {
 export function sendEvent<T extends EventType>({
   type,
   version = '1.0.0',
+  eventGroupKey,
+  eventGroupId,
   ...props
 }: {
   type: T
   version?: string
-} & SendEventProps[T]) {
+  eventGroupKey?: string
+  eventGroupId?: string
+} & EventPropsByType[T]) {
   const body = {
     type,
 
@@ -147,11 +97,13 @@ export function sendEvent<T extends EventType>({
       page_event_id: pageEventId,
 
       // Content information
-      path: location.pathname,
-      hostname: location.hostname,
       referrer: getReferrer(document.referrer),
-      search: location.search,
-      href: location.href,
+      title: document.title,
+      href: location.href, // full URL
+      hostname: location.hostname, // origin without protocol or port
+      path: location.pathname, // path without search or host
+      search: location.search, // also known as query string
+      hash: location.hash, // also known as anchor
       path_language: getMetaContent('path-language'),
       path_version: getMetaContent('path-version'),
       path_product: getMetaContent('path-product'),
@@ -164,8 +116,13 @@ export function sendEvent<T extends EventType>({
       // Device information
       // os, os_version, browser, browser_version:
       ...parseUserAgent(),
+      is_headless: isHeadless(),
       viewport_width: document.documentElement.clientWidth,
       viewport_height: document.documentElement.clientHeight,
+      screen_width: window.screen.width,
+      screen_height: window.screen.height,
+      pixel_ratio: window.devicePixelRatio || 1,
+      user_agent: navigator.userAgent,
 
       // Location information
       timezone: new Date().getTimezoneOffset() / -60,
@@ -176,22 +133,46 @@ export function sendEvent<T extends EventType>({
       color_mode_preference: getColorModePreference(),
       os_preference: Cookies.get('osPreferred'),
       code_display_preference: Cookies.get('annotate-mode'),
+
+      experiment_variation:
+        getExperimentVariationForContext(
+          getMetaContent('path-language'),
+          getMetaContent('path-version'),
+        ) || '',
+
+      // Event grouping
+      event_group_key: eventGroupKey,
+      event_group_id: eventGroupId,
     },
 
     ...props,
   }
 
-  const blob = new Blob([JSON.stringify(body)], { type: 'application/json' })
-  const endpoint = '/api/events'
-  try {
-    // Only send the beacon if the feature is not disabled in the user's browser
-    // Even if the function exists, it can still throw an error from the call being blocked
-    navigator?.sendBeacon(endpoint, blob)
-  } catch {
-    console.warn(`sendBeacon to '${endpoint}' failed.`)
+  queueEvent(body)
+
+  if (type === EventType.exit) {
+    flushQueue()
   }
 
   return body
+}
+
+function flushQueue() {
+  if (!eventQueue.length) return
+
+  const endpoint = '/api/events'
+  const eventsBody = JSON.stringify(eventQueue)
+  eventQueue = []
+
+  try {
+    navigator.sendBeacon(endpoint, new Blob([eventsBody], { type: 'application/json' }))
+  } catch (err) {
+    console.warn(`sendBeacon to '${endpoint}' failed.`, err)
+  }
+}
+
+function queueEvent(eventBody: unknown) {
+  eventQueue.push(eventBody)
 }
 
 // Sometimes using the back button means the internal referrer path is not there,
@@ -202,9 +183,9 @@ function getReferrer(documentReferrer: string) {
     // new URL() throws an error if not a valid URL
     const referrerUrl = new URL(documentReferrer)
     if (!referrerUrl.pathname || referrerUrl.pathname === '/') {
-      return referrerUrl.origin + previousPath
+      return location.origin + previousPath
     }
-  } catch (e) {}
+  } catch {}
   return documentReferrer
 }
 
@@ -274,6 +255,8 @@ function sendExit() {
   sentExit = true
   const { render, firstContentfulPaint, domInteractive, domComplete } = getPerformance()
 
+  const clampedScrollLength = Math.min(maxScrollY, 1)
+
   return sendEvent({
     type: EventType.exit,
     exit_render_duration: render,
@@ -281,7 +264,7 @@ function sendExit() {
     exit_dom_interactive: domInteractive,
     exit_dom_complete: domComplete,
     exit_visit_duration: (Date.now() - startVisitTime) / 1000,
-    exit_scroll_length: maxScrollY,
+    exit_scroll_length: clampedScrollLength,
     exit_scroll_flip: scrollFlipCount,
   })
 }
@@ -294,6 +277,8 @@ function initPageAndExitEvent() {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
       sendExit()
+    } else {
+      flushQueue()
     }
   })
 
@@ -358,6 +343,7 @@ function initCopyButtonEvent() {
     const target = evt.target as HTMLElement
     const button = target.closest('.js-btn-copy') as HTMLButtonElement
     if (!button) return
+
     sendEvent({
       type: EventType.clipboard,
       clipboard_operation: 'copy',
@@ -373,11 +359,19 @@ function initLinkEvent() {
     if (!link) return
     const sameSite = link.origin === location.origin
     const container = target.closest(`[data-container]`) as HTMLElement | null
+
+    // We can attach `data-group-key` and `data-group-id` to any anchor element to include them in the event
+    const eventGroupKey = link?.dataset?.groupKey || undefined
+    const eventGroupId = link?.dataset?.groupId || undefined
+
     sendEvent({
       type: EventType.link,
       link_url: link.href,
       link_samesite: sameSite,
+      link_samepage: sameSite && link.pathname === location.pathname,
       link_container: container?.dataset.container,
+      eventGroupKey,
+      eventGroupId,
     })
   })
 
@@ -389,6 +383,9 @@ function initLinkEvent() {
     sendEvent({
       type: EventType.link,
       link_url: `${url}#scroll-to-top`,
+      link_samesite: true,
+      link_samepage: true,
+      link_container: 'static',
     })
   })
 }

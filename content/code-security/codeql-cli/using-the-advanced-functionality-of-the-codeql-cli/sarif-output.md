@@ -8,7 +8,7 @@ versions:
   ghes: '*'
   ghec: '*'
 topics:
-  - Advanced Security
+  - Code Security
   - Code scanning
   - CodeQL
 redirect_from:
@@ -19,11 +19,11 @@ redirect_from:
 ## About SARIF output
 
 SARIF is designed to represent the output of a broad range of static analysis tools, and there are many features in the SARIF specification that are
-considered "optional". This document details the output produced when using the format type `sarifv2.1.0`, which corresponds to the SARIF v2.1.0.csd1 specification. For more information on selecting a file format for your analysis results, see "[AUTOTITLE](/code-security/codeql-cli/codeql-cli-manual/database-analyze)."
+considered "optional". This document details the output produced when using the format type `sarifv2.1.0`, which corresponds to the SARIF v2.1.0.csd1 specification. For more information on selecting a file format for your analysis results, see [AUTOTITLE](/code-security/codeql-cli/codeql-cli-manual/database-analyze).
 
 ## SARIF specification and schema
 
-This article is intended to be read alongside the detailed SARIF specification. For more information on the specification and the SARIF schema, see the [SARIF specification documentation](https://github.com/oasis-tcs/sarif-spec/blob/123e95847b13fbdd4cbe2120fa5e33355d4a042b/Schemata/sarif-schema-2.1.0.json).
+This article is intended to be read alongside the detailed SARIF specification. For more information on the specification and the SARIF schema, see the [SARIF specification documentation](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html).
 
 ## Change notes
 
@@ -37,9 +37,9 @@ This article is intended to be read alongside the detailed SARIF specification. 
 
 The output produced for a given specific format type (for example, `sarifv2.1.0`) may change in future {% data variables.product.prodname_codeql %} releases. We will endeavor to maintain backwards compatibility with consumers of the generated SARIF by ensuring that:
 
-- Fields that are marked as always being generated will never be removed.
+* Fields that are marked as always being generated will never be removed.
 
-- For fields that are marked as not always being generated, the circumstances under which the fields are generated may change. Consumers of the {% data variables.product.prodname_codeql %} SARIF output should be robust to the presence or absence of these fields.
+* For fields that are marked as not always being generated, the circumstances under which the fields are generated may change. Consumers of the {% data variables.product.prodname_codeql %} SARIF output should be robust to the presence or absence of these fields.
 
 New output fields may be added in future releases under the same format type–these are not considered to break backwards compatibility, and consumers should be robust to the presence of newly added fields.
 
@@ -53,7 +53,7 @@ This details each SARIF component that may be generated, along with any specific
 
 | JSON property name| Always generated?| Notes|
 |-------------------|------------------------|---------|
-| `$schema`| {% octicon "check" aria-label="Always" %}| Provides a link to the [SARIF schema](https://github.com/oasis-tcs/sarif-spec/blob/123e95847b13fbdd4cbe2120fa5e33355d4a042b/Schemata/sarif-schema-2.1.0.json).|
+| `$schema`| {% octicon "check" aria-label="Always" %}| Provides a link to the [SARIF schema](https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json).|
 | `version`| {% octicon "check" aria-label="Always" %}| The version of the SARIF used to generate the output.|
 | `runs`| {% octicon "check" aria-label="Always" %}| An array containing a single run object, for one language.|
 
@@ -146,9 +146,9 @@ The composition of the results is dependent on the options provided to {% data v
 
 There are two types of `region` object produced by {% data variables.product.prodname_codeql %}:
 
-- Line/column offset regions
+* Line/column offset regions
 
-- Character offset and length regions
+* Character offset and length regions
 
 Any region produced by {% data variables.product.prodname_codeql %} may be specified in either format, and consumers should robustly handle either type.
 

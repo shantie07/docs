@@ -1,31 +1,23 @@
 ---
-title: "{% data variables.product.prodname_actions %} documentation"
-shortTitle: "{% data variables.product.prodname_actions %}"
+title: '{% data variables.product.prodname_actions %} documentation'
+shortTitle: '{% data variables.product.prodname_actions %}'
 intro: 'Automate, customize, and execute your software development workflows right in your repository with {% data variables.product.prodname_actions %}. You can discover, create, and share actions to perform any job you''d like, including CI/CD, and combine actions in a completely customized workflow.'
 introLinks:
-  overview: /actions/learn-github-actions/understanding-github-actions
-  quickstart: /actions/quickstart
+  overview: /actions/get-started/understand-github-actions
+  quickstart: /actions/get-started/quickstart
 featuredLinks:
   startHere:
-    - /actions/learn-github-actions
-    - /actions/examples
-    - /actions/automating-builds-and-tests/about-continuous-integration
-    - /actions/deployment/about-deployments/deploying-with-github-actions
-    - /actions/publishing-packages/about-packaging-with-github-actions
-    - /actions/monitoring-and-troubleshooting-workflows/about-monitoring-and-troubleshooting
+    - /actions/how-tos/write-workflows
+    - /actions/tutorials
+    - /actions/get-started/continuous-integration
+    - /packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions
   guideCards:
-    - /actions/learn-github-actions/using-starter-workflows
-    - /actions/publishing-packages/publishing-nodejs-packages
-    - /actions/automating-builds-and-tests/building-and-testing-powershell
+    - /actions/how-tos/write-workflows/use-workflow-templates
+    - /actions/tutorials/publish-packages/publish-nodejs-packages
+    - /actions/tutorials/build-and-test-code/powershell
   popular:
-    - /actions/using-workflows/workflow-syntax-for-github-actions
-    - /actions/learn-github-actions
-    - /actions/examples
-    - /actions/using-workflows/events-that-trigger-workflows
-    - /actions/learn-github-actions/contexts
-    - /actions/learn-github-actions/expressions
-    - /actions/learn-github-actions/variables
-    - /actions/security-guides/using-secrets-in-github-actions
+    - /actions/reference/workflows-and-actions/workflow-syntax
+    - /actions/how-tos/write-workflows
 changelog:
   label: actions
 redirect_from:
@@ -35,30 +27,16 @@ redirect_from:
   - /actions/automating-your-workflow-with-github-actions
   - /categories/automating-your-workflow-with-github-actions
   - /marketplace/actions
-  - /actions/reference
 layout: product-landing
 versions:
   fpt: '*'
   ghes: '*'
   ghec: '*'
 children:
-  - /quickstart
-  - /learn-github-actions
-  - /examples
-  - /using-workflows
-  - /using-jobs
-  - /managing-workflow-runs
-  - /automating-builds-and-tests
-  - /deployment
-  - /using-containerized-services
-  - /publishing-packages
-  - /managing-issues-and-pull-requests
-  - /migrating-to-github-actions
-  - /monitoring-and-troubleshooting-workflows
-  - /using-github-hosted-runners
-  - /hosting-your-own-runners
-  - /security-guides
-  - /creating-actions
-  - /guides
+  - /get-started
+  - /concepts
+  - /how-tos
+  - /reference
+  - /tutorials
 ---
 

@@ -5,36 +5,47 @@ import {
   getMainContext,
   MainContext,
   MainContextT,
-} from 'src/frame/components/context/MainContext'
+} from '@/frame/components/context/MainContext'
 import {
   getAutomatedPageContextFromRequest,
   AutomatedPageContext,
   AutomatedPageContextT,
-} from 'src/automated-pipelines/components/AutomatedPageContext'
-import { AutomatedPage } from 'src/automated-pipelines/components/AutomatedPage'
+} from '@/automated-pipelines/components/AutomatedPageContext'
+import { AutomatedPage } from '@/automated-pipelines/components/AutomatedPage'
+import { HeadingLink } from '@/frame/components/article/HeadingLink'
 import GroupedEvents from '../components/GroupedEvents'
-
-type AuditLogEventT = {
-  action: string
-  description: string
-}
+import type { CategorizedEvents, CategoryNotes } from '../types'
 
 type Props = {
   mainContext: MainContextT
   automatedPageContext: AutomatedPageContextT
-  auditLogEvents: Record<string, Array<AuditLogEventT>>
+  auditLogEvents: CategorizedEvents
+  categoryNotes: CategoryNotes
 }
 
 export default function AuditLogEvents({
   mainContext,
   automatedPageContext,
   auditLogEvents,
+  categoryNotes,
 }: Props) {
-  const content = Object.keys(auditLogEvents).map((category) => {
-    return (
-      <GroupedEvents key={category} category={category} auditLogEvents={auditLogEvents[category]} />
-    )
-  })
+  const content = (
+    <>
+      <HeadingLink as="h2" slug="audit-log-events">
+        Audit log events
+      </HeadingLink>
+      {Object.keys(auditLogEvents).map((category) => {
+        return (
+          <GroupedEvents
+            key={category}
+            category={category}
+            auditLogEvents={auditLogEvents[category]}
+            categoryNote={categoryNotes[category]}
+          />
+        )
+      })}
+    </>
+  )
 
   return (
     <MainContext.Provider value={mainContext}>
@@ -46,8 +57,8 @@ export default function AuditLogEvents({
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-  const { getAutomatedPageMiniTocItems } = await import('src/frame/lib/get-mini-toc-items')
-  const { getAuditLogEvents } = await import('src/audit-logs/lib')
+  const { getAutomatedPageMiniTocItems } = await import('@/frame/lib/get-mini-toc-items')
+  const { getCategorizedAuditLogEvents, getCategoryNotes } = await import('../lib')
 
   const req = context.req as object
   const res = context.res as object
@@ -59,27 +70,30 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 
   const { miniTocItems } = getAutomatedPageContextFromRequest(req)
 
-  let auditLogEvents = {} as Record<string, Array<AuditLogEventT>>
-  // events are displayed grouped by categories
-  const categorized = true
+  let auditLogEvents: CategorizedEvents = {}
 
   if (url?.includes('/security-log-events')) {
-    auditLogEvents = getAuditLogEvents('user', currentVersion, categorized)
+    auditLogEvents = getCategorizedAuditLogEvents('user', currentVersion)
   } else if (url?.includes('/audit-log-events-for-your-enterprise')) {
-    auditLogEvents = getAuditLogEvents('enterprise', currentVersion, categorized)
+    auditLogEvents = getCategorizedAuditLogEvents('enterprise', currentVersion)
   } else if (url?.includes('/audit-log-events-for-your-organization')) {
-    auditLogEvents = getAuditLogEvents('organization', currentVersion, categorized)
+    auditLogEvents = getCategorizedAuditLogEvents('organization', currentVersion)
   }
+
+  const categoryNotes = getCategoryNotes()
 
   const auditLogEventsMiniTocs = await getAutomatedPageMiniTocItems(
     Object.keys(auditLogEvents).map((category) => category),
     context,
   )
-  auditLogEventsMiniTocs && miniTocItems.push(...auditLogEventsMiniTocs)
+  if (auditLogEventsMiniTocs) {
+    miniTocItems.push(...auditLogEventsMiniTocs)
+  }
 
   return {
     props: {
       auditLogEvents,
+      categoryNotes,
       mainContext,
       automatedPageContext: getAutomatedPageContextFromRequest(req),
     },

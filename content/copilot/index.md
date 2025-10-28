@@ -1,37 +1,44 @@
 ---
 title: '{% data variables.product.prodname_copilot %} documentation'
 shortTitle: '{% data variables.product.prodname_copilot %}'
-intro: 'You can use {% data variables.product.prodname_copilot %} to get autocomplete-style suggestions from an AI pair programmer as you code.'
+intro: 'You can use {% data variables.product.prodname_copilot %} to enhance your productivity and assist as you work on code.'
 redirect_from:
   - /github/copilot
+  - /copilot/using-github-copilot/using-github-copilot-for-pull-requests/using-copilot-to-help-you-work-on-a-pull-request
 changelog:
   label: copilot
 introLinks:
-  overview: /copilot/copilot-individual/about-github-copilot-individual
-  quickstart: /copilot/quickstart
+  overview: /copilot/get-started/what-is-github-copilot
+  quickstart: /copilot/get-started/quickstart
 featuredLinks:
   startHere:
-    - /copilot/using-github-copilot/getting-started-with-github-copilot
+    - /copilot/get-started/what-is-github-copilot
+    - '{% ifversion fpt %}/copilot/get-started/quickstart{% endif %}'
+    - '{% ifversion fpt %}/copilot/tutorials/try-extensions{% endif %}'
+    - '{% ifversion fpt %}/copilot/concepts/agents/coding-agent{% endif %}'
+    - '{% ifversion ghec %}/copilot/get-started/choose-enterprise-plan{% endif %}'
+    - '{% ifversion ghec %}/copilot/how-tos/set-up/set-up-for-enterprise{% endif %}'
+    - '{% ifversion ghec %}/copilot/tutorials/coding-agent/pilot-coding-agent{% endif %}'
   popular:
-    - /billing/managing-billing-for-github-copilot/about-billing-for-github-copilot
-    - /copilot/configuring-github-copilot/configuring-github-copilot-in-your-environment
-    - /copilot/configuring-github-copilot/configuring-github-copilot-settings-on-githubcom
+    - /copilot/get-started/features
+    - '{% ifversion fpt %}/copilot/tutorials/copilot-chat-cookbook{% endif %}'
+    - '{% ifversion fpt %}/copilot/how-tos/get-code-suggestions/get-ide-code-suggestions{% endif %}'
+    - '{% ifversion fpt %}/copilot/how-tos/chat-with-copilot/chat-in-ide{% endif %}'
+    - '{% ifversion fpt %}/copilot/how-tos/use-copilot-for-common-tasks/use-copilot-in-the-cli{% endif %}'
+    - '{% ifversion ghec %}/copilot/how-tos/manage-and-track-spending/manage-request-allowances{% endif %}'
+    - '{% ifversion ghec %}/copilot/tutorials/roll-out-at-scale/enable-developers/drive-adoption{% endif %}'
+    - '{% ifversion ghec %}/copilot/tutorials/roll-out-at-scale/enable-developers/integrate-ai-agents{% endif %}'
 layout: product-landing
 versions:
   feature: copilot
 children:
-  - /about-github-copilot
-  - /quickstart
-  - /using-github-copilot
-  - /copilot-individual
-  - /copilot-business
-  - /github-copilot-enterprise
-  - /managing-github-copilot-in-your-organization
-  - /github-copilot-chat
-  - /github-copilot-in-the-cli
-  - /configuring-github-copilot
-  - /troubleshooting-github-copilot
+  - /get-started
+  - /concepts
+  - /how-tos
+  - /reference
+  - /tutorials
+  - /responsible-use
 topics:
   - Copilot
+contentType: landing
 ---
-

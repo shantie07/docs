@@ -5,7 +5,7 @@ versions: # DO NOT MANUALLY EDIT. CHANGES WILL BE OVERWRITTEN BY A 🤖
   ghec: '*'
   ghes: '*'
 topics:
-  - Advanced Security
+  - Code Security
   - Code scanning
   - CodeQL
 type: reference
@@ -18,6 +18,9 @@ redirect_from:
   - /code-security/codeql-cli/manual/database-analyze
 ---
 
+<!-- markdownlint-disable GHD053 -->
+
+<!-- markdownlint-disable GHD030 -->
 
 <!-- Content after this section is automatically generated -->
 
@@ -50,14 +53,14 @@ being interpreted as source-code alerts, use
 
 \[Mandatory] Path to the CodeQL database to query.
 
-#### `<querysuite|pack>...`
+#### `<query|dir|suite|pack>...`
 
 Queries to execute. Each argument is in the form `scope/name@range:path`
 where:
 
-- `scope/name` is the qualified name of a CodeQL pack.
-- `range` is a semver range.
-- `path` is a file system path.
+* `scope/name` is the qualified name of a CodeQL pack.
+* `range` is a semver range.
+* `path` is a file system path.
 
 If a `scope/name` is specified, the `range` and `path` are optional. A
 missing `range` implies the latest version of the specified pack. A
@@ -167,6 +170,13 @@ This option has no effect when passed to [codeql bqrs interpret](/code-security/
 
 Available since `v2.15.2`.
 
+#### `--no-sarif-include-alert-provenance`
+
+\[Advanced] \[SARIF formats only] Do not include alert provenance
+information in the SARIF output.
+
+Available since `v2.18.1`.
+
 #### `--[no-]sarif-group-rules-by-pack`
 
 \[SARIF formats only] Place the rule object for each query under its
@@ -178,6 +188,16 @@ option has no effect when passed to [codeql bqrs interpret](/code-security/codeq
 \[SARIF formats only] For alerts that have multiple causes, include
 them as a Markdown-formatted itemized list in the output in addition to
 as a plain string.
+
+#### `--no-sarif-minify`
+
+\[SARIF formats only] Produce pretty-printed SARIF output. By default,
+SARIF output is minified to reduce the size of the output file.
+
+#### `--sarif-run-property=<String=String>`
+
+\[SARIF formats only] A key value pair to add to the generated SARIF
+'run' property bag. Can be repeated.
 
 #### `--no-group-results`
 
@@ -238,6 +258,14 @@ during database creation from a Code Scanning configuration file.
 #### `--[no-]download`
 
 Download any missing queries before analyzing.
+
+### Options to control the model packs to be used
+
+#### `--model-packs=<`<name@range>>...
+
+A list of CodeQL pack names, each with an optional version range, to be
+used as model packs to customize the queries that are about to be
+evaluated.
 
 ### Options to control the threat models to be used
 
@@ -359,10 +387,11 @@ appropriate terminal.
 
 `yes`: Assume the terminal can understand xterm control sequences. The
 feature still depends on being able to autodetect the _size_ of the
-terminal, and will also be disabled if `-q` is given.
+terminal (which is not implemented on Windows, sorry), and will also be
+disabled if `-q` is given.
 
 `25x80` (or similar): Like `yes`, and also explicitly give the size of
-the terminal.
+the terminal. (Unlike `yes`, this should work on Windows.)
 
 `25x80:/dev/pts/17` (or similar): show fancy progress on a _different_
 terminal than stderr. Mostly useful for internal testing.

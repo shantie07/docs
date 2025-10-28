@@ -1,9 +1,9 @@
-import { useTranslation } from 'src/languages/components/useTranslation'
+import { useTranslation } from '@/languages/components/useTranslation'
 import { ArrowRightIcon } from '@primer/octicons-react'
-import { LearningTrack as LearningTrackT } from 'src/landings/components/ProductGuidesContext'
-import { Link } from 'src/frame/components/Link'
+import { LearningTrack as LearningTrackT } from '@/landings/components/ProductGuidesContext'
+import { Link } from '@/frame/components/Link'
 
-import { HeadingLink } from 'src/frame/components/article/HeadingLink'
+import { HeadingLink } from '@/frame/components/article/HeadingLink'
 
 type Props = {
   track: LearningTrackT
@@ -31,11 +31,12 @@ export const LearningTrack = ({ track }: Props) => {
         <ol className="pl-4 my-3 f4">
           {track.guides.map((guide) => (
             <li key={guide.href + track.trackName}>
-              <span className="color-fg-muted mr-2">
+              <span className="mr-2">
                 {tObject('guide_types')[guide.page?.type || ''] as string}
               </span>
               <Link
                 href={`${guide.href}?learn=${track.trackName}&learnProduct=${track.trackProduct}`}
+                className="text-underline"
               >
                 {guide.title}
               </Link>

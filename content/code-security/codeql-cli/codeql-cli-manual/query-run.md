@@ -5,7 +5,7 @@ versions: # DO NOT MANUALLY EDIT. CHANGES WILL BE OVERWRITTEN BY A 🤖
   ghec: '*'
   ghes: '*'
 topics:
-  - Advanced Security
+  - Code Security
   - Code scanning
   - CodeQL
 type: reference
@@ -16,6 +16,9 @@ redirect_from:
   - /code-security/codeql-cli/manual/query-run
 ---
 
+<!-- markdownlint-disable GHD053 -->
+
+<!-- markdownlint-disable GHD030 -->
 
 <!-- Content after this section is automatically generated -->
 
@@ -164,10 +167,11 @@ appropriate terminal.
 
 `yes`: Assume the terminal can understand xterm control sequences. The
 feature still depends on being able to autodetect the _size_ of the
-terminal, and will also be disabled if `-q` is given.
+terminal (which is not implemented on Windows, sorry), and will also be
+disabled if `-q` is given.
 
 `25x80` (or similar): Like `yes`, and also explicitly give the size of
-the terminal.
+the terminal. (Unlike `yes`, this should work on Windows.)
 
 `25x80:/dev/pts/17` (or similar): show fancy progress on a _different_
 terminal than stderr. Mostly useful for internal testing.
@@ -356,6 +360,14 @@ To authenticate to GitHub Enterprise Server Container registries, pass
 variable.
 
 This overrides the GITHUB\_TOKEN environment variable.
+
+### Options to control the extension packs
+
+#### `--model-packs=<`<name@range>>...
+
+A list of CodeQL pack names, each with an optional version range, to be
+used as model packs to customize the queries that are about to be
+evaluated.
 
 ### Common options
 

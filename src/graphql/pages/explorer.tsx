@@ -1,13 +1,15 @@
 import { GetServerSideProps } from 'next'
 
-import { MainContextT, MainContext, getMainContext } from 'src/frame/components/context/MainContext'
-import { AutomatedPage } from 'src/automated-pipelines/components/AutomatedPage'
+import { MainContextT, MainContext, getMainContext } from '@/frame/components/context/MainContext'
+import { AutomatedPage } from '@/automated-pipelines/components/AutomatedPage'
 import {
   AutomatedPageContext,
   AutomatedPageContextT,
   getAutomatedPageContextFromRequest,
-} from 'src/automated-pipelines/components/AutomatedPageContext'
+} from '@/automated-pipelines/components/AutomatedPageContext'
 import { useEffect, useRef } from 'react'
+
+import styles from './explorer.module.scss'
 
 type Props = {
   mainContext: MainContextT
@@ -32,11 +34,9 @@ export default function GQLExplorer({
       <AutomatedPageContext.Provider value={automatedPageContext}>
         <AutomatedPage fullWidth={true}>
           <div>
-            {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
             <iframe
               ref={graphiqlRef}
-              style={{ height: 715 }}
-              className="border width-full"
+              className={`border width-full ${styles.explorerIframe}`}
               scrolling="no"
               src={graphqlExplorerUrl}
               title="GitHub GraphQL API"
